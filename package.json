@@ -16,6 +16,7 @@
     "express-session": "^1.15.6",
     "mongodb": "^2.2.33",
     "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-router-dom": "^4.2.2",
