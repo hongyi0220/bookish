@@ -1,5 +1,6 @@
 @import 'variables';
-
+@import 'login-form';
+@import 'signup-form';
 .app-container {
     background-color: $bg-grey;
     & > * {
@@ -18,7 +19,7 @@
         color: grey;
         margin-bottom: 1em;
     }
-    .layout-container {
+    .layout-buttons-container {
         text-align: center;
         & > * {
             &:hover {
@@ -26,7 +27,7 @@
             }
         }
     }
-    .container-wrapper {
+    .flexbox-container {
         margin: auto;
         width: 80%;
         // border: 3px solid red;
@@ -36,7 +37,7 @@
             display: inline-block;
             float: right;
         }
-        .nav-container, .content-container, .status-container {
+        .nav-container, .content-container, .auth-container {
             // border: 3px solid black;
             height: 400px;
         }
@@ -88,7 +89,7 @@
         .content-container {
             flex-grow: 8;
         }
-        .status-container {
+        .auth-container {
             flex-grow: 1;
             & > * {
                 height: 3em;
