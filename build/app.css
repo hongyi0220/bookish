@@ -1,98 +1,49 @@
-.login-form-container {
-  padding: 1em;
+.form-container {
   text-align: center; }
-  .login-form-container h2, .login-form-container .signup-link {
+  .form-container h2, .form-container .link {
     text-align: center; }
-  .login-form-container .login-form {
-    display: flex;
-    flex-direction: column;
+  .form-container .form {
     width: 25%;
     min-width: 300px;
     margin: 1em auto 1em auto;
     border-radius: 2px; }
-    .login-form-container .login-form .username-container, .login-form-container .login-form .password-container {
-      flex-grow: 1;
+    .form-container .form .username-container, .form-container .form .password-container {
       margin: 0.5em;
       position: relative; }
-      .login-form-container .login-form .username-container input, .login-form-container .login-form .password-container input {
+      .form-container .form .username-container input, .form-container .form .password-container input {
         background: #f2f2f2;
         width: 100%;
         height: 3em;
         border: none;
         padding-left: 1em;
         border-radius: 4px; }
-        .login-form-container .login-form .username-container input:focus, .login-form-container .login-form .password-container input:focus {
+        .form-container .form .username-container input:focus, .form-container .form .password-container input:focus {
           outline: none;
           background-color: white;
           box-shadow: 0 .2px 1px grey; }
-      .login-form-container .login-form .username-container .emoji-wrapper, .login-form-container .login-form .password-container .emoji-wrapper {
+      .form-container .form .username-container .emoji-wrapper, .form-container .form .password-container .emoji-wrapper {
         position: absolute;
         right: 0;
         line-height: 3em;
         margin-right: 1em; }
-    .login-form-container .login-form .button-container {
-      flex-grow: 1;
+    .form-container .form .button-wrapper {
       margin: 0.5em;
       text-align: center;
       transition: all 1s ease; }
-      .login-form-container .login-form .button-container button {
+      .form-container .form .button-wrapper button {
         width: 99.7%;
         background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%);
         color: white;
         border: none;
         padding: 0.5em;
         border-radius: 2px;
-        transition: all 1s ease; }
-        .login-form-container .login-form .button-container button:hover {
-          background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #19B5FE 100%); }
+        opacity: .8;
+        transition: all .3s ease; }
+        .form-container .form .button-wrapper button:hover {
+          opacity: 1; }
 
-.signup-form-container {
-  padding: 1em;
-  text-align: center; }
-  .signup-form-container h2, .signup-form-container .signin-link {
-    text-align: center; }
-  .signup-form-container .signup-form {
-    display: flex;
-    flex-direction: column;
-    width: 25%;
-    min-width: 300px;
-    margin: 1em auto 1em auto;
-    border-radius: 2px; }
-    .signup-form-container .signup-form .username-container, .signup-form-container .signup-form .password-container {
-      flex-grow: 1;
-      margin: 0.5em;
-      position: relative; }
-      .signup-form-container .signup-form .username-container input, .signup-form-container .signup-form .password-container input {
-        background: #f2f2f2;
-        width: 100%;
-        height: 3em;
-        border: none;
-        padding-left: 1em;
-        border-radius: 4px; }
-        .signup-form-container .signup-form .username-container input:focus, .signup-form-container .signup-form .password-container input:focus {
-          outline: none;
-          background-color: white;
-          box-shadow: 0 .2px 1px grey; }
-      .signup-form-container .signup-form .username-container .emoji-wrapper, .signup-form-container .signup-form .password-container .emoji-wrapper {
-        position: absolute;
-        right: 0;
-        line-height: 3em;
-        margin-right: 1em; }
-    .signup-form-container .signup-form .button-container {
-      flex-grow: 1;
-      margin: 0.5em;
-      text-align: center;
-      transition: all 1s ease; }
-      .signup-form-container .signup-form .button-container button {
-        width: 99.7%;
-        background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%);
-        color: white;
-        border: none;
-        padding: 0.5em;
-        border-radius: 2px;
-        transition: all 1s ease; }
-        .signup-form-container .signup-form .button-container button:hover {
-          background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #19B5FE 100%); }
+* {
+  border: 1px dotted red; }
 
 .app-container {
   background-color: #fafafa; }

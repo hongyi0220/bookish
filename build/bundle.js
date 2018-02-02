@@ -69699,7 +69699,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var SignupForm = exports.SignupForm = function SignupForm(props) {
     return _react2.default.createElement(
         'div',
-        { className: 'signup-form-container' },
+        { className: 'form-container' },
         _react2.default.createElement(
             'h2',
             null,
@@ -69707,17 +69707,17 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
         ),
         _react2.default.createElement(
             'div',
-            { className: 'login-link-wrapper' },
+            { className: 'link-wrapper' },
             'Already have an account?\xA0',
             _react2.default.createElement(
                 _reactRouterDom.Link,
-                { className: 'login-link', to: '/login' },
+                { className: 'link', to: '/login' },
                 'Log In'
             )
         ),
         _react2.default.createElement(
             'form',
-            { className: 'signup-form', action: '/signup', method: 'post' },
+            { className: 'form', action: '/signup', method: 'post' },
             _react2.default.createElement(
                 'div',
                 { className: 'username-container' },
@@ -69740,7 +69740,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
             ),
             _react2.default.createElement(
                 'div',
-                { className: 'button-container' },
+                { className: 'button-wrapper' },
                 _react2.default.createElement(
                     'button',
                     { type: 'submit' },
@@ -69774,7 +69774,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var LoginForm = exports.LoginForm = function LoginForm(props) {
     return _react2.default.createElement(
         'div',
-        { className: 'login-form-container' },
+        { className: 'form-container' },
         _react2.default.createElement(
             'h2',
             null,
@@ -69782,17 +69782,17 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
         ),
         _react2.default.createElement(
             'div',
-            { className: 'signup-link-wrapper' },
+            { className: 'link-wrapper' },
             'Don\'t have an account?\xA0',
             _react2.default.createElement(
                 _reactRouterDom.Link,
-                { className: 'signup-link', to: '/signup' },
+                { className: 'link', to: '/signup' },
                 'Sign Up'
             )
         ),
         _react2.default.createElement(
             'form',
-            { className: 'login-form', action: '/login', method: 'post' },
+            { className: 'form', action: '/login', method: 'post' },
             _react2.default.createElement(
                 'div',
                 { className: 'username-container' },
@@ -69815,7 +69815,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
             ),
             _react2.default.createElement(
                 'div',
-                { className: 'button-container' },
+                { className: 'button-wrapper' },
                 _react2.default.createElement(
                     'button',
                     { type: 'submit' },

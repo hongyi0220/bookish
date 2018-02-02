@@ -23,18 +23,18 @@ class App extends React.Component {
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
             <div className='layout-buttons-container'>
-                <Icon name='list layout'></Icon>
-                <Icon name='grid layout'></Icon>
+                <Icon className='icon' name='list layout'></Icon>
+                <Icon className='icon' name='grid layout'></Icon>
             </div>
             <div className='flexbox-container'>
                 <Nav />
                 <div className='content-container'>
-                    {/* <Switch>
+                    <Switch>
                         <Route exact path='/login' render={() => <LoginForm />} />
                         <Route path='/signup' render={() => <SignupForm />} />
-                    </Switch> */}
-                    <LoginForm />
-                    <SignupForm />
+                    </Switch>
+                    {/* <LoginForm />
+                    <SignupForm /> */}
                 </div>
                 <Auth />
             </div>

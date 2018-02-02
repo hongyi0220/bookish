@@ -1,0 +1,50 @@
+@import 'variables';
+
+.nav-container {
+    flex-grow: 1;
+    .search-bar-wrapper {
+        position: relative;
+        input {
+            background: $light-grey;
+            width: 100%;
+            height: 3em;
+            border: none;
+            padding-left: 1em;
+            border-radius: $bd-radius;
+            &:focus {
+                outline: none;
+                background-color: white;
+                box-shadow: 0 .2px 1px grey;
+            }
+        }
+        .emoji-wrapper {
+            position: absolute;
+            right: 0;
+        }
+    }
+    .home-link-wrapper {
+        margin-top: .1em;
+    }
+    .search-bar-wrapper, .home-link-wrapper, .books-link-wrapper, .inbox-link-wrapper, .about-link-wrapper {
+        height: 3em;
+        transition: all .1s ease;
+        &:hover {
+            // border: 1px solid $light-grey;
+            border-radius: $bd-radius;
+            background-color: white;
+            box-shadow: 0 .2px 1px grey;
+            cursor: pointer;
+        }
+        .text-wrapper {
+            // border: 1px solid red;
+            display: inline-block;
+            color: grey;
+            line-height: 3em;
+            margin-left: 1em;
+        }
+        .emoji-wrapper {
+            line-height: 3em;
+            margin-right: 1em;
+        }
+    }
+}

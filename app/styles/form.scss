@@ -1,20 +1,20 @@
 @import 'variables';
-.signup-form-container {
-    padding: 1em;
+.form-container {
+    // padding: 1em;
     text-align: center;
-    h2, .signin-link {
+    h2, .link {
         text-align: center;
     }
-    .signup-form {
-        display: flex;
-        flex-direction: column;
+    .form {
+        // display: flex;
+        // flex-direction: column;
         width: 25%;
         min-width: 300px;
         margin: 1em auto 1em auto;
         // background-color: rgb(237,238,238);
-        border-radius: 2px;
+        // border-radius: 2px;
         .username-container, .password-container {
-            flex-grow: 1;
+            // flex-grow: 1;
             margin: 0.5em;
             position: relative;
             input {
@@ -37,8 +37,8 @@
                 margin-right: 1em;
             }
         }
-        .button-container {
-            flex-grow: 1;
+        .button-wrapper {
+            // flex-grow: 1;
             margin: 0.5em;
             text-align: center;
             transition: all 1s ease;
@@ -49,9 +49,11 @@
                 border: none;
                 padding: 0.5em;
                 border-radius: 2px;
-                transition: all 1s ease;
+                opacity: .8;
+                transition: all .3s ease;
                 &:hover {
-                    background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #19B5FE 100%);
+                    opacity: 1;
+                    // background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #19B5FE 100%);
                 }
             }
         }
