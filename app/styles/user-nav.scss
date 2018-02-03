@@ -1,25 +1,47 @@
 @import 'variables';
 .user-nav-container {
     flex-grow: 1;
-    .user-nav-link-container {
-        height: 3em;
-        &:hover {
-            // border: 1px solid $light-grey;
-            border-radius: $bd-radius;
-            background-color: white;
-            box-shadow: 0 .2px 1px grey;
-            cursor: pointer;
+    .user-window {
+        .greeting-wrapper {
+            .username-wrapper {
+                display: inline-block;
+                color: $picton-blue;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
         }
-        .text-wrapper {
-            // border: 1px solid red;
-            display: inline-block;
-            color: grey;
-            line-height: 3em;
-            margin-left: 1em;
-        }
-        .emoji-wrapper {
-            line-height: 3em;
-            margin-right: 1em;
+        .user-menu-container {
+            .menu-item-wrapper {
+                color: $picton-blue;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
         }
     }
+    .auth-links-container {
+        .auth-link-container {
+            height: 3em;
+            &:hover {
+                // border: 1px solid $light-grey;
+                border-radius: $bd-radius;
+                background-color: white;
+                box-shadow: 0 .2px 1px grey;
+                cursor: pointer;
+            }
+            .text-wrapper {
+                // border: 1px solid red;
+                display: inline-block;
+                color: grey;
+                line-height: 3em;
+                margin-left: 1em;
+            }
+            .emoji-wrapper {
+                line-height: 3em;
+                margin-right: 1em;
+            }
+        }
+    }
+
 }

@@ -16,16 +16,14 @@ class App extends React.Component {
             dev: true
         };
         this.retrieveUserSession = this.retrieveUserSession.bind(this);
+        this.logout = this.logout.bind(this);
     }
 
     retrieveUserSession() {
         const dev = this.state.dev;
         const apiUrl = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/session';
-        fetch(apiUrl + route, {
-            method: 'get',
-            credentials: 'include'
-        })
+        fetch(apiUrl + route, {credentials: 'include'})
         .then(res => res.json())
         .then(resJson => {
             console.log('resJson:', resJson);
@@ -34,14 +32,27 @@ class App extends React.Component {
         .catch(err => console.error(err));
     }
 
+    logout() {
+        const dev = this.state.dev;
+        const apiUrl = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const route = '/logout';
+        fetch(apiUrl + route)
+        .catch(err => console.error(err));
+        this.setState({ user: null });
+        this.props.history.push('/');
+    }
+
     componentDidMount() {
         console.log('cmpDidMnt');
         const socket = socketIOClient();
         this.retrieveUserSession();
-
     }
 
     render() {
+        const isLoggedIn = this.state.user;
+        // const username = isLoggedIn ? isLoggedIn.username : '';
+        const logout = this.logout;
+
         return (<div className='app-container'>
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
@@ -59,7 +70,7 @@ class App extends React.Component {
                     {/* <LoginForm />
                     <SignupForm /> */}
                 </div>
-                <UserNav />
+                <UserNav isLoggedIn={isLoggedIn} logout={logout}/>
             </div>
         </div>);
     }

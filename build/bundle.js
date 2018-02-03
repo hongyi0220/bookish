@@ -45958,6 +45958,7 @@ var App = function (_React$Component) {
             dev: true
         };
         _this.retrieveUserSession = _this.retrieveUserSession.bind(_this);
+        _this.logout = _this.logout.bind(_this);
         return _this;
     }
 
@@ -45969,10 +45970,7 @@ var App = function (_React$Component) {
             var dev = this.state.dev;
             var apiUrl = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/session';
-            fetch(apiUrl + route, {
-                method: 'get',
-                credentials: 'include'
-            }).then(function (res) {
+            fetch(apiUrl + route, { credentials: 'include' }).then(function (res) {
                 return res.json();
             }).then(function (resJson) {
                 console.log('resJson:', resJson);
@@ -45980,6 +45978,18 @@ var App = function (_React$Component) {
             }).catch(function (err) {
                 return console.error(err);
             });
+        }
+    }, {
+        key: 'logout',
+        value: function logout() {
+            var dev = this.state.dev;
+            var apiUrl = dev ? 'http://localhost:8080' : 'http://myappurl';
+            var route = '/logout';
+            fetch(apiUrl + route).catch(function (err) {
+                return console.error(err);
+            });
+            this.setState({ user: null });
+            this.props.history.push('/');
         }
     }, {
         key: 'componentDidMount',
@@ -45991,6 +46001,10 @@ var App = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var isLoggedIn = this.state.user;
+            // const username = isLoggedIn ? isLoggedIn.username : '';
+            var logout = this.logout;
+
             return _react2.default.createElement(
                 'div',
                 { className: 'app-container' },
@@ -46028,7 +46042,7 @@ var App = function (_React$Component) {
                                 } })
                         )
                     ),
-                    _react2.default.createElement(_UserNav.UserNav, null)
+                    _react2.default.createElement(_UserNav.UserNav, { isLoggedIn: isLoggedIn, logout: logout })
                 )
             );
         }
@@ -69677,42 +69691,91 @@ var _reactRouterDom = __webpack_require__(55);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var UserNav = exports.UserNav = function UserNav(props) {
+    var isLoggedIn = props.isLoggedIn;
+    var username = isLoggedIn ? isLoggedIn.username : '';
+    var logout = props.logout;
+
     return _react2.default.createElement(
         'div',
         { className: 'user-nav-container' },
-        _react2.default.createElement(
-            _reactRouterDom.Link,
-            { className: 'user-nav-link', to: '/login' },
+        isLoggedIn ? _react2.default.createElement(
+            'div',
+            { className: 'user-window' },
             _react2.default.createElement(
                 'div',
-                { className: 'user-nav-link-container' },
+                { className: 'greeting-wrapper' },
+                'Hello,\xA0',
                 _react2.default.createElement(
                     'div',
-                    { className: 'text-wrapper' },
-                    'Log In'
+                    { className: 'username-wrapper' },
+                    username
+                ),
+                '!'
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'user-menu-container' },
+                _react2.default.createElement(
+                    _reactRouterDom.Link,
+                    { to: '/profile' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'menu-item-wrapper' },
+                        'Profile'
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactRouterDom.Link,
+                    { to: '/mybooks' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'menu-item-wrapper' },
+                        'My Books'
+                    )
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'emoji-wrapper' },
-                    '\uD83D\uDD11'
+                    { className: 'menu-item-wrapper', onClick: logout },
+                    'Log Out'
                 )
             )
-        ),
-        _react2.default.createElement(
-            _reactRouterDom.Link,
-            { className: 'user-nav-link', to: '/signup' },
+        ) : _react2.default.createElement(
+            'div',
+            { className: 'auth-links-container' },
             _react2.default.createElement(
-                'div',
-                { className: 'user-nav-link-container' },
+                _reactRouterDom.Link,
+                { className: 'auth-link', to: '/login' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'text-wrapper' },
-                    'Sign Up'
-                ),
+                    { className: 'auth-link-container' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'text-wrapper' },
+                        'Log In'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'emoji-wrapper' },
+                        '\uD83D\uDD11'
+                    )
+                )
+            ),
+            _react2.default.createElement(
+                _reactRouterDom.Link,
+                { className: 'auth-link', to: '/signup' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'emoji-wrapper' },
-                    '\uD83D\uDD8B\uFE0F'
+                    { className: 'auth-link-container' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'text-wrapper' },
+                        'Sign Up'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'emoji-wrapper' },
+                        '\uD83D\uDD8B\uFE0F'
+                    )
                 )
             )
         )

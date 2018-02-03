@@ -14,6 +14,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const dbErrMsg = 'There was a problem connecting to database ';
 
+// Configure passportJs login strategy
 passport.use(new LocalStrategy(
     function(username, password, done) {
         MongoClient.connect(dbURL, (err, db) => {
@@ -39,11 +40,14 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// This stores user in session after authentication
 passport.serializeUser(function(user, done) {
     console.log('serializing user:', user);
     done(null, user._id);
 });
 
+// This retrieves user info from database using user._id set in session
+//and store it in req.user because it is more secure not to store user info in session cookie
 passport.deserializeUser(function(id, done) {
     console.log('deserializing user; id:', id);
     MongoClient.connect(dbURL, (err, db) => {
@@ -61,8 +65,8 @@ app.use(passport.session());
 
 app.get('/session', (req, res) => {
     console.log('req.session:', req.session);
-    console.log('req.session.user:', req.session.user);
-    res.send(req.session.passport.user);
+    console.log('req.user:', req.user);
+    res.send(req.user);
 });
 
 app.post('/login',
@@ -79,8 +83,10 @@ app.post('/login',
 });
 
 app.get('/logout', (req, res) => {
+    console.log('user logged out');
     req.logout();
-    res.redirect('/');
+    console.log('req.session:', req.session);
+    console.log('req.user:', req.user);
 });
 
 app.post('/signup', (req, res) => {

@@ -43,19 +43,28 @@
 
 .user-nav-container {
   flex-grow: 1; }
-  .user-nav-container .user-nav-link-container {
+  .user-nav-container .user-window .greeting-wrapper .username-wrapper {
+    display: inline-block;
+    color: #22A7F0; }
+    .user-nav-container .user-window .greeting-wrapper .username-wrapper:hover {
+      cursor: pointer; }
+  .user-nav-container .user-window .user-menu-container .menu-item-wrapper {
+    color: #22A7F0; }
+    .user-nav-container .user-window .user-menu-container .menu-item-wrapper:hover {
+      cursor: pointer; }
+  .user-nav-container .auth-links-container .auth-link-container {
     height: 3em; }
-    .user-nav-container .user-nav-link-container:hover {
+    .user-nav-container .auth-links-container .auth-link-container:hover {
       border-radius: 4px;
       background-color: white;
       box-shadow: 0 .2px 1px grey;
       cursor: pointer; }
-    .user-nav-container .user-nav-link-container .text-wrapper {
+    .user-nav-container .auth-links-container .auth-link-container .text-wrapper {
       display: inline-block;
       color: grey;
       line-height: 3em;
       margin-left: 1em; }
-    .user-nav-container .user-nav-link-container .emoji-wrapper {
+    .user-nav-container .auth-links-container .auth-link-container .emoji-wrapper {
       line-height: 3em;
       margin-right: 1em; }
 
