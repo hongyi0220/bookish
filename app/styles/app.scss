@@ -1,6 +1,6 @@
 @import 'variables';
 @import 'form';
-@import 'auth';
+@import 'user-nav';
 @import 'nav';
 
 .app-container {
@@ -37,7 +37,7 @@
             display: inline-block;
             float: right;
         }
-        .nav-container, .content-container, .auth-container {
+        .nav-container, .content-container, .user-nav-container {
             min-width: 200px;
         }
         .content-container {

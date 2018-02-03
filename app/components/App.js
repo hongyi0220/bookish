@@ -3,7 +3,7 @@ import { withRouter, Switch, Route } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import { Transition, Icon, Sidebar } from 'semantic-ui-react';
 import { Nav } from './Nav';
-import { Auth } from './Auth';
+import { UserNav } from './UserNav';
 import { SignupForm } from './forms/SignupForm';
 import { LoginForm } from './forms/LoginForm'
 
@@ -11,10 +11,33 @@ class App extends React.Component {
     constructor() {
         super();
         //	AIzaSyDHUrQvtLU4zjnACT-2TlctA1RFA_2DxuQ
+        this.state = {
+            user: null,
+            dev: true
+        };
+        this.retrieveUserSession = this.retrieveUserSession.bind(this);
+    }
+
+    retrieveUserSession() {
+        const dev = this.state.dev;
+        const apiUrl = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const route = '/session';
+        fetch(apiUrl + route, {
+            method: 'get',
+            credentials: 'include'
+        })
+        .then(res => res.json())
+        .then(resJson => {
+            console.log('resJson:', resJson);
+            this.setState({ user: resJson });
+        })
+        .catch(err => console.error(err));
     }
 
     componentDidMount() {
+        console.log('cmpDidMnt');
         const socket = socketIOClient();
+        this.retrieveUserSession();
 
     }
 
@@ -36,7 +59,7 @@ class App extends React.Component {
                     {/* <LoginForm />
                     <SignupForm /> */}
                 </div>
-                <Auth />
+                <UserNav />
             </div>
         </div>);
     }

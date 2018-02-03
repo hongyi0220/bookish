@@ -45930,7 +45930,7 @@ var _semanticUiReact = __webpack_require__(482);
 
 var _Nav = __webpack_require__(821);
 
-var _Auth = __webpack_require__(822);
+var _UserNav = __webpack_require__(822);
 
 var _SignupForm = __webpack_require__(823);
 
@@ -45950,14 +45950,43 @@ var App = function (_React$Component) {
     function App() {
         _classCallCheck(this, App);
 
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
         //	AIzaSyDHUrQvtLU4zjnACT-2TlctA1RFA_2DxuQ
+        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
+
+        _this.state = {
+            user: null,
+            dev: true
+        };
+        _this.retrieveUserSession = _this.retrieveUserSession.bind(_this);
+        return _this;
     }
 
     _createClass(App, [{
+        key: 'retrieveUserSession',
+        value: function retrieveUserSession() {
+            var _this2 = this;
+
+            var dev = this.state.dev;
+            var apiUrl = dev ? 'http://localhost:8080' : 'http://myappurl';
+            var route = '/session';
+            fetch(apiUrl + route, {
+                method: 'get',
+                credentials: 'include'
+            }).then(function (res) {
+                return res.json();
+            }).then(function (resJson) {
+                console.log('resJson:', resJson);
+                _this2.setState({ user: resJson });
+            }).catch(function (err) {
+                return console.error(err);
+            });
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
+            console.log('cmpDidMnt');
             var socket = (0, _socket2.default)();
+            this.retrieveUserSession();
         }
     }, {
         key: 'render',
@@ -45999,7 +46028,7 @@ var App = function (_React$Component) {
                                 } })
                         )
                     ),
-                    _react2.default.createElement(_Auth.Auth, null)
+                    _react2.default.createElement(_UserNav.UserNav, null)
                 )
             );
         }
@@ -69637,7 +69666,7 @@ var Nav = exports.Nav = function Nav(props) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Auth = undefined;
+exports.UserNav = undefined;
 
 var _react = __webpack_require__(0);
 
@@ -69647,16 +69676,16 @@ var _reactRouterDom = __webpack_require__(55);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Auth = exports.Auth = function Auth(props) {
+var UserNav = exports.UserNav = function UserNav(props) {
     return _react2.default.createElement(
         'div',
-        { className: 'auth-container' },
+        { className: 'user-nav-container' },
         _react2.default.createElement(
             _reactRouterDom.Link,
-            { className: 'auth-link', to: '/login' },
+            { className: 'user-nav-link', to: '/login' },
             _react2.default.createElement(
                 'div',
-                { className: 'auth-link-container' },
+                { className: 'user-nav-link-container' },
                 _react2.default.createElement(
                     'div',
                     { className: 'text-wrapper' },
@@ -69671,10 +69700,10 @@ var Auth = exports.Auth = function Auth(props) {
         ),
         _react2.default.createElement(
             _reactRouterDom.Link,
-            { className: 'auth-link', to: '/signup' },
+            { className: 'user-nav-link', to: '/signup' },
             _react2.default.createElement(
                 'div',
-                { className: 'auth-link-container' },
+                { className: 'user-nav-link-container' },
                 _react2.default.createElement(
                     'div',
                     { className: 'text-wrapper' },

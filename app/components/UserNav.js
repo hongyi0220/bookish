@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const Auth = props => {
+export const UserNav = props => {
     return (
-        <div className='auth-container'>
-            <Link className='auth-link' to='/login'>
-                <div className='auth-link-container'>
+        <div className='user-nav-container'>
+            <Link className='user-nav-link' to='/login'>
+                <div className='user-nav-link-container'>
                         <div className='text-wrapper'>Log In</div>
                         <div className='emoji-wrapper'>🔑</div>
                 </div>
             </Link>
-            <Link className='auth-link' to='/signup'>
-                <div className='auth-link-container'>
+            <Link className='user-nav-link' to='/signup'>
+                <div className='user-nav-link-container'>
                         <div className='text-wrapper'>Sign Up</div>
                         <div className='emoji-wrapper'>🖋️</div>
                 </div>

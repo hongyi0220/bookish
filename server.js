@@ -39,29 +39,44 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(passport.initialize());
-app.use(passport.session());
-
 passport.serializeUser(function(user, done) {
+    console.log('serializing user:', user);
     done(null, user._id);
 });
 
 passport.deserializeUser(function(id, done) {
+    console.log('deserializing user; id:', id);
     MongoClient.connect(dbURL, (err, db) => {
         if (err) console.error(dbErrMsg, err);
         const Users = db.collection('users');
-        Users.findOne({_id: id}, function(err, user) {
+        Users.findOne({_id: mongo.ObjectId(id)}, function(err, user) {
             done(err, user);
             db.close();
         });
     });
 });
 
-app.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/session', (req, res) => {
+    console.log('req.session:', req.session);
+    console.log('req.session.user:', req.session.user);
+    res.send(req.session.passport.user);
+});
+
+app.post('/login',
+    function(req, res) {
+        passport.authenticate('local', function(err, user, info) {
+            if (err) return console.error(err);
+            if (!user) return res.redirect('/login')
+            req.login(user, function(err) {
+                if (err) return console.error(err);
+                return res.redirect('/' + user.username);
+            });
+            res.end();
+        })(req, res);
+});
 
 app.get('/logout', (req, res) => {
     req.logout();

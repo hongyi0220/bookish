@@ -41,21 +41,21 @@
         .form-container .form .button-wrapper button:hover {
           opacity: 1; }
 
-.auth-container {
+.user-nav-container {
   flex-grow: 1; }
-  .auth-container .auth-link-container {
+  .user-nav-container .user-nav-link-container {
     height: 3em; }
-    .auth-container .auth-link-container:hover {
+    .user-nav-container .user-nav-link-container:hover {
       border-radius: 4px;
       background-color: white;
       box-shadow: 0 .2px 1px grey;
       cursor: pointer; }
-    .auth-container .auth-link-container .text-wrapper {
+    .user-nav-container .user-nav-link-container .text-wrapper {
       display: inline-block;
       color: grey;
       line-height: 3em;
       margin-left: 1em; }
-    .auth-container .auth-link-container .emoji-wrapper {
+    .user-nav-container .user-nav-link-container .emoji-wrapper {
       line-height: 3em;
       margin-right: 1em; }
 
@@ -123,7 +123,7 @@
     .app-container .flexbox-container .emoji-wrapper {
       display: inline-block;
       float: right; }
-    .app-container .flexbox-container .nav-container, .app-container .flexbox-container .content-container, .app-container .flexbox-container .auth-container {
+    .app-container .flexbox-container .nav-container, .app-container .flexbox-container .content-container, .app-container .flexbox-container .user-nav-container {
       min-width: 200px; }
     .app-container .flexbox-container .content-container {
       flex-grow: 8;
