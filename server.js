@@ -5,7 +5,7 @@ const http = require('http').Server(app);
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
 require('dotenv').config();
-const dbUrl = process.env.MONGOLAB_URI;
+const dbURL = process.env.MONGOLAB_URI;
 const port = process.env.PORT || 8080;
 const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
@@ -16,13 +16,14 @@ const dbErrMsg = 'There was a problem connecting to database ';
 
 passport.use(new LocalStrategy(
     function(username, password, done) {
-        MongoClient.connect(dbUrl, (err, db) => {
+        MongoClient.connect(dbURL, (err, db) => {
             if (err) console.error(dbErrMsg, err);
-            const users = db.collection('users');
-            users.findOne({ username: username }, function(err, user) {
+            const Users = db.collection('users');
+            Users.findOne({ username: username }, function(err, user) {
                 if (err) return done(err);
                 if (!user) return done(null, false, {message: 'Incorrect username.'});
                 if (user.password !== password) return done(null, false, {message: 'Incorrect password'});
+                db.close();
                 return done(null, user);
             });
         });
@@ -35,33 +36,57 @@ app.use(session({
     saveUninitialized: false,
     unset: 'destroy'
 }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+passport.serializeUser(function(user, done) {
+    done(null, user._id);
+});
+
+passport.deserializeUser(function(id, done) {
+    MongoClient.connect(dbURL, (err, db) => {
+        if (err) console.error(dbErrMsg, err);
+        const Users = db.collection('users');
+        Users.findOne({_id: id}, function(err, user) {
+            done(err, user);
+            db.close();
+        });
+    });
+});
+
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+});
 
 app.post('/signup', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 console.log('hi');
-    MongoClient.connect(dbUrl, (err, db) => {
+    MongoClient.connect(dbURL, (err, db) => {
         console.log('connected');
         if (err) console.error(dbErrMsg, err);
         // Check if the username is already taken
-        const users = db.collection('users');
+        const Users = db.collection('users');
 
-        users.find({ username: username })
-        .toArray((err, docs) => {
+        Users.findOne({ username: username }, function(err, user) {
             if (err) console.error(err);
-            if (docs.length) res.redirect('/signup/invalid_username');
+            if (user) res.redirect('/signup/invalid_username');
             else {
                 const schema = {
                     username: username,
                     password: password
                 };
-                users.insert(schema);
+                Users.insert(schema);
                 db.close();
                 res.redirect('/');
             }
