@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
@@ -6,6 +5,7 @@ const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
 require('dotenv').config();
 const dbURL = process.env.MONGOLAB_URI;
+const googleApiKey = process.env.GOOGLEAPIKEY;
 const port = process.env.PORT || 8080;
 const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
@@ -63,9 +63,14 @@ passport.deserializeUser(function(id, done) {
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/apikey', (req, res) => {
+    console.log('apiKey requested:', googleApiKey);
+    res.send({apiKey: googleApiKey});
+});
+
 app.get('/session', (req, res) => {
-    console.log('req.session:', req.session);
-    console.log('req.user:', req.user);
+    // console.log('req.session:', req.session);
+    // console.log('req.user:', req.user);
     res.send(req.user);
 });
 

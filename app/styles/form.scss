@@ -13,7 +13,19 @@
         margin: 1em auto 1em auto;
         // background-color: rgb(237,238,238);
         // border-radius: 2px;
-        .username-container, .password-container {
+        .form-item-container.profile-item-container {
+            input {
+                background: $bg-grey;
+                &:-webkit-autofill {
+                    -webkit-box-shadow: 0 0 0px 100px $bg-grey inset;
+                }
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+        }
+        .form-item-container {
             // flex-grow: 1;
             margin: 0.5em;
             position: relative;
@@ -37,6 +49,7 @@
                 margin-right: 1em;
             }
         }
+
         .button-wrapper {
             // flex-grow: 1;
             margin: 0.5em;

@@ -40,6 +40,9 @@
         .nav-container, .content-container, .user-nav-container {
             min-width: 200px;
         }
+        .nav-container {
+            flex-grow: 1;
+        }
         .content-container {
             flex-grow: 8;
             min-width: 300px;

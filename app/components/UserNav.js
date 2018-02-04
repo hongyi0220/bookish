@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const UserNav = props => {
-    const isLoggedIn = props.isLoggedIn;
+    const state = props.state;
+    const isLoggedIn = state.user;
     const username = isLoggedIn ? isLoggedIn.username : '';
     const logout = props.logout;
 
@@ -10,17 +11,29 @@ export const UserNav = props => {
         <div className='user-nav-container'>
             {isLoggedIn ?
                 <div className='user-window'>
-                    <div className='greeting-wrapper'>
-                        Hello,&nbsp;<div className='username-wrapper'>{username}</div>!
+                    <div className='nav-item-wrapper greeting-wrapper'>
+                        <div className='text-wrapper'>
+                            Hello,&nbsp;<div className='username-wrapper'>{username}</div>!
+                        </div>
+                        <div className='emoji-wrapper'>👋</div>
                     </div>
                     <div className='user-menu-container'>
                         <Link to='/profile'>
-                            <div className='menu-item-wrapper'>Profile</div>
+                            <div className='nav-item-wrapper'>
+                                <div className='text-wrapper'>Profile</div>
+                                <div className='emoji-wrapper'>⚙️</div>
+                            </div>
                         </Link>
                         <Link to='/mybooks'>
-                            <div className='menu-item-wrapper'>My Books</div>
+                            <div className='nav-item-wrapper'>
+                                <div className='text-wrapper'>My Books</div>
+                                <div className='emoji-wrapper'>📖</div>
+                            </div>
                         </Link>
-                        <div className='menu-item-wrapper' onClick={logout}>Log Out</div>
+                        <div className='nav-item-wrapper' onClick={logout}>
+                            <div className='text-wrapper'>Log Out</div>
+                            <div className='emoji-wrapper'>⏏️</div>
+                        </div>
                     </div>
                 </div>
                  :

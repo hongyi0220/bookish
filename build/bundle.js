@@ -24982,7 +24982,7 @@ StatisticValue.create = Object(__WEBPACK_IMPORTED_MODULE_4__lib__["m" /* createS
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(420);
-module.exports = __webpack_require__(825);
+module.exports = __webpack_require__(827);
 
 
 /***/ }),
@@ -45936,6 +45936,10 @@ var _SignupForm = __webpack_require__(823);
 
 var _LoginForm = __webpack_require__(824);
 
+var _Profile = __webpack_require__(825);
+
+var _SearchResults = __webpack_require__(826);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -45950,15 +45954,21 @@ var App = function (_React$Component) {
     function App() {
         _classCallCheck(this, App);
 
-        //	AIzaSyDHUrQvtLU4zjnACT-2TlctA1RFA_2DxuQ
         var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
         _this.state = {
             user: null,
+            searchResults: null,
+            searchValue: '',
             dev: true
         };
         _this.retrieveUserSession = _this.retrieveUserSession.bind(_this);
         _this.logout = _this.logout.bind(_this);
+        _this.searchForBook = _this.searchForBook.bind(_this);
+        _this.getApiKey = _this.getApiKey.bind(_this);
+        _this.callGoogleApi = _this.callGoogleApi.bind(_this);
+        _this.handleInput = _this.handleInput.bind(_this);
+        _this.pushToBrowserHistory = _this.pushToBrowserHistory.bind(_this);
         return _this;
     }
 
@@ -45968,9 +45978,9 @@ var App = function (_React$Component) {
             var _this2 = this;
 
             var dev = this.state.dev;
-            var apiUrl = dev ? 'http://localhost:8080' : 'http://myappurl';
+            var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/session';
-            fetch(apiUrl + route, { credentials: 'include' }).then(function (res) {
+            fetch(apiRoot + route, { credentials: 'include' }).then(function (res) {
                 return res.json();
             }).then(function (resJson) {
                 console.log('resJson:', resJson);
@@ -45983,13 +45993,74 @@ var App = function (_React$Component) {
         key: 'logout',
         value: function logout() {
             var dev = this.state.dev;
-            var apiUrl = dev ? 'http://localhost:8080' : 'http://myappurl';
+            var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/logout';
-            fetch(apiUrl + route).catch(function (err) {
+            fetch(apiRoot + route).catch(function (err) {
                 return console.error(err);
             });
             this.setState({ user: null });
             this.props.history.push('/');
+        }
+    }, {
+        key: 'getApiKey',
+        value: function getApiKey() {
+            var dev = this.state.dev;
+            var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+            var route = '/apikey';
+            return fetch(apiRoot + route).then(function (res) {
+                return res.json();
+            }).then(function (resJson) {
+                console.log('apiKey???:', resJson);
+                return resJson.apiKey;
+            }).catch(function (err) {
+                return console.error(err);
+            });
+        }
+    }, {
+        key: 'callGoogleApi',
+        value: function callGoogleApi(keyword, apiKey) {
+            var apiRoot = 'https://www.googleapis.com/books/v1/volumes?q=';
+            apiKey = '&key=' + apiKey;
+            console.log('apiUrl:', apiRoot + keyword + apiKey);
+            // keyword += '+';
+            // if (!(term === 'intitle' || 'inauthor')) return console.error('Invalid term');
+            return fetch(apiRoot + keyword + apiKey).then(function (res) {
+                return res.json();
+            }).then(function (resJson) {
+                return resJson;
+            }).catch(function (err) {
+                return console.error(err);
+            });
+        }
+    }, {
+        key: 'searchForBook',
+        value: function searchForBook(evt) {
+            var _this3 = this;
+
+            var keyword = evt.target.value;
+            console.log('keyword @ searchForBook:', keyword);
+            if (keyword.length) this.getApiKey().then(function (apiKey) {
+                console.log('apiKey:', apiKey);
+                _this3.callGoogleApi(keyword, apiKey).then(function (books) {
+                    return _this3.setState({ searchResults: books });
+                }).catch(function (err) {
+                    return console.error(err);
+                });
+            }).catch(function (err) {
+                return console.error(err);
+            });
+        }
+    }, {
+        key: 'handleInput',
+        value: function handleInput(evt) {
+            var searchValue = evt.target.value;
+            console.log('searchValue @ handleInput:', searchValue);
+            this.setState({ searchValue: searchValue });
+        }
+    }, {
+        key: 'pushToBrowserHistory',
+        value: function pushToBrowserHistory(route) {
+            this.props.history.push(route);
         }
     }, {
         key: 'componentDidMount',
@@ -46001,9 +46072,11 @@ var App = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var isLoggedIn = this.state.user;
-            // const username = isLoggedIn ? isLoggedIn.username : '';
+            var state = this.state;
             var logout = this.logout;
+            var handleInput = this.handleInput;
+            var searchForBook = this.searchForBook;
+            var pushToBrowserHistory = this.pushToBrowserHistory;
 
             return _react2.default.createElement(
                 'div',
@@ -46027,13 +46100,21 @@ var App = function (_React$Component) {
                 _react2.default.createElement(
                     'div',
                     { className: 'flexbox-container' },
-                    _react2.default.createElement(_Nav.Nav, null),
+                    _react2.default.createElement(_Nav.Nav, { state: state, handleInput: handleInput, searchForBook: searchForBook,
+                        pushToBrowserHistory: pushToBrowserHistory }),
                     _react2.default.createElement(
                         'div',
                         { className: 'content-container' },
                         _react2.default.createElement(
                             _reactRouterDom.Switch,
                             null,
+                            _react2.default.createElement(_reactRouterDom.Route, { path: '/results', render: function render() {
+                                    return _react2.default.createElement(_SearchResults.SearchResults, { state: state
+                                    });
+                                } }),
+                            _react2.default.createElement(_reactRouterDom.Route, { path: '/profile', render: function render() {
+                                    return _react2.default.createElement(_Profile.Profile, { state: state });
+                                } }),
                             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/login', render: function render() {
                                     return _react2.default.createElement(_LoginForm.LoginForm, null);
                                 } }),
@@ -46042,7 +46123,7 @@ var App = function (_React$Component) {
                                 } })
                         )
                     ),
-                    _react2.default.createElement(_UserNav.UserNav, { isLoggedIn: isLoggedIn, logout: logout })
+                    _react2.default.createElement(_UserNav.UserNav, { state: state, logout: logout })
                 )
             );
         }
@@ -69594,13 +69675,22 @@ var _reactRouterDom = __webpack_require__(55);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Nav = exports.Nav = function Nav(props) {
+    var state = props.state;
+    var searchValue = state.searchValue;
+    var handleInput = props.handleInput;
+    var searchForBook = props.searchForBook;
+    var pushToBrowserHistory = props.pushToBrowserHistory;
+
     return _react2.default.createElement(
         'div',
         { className: 'nav-container' },
         _react2.default.createElement(
             'div',
-            { className: 'search-bar-wrapper' },
-            _react2.default.createElement('input', { type: 'text', placeholder: 'Search' }),
+            { className: 'nav-item-wrapper' },
+            _react2.default.createElement('input', { type: 'text', placeholder: 'Search', onChange: handleInput, value: searchValue,
+                onKeyUp: searchForBook, onClick: function onClick() {
+                    pushToBrowserHistory('/results');
+                } }),
             _react2.default.createElement(
                 'div',
                 { className: 'emoji-wrapper' },
@@ -69612,7 +69702,7 @@ var Nav = exports.Nav = function Nav(props) {
             { to: '/' },
             _react2.default.createElement(
                 'div',
-                { className: 'home-link-wrapper' },
+                { className: 'nav-item-wrapper' },
                 _react2.default.createElement(
                     'div',
                     { className: 'text-wrapper' },
@@ -69627,7 +69717,7 @@ var Nav = exports.Nav = function Nav(props) {
         ),
         _react2.default.createElement(
             'div',
-            { className: 'books-link-wrapper' },
+            { className: 'nav-item-wrapper' },
             _react2.default.createElement(
                 'div',
                 { className: 'text-wrapper' },
@@ -69641,7 +69731,7 @@ var Nav = exports.Nav = function Nav(props) {
         ),
         _react2.default.createElement(
             'div',
-            { className: 'inbox-link-wrapper' },
+            { className: 'nav-item-wrapper' },
             _react2.default.createElement(
                 'div',
                 { className: 'text-wrapper' },
@@ -69655,7 +69745,7 @@ var Nav = exports.Nav = function Nav(props) {
         ),
         _react2.default.createElement(
             'div',
-            { className: 'about-link-wrapper' },
+            { className: 'nav-item-wrapper' },
             _react2.default.createElement(
                 'div',
                 { className: 'text-wrapper' },
@@ -69691,7 +69781,8 @@ var _reactRouterDom = __webpack_require__(55);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var UserNav = exports.UserNav = function UserNav(props) {
-    var isLoggedIn = props.isLoggedIn;
+    var state = props.state;
+    var isLoggedIn = state.user;
     var username = isLoggedIn ? isLoggedIn.username : '';
     var logout = props.logout;
 
@@ -69703,14 +69794,23 @@ var UserNav = exports.UserNav = function UserNav(props) {
             { className: 'user-window' },
             _react2.default.createElement(
                 'div',
-                { className: 'greeting-wrapper' },
-                'Hello,\xA0',
+                { className: 'nav-item-wrapper greeting-wrapper' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'username-wrapper' },
-                    username
+                    { className: 'text-wrapper' },
+                    'Hello,\xA0',
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'username-wrapper' },
+                        username
+                    ),
+                    '!'
                 ),
-                '!'
+                _react2.default.createElement(
+                    'div',
+                    { className: 'emoji-wrapper' },
+                    '\uD83D\uDC4B'
+                )
             ),
             _react2.default.createElement(
                 'div',
@@ -69720,8 +69820,17 @@ var UserNav = exports.UserNav = function UserNav(props) {
                     { to: '/profile' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'menu-item-wrapper' },
-                        'Profile'
+                        { className: 'nav-item-wrapper' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'text-wrapper' },
+                            'Profile'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'emoji-wrapper' },
+                            '\u2699\uFE0F'
+                        )
                     )
                 ),
                 _react2.default.createElement(
@@ -69729,14 +69838,32 @@ var UserNav = exports.UserNav = function UserNav(props) {
                     { to: '/mybooks' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'menu-item-wrapper' },
-                        'My Books'
+                        { className: 'nav-item-wrapper' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'text-wrapper' },
+                            'My Books'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'emoji-wrapper' },
+                            '\uD83D\uDCD6'
+                        )
                     )
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'menu-item-wrapper', onClick: logout },
-                    'Log Out'
+                    { className: 'nav-item-wrapper', onClick: logout },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'text-wrapper' },
+                        'Log Out'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'emoji-wrapper' },
+                        '\u23CF\uFE0F'
+                    )
                 )
             )
         ) : _react2.default.createElement(
@@ -69901,7 +70028,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
             { className: 'form', action: '/login', method: 'post' },
             _react2.default.createElement(
                 'div',
-                { className: 'username-container' },
+                { className: 'form-item-container' },
                 _react2.default.createElement('input', { id: 'username', type: 'text', name: 'username', placeholder: 'Enter your username' }),
                 _react2.default.createElement(
                     'div',
@@ -69911,7 +70038,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
             ),
             _react2.default.createElement(
                 'div',
-                { className: 'password-container' },
+                { className: 'form-item-container' },
                 _react2.default.createElement('input', { id: 'password', type: 'password', name: 'password', placeholder: 'Enter your password' }),
                 _react2.default.createElement(
                     'div',
@@ -69934,6 +70061,146 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
 
 /***/ }),
 /* 825 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Profile = undefined;
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Profile = exports.Profile = function Profile(props) {
+    var state = props.state;
+    var user = state.user ? state.user : '';
+    var username = user.username;
+    var password = user.password;
+    var location = user.location || 'city, state';
+    var masked = function maskPassword(password) {
+        var masked = '';
+        for (var i = 0; i < password.length; i++) {
+            masked += '*';
+        }return masked;
+    }(password);
+
+    return _react2.default.createElement(
+        'div',
+        { className: 'profile-container' },
+        _react2.default.createElement(
+            'div',
+            { className: 'form-container' },
+            _react2.default.createElement(
+                'h2',
+                null,
+                'My profile'
+            ),
+            _react2.default.createElement(
+                'form',
+                { className: 'form', action: '/profile', method: 'post' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'form-item-container profile-item-container' },
+                    _react2.default.createElement('input', { type: 'text', name: 'username', placeholder: username }),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'emoji-wrapper' },
+                        '\uD83D\uDC64'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'form-item-container profile-item-container' },
+                    _react2.default.createElement('input', { type: 'password', name: 'password', placeholder: masked }),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'emoji-wrapper' },
+                        '\uD83D\uDD11'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'form-item-container profile-item-container' },
+                    _react2.default.createElement('input', { type: 'text', name: 'location', placeholder: location }),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'emoji-wrapper' },
+                        '\uD83D\uDCCD'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'button-wrapper' },
+                    _react2.default.createElement(
+                        'button',
+                        { type: 'submit' },
+                        'SAVE'
+                    )
+                )
+            )
+        )
+    );
+};
+
+/***/ }),
+/* 826 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.SearchResults = undefined;
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SearchResults = exports.SearchResults = function SearchResults(props) {
+    var state = props.state;
+    var searchResults = state.searchResults;
+    // const imgRootUrl = 'http://books.google.com/books/content?id=';
+    // const params = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
+
+    return _react2.default.createElement(
+        'div',
+        { className: 'results-container' },
+        searchResults ? searchResults.items.map(function (item) {
+            var book = item.volumeInfo;
+            var imageSrc = book.imageLinks ? book.imageLinks.smallThumbnail : '';
+            return _react2.default.createElement(
+                'div',
+                { className: 'book' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'title' },
+                    'Title:\xA0',
+                    book.title,
+                    _react2.default.createElement('img', { style: { height: 65 + 'px' }, src: imageSrc })
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'author' },
+                    'Author:\xA0',
+                    console.log(item)
+                )
+            );
+        }) : ''
+    );
+};
+
+/***/ }),
+/* 827 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

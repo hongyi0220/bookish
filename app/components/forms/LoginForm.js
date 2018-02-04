@@ -9,11 +9,11 @@ export const LoginForm = props => {
                 <Link className='link' to='/signup'>Sign Up</Link>
             </div>
             <form className='form' action='/login' method='post'>
-                <div className='username-container'>
+                <div className='form-item-container'>
                     <input id='username' type='text' name='username' placeholder='Enter your username'/>
                     <div className='emoji-wrapper'>👤</div>
                 </div>
-                <div className='password-container'>
+                <div className='form-item-container'>
                     <input id='password' type='password' name='password' placeholder='Enter your password'/>
                     <div className='emoji-wrapper'>🔑</div>
                 </div>
