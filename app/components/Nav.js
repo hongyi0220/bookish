@@ -12,7 +12,7 @@ export const Nav = props => {
         <div className='nav-container'>
             <div className='nav-item-wrapper'>
                 <input type='text' placeholder='Search' onChange={handleInput} value={searchValue}
-                    onKeyUp={searchForBook} onClick={() => {pushToBrowserHistory('/results')}}/>
+                    onKeyUp={searchForBook} onClick={() => {pushToBrowserHistory('/search')}}/>
                 <div className='emoji-wrapper'>🔍</div>
             </div>
             <Link to='/'>

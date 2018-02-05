@@ -114,6 +114,43 @@
     line-height: 3em;
     margin-right: 1em; }
 
+.results-container .book {
+  margin: .5em;
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+  box-shadow: 0 1px 5px grey;
+  border-radius: 5px; }
+  .results-container .book .img {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    width: 150px;
+    height: 200px;
+    background-position: center;
+    background-size: 150px; }
+  .results-container .book .img-shade {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 90px;
+    left: 0;
+    transition: all .3s ease; }
+    .results-container .book .img-shade .view-detail-button {
+      text-align: center;
+      color: white;
+      border: 1px solid white;
+      position: relative;
+      top: 50%;
+      transform: translateY(-10px);
+      width: 75px;
+      margin: auto; }
+  .results-container .book .summary-container {
+    width: 150px;
+    height: 90px;
+    padding-left: .3em; }
+
 .app-container {
   background-color: #fafafa; }
   .app-container .title-wrapper, .app-container .subtitle-wrapper {

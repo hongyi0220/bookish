@@ -8,6 +8,7 @@ import { SignupForm } from './forms/SignupForm';
 import { LoginForm } from './forms/LoginForm';
 import { Profile } from './Profile';
 import { SearchResults } from './SearchResults';
+import { sample } from './sampleData';
 
 class App extends React.Component {
     constructor() {
@@ -16,7 +17,13 @@ class App extends React.Component {
             user: null,
             searchResults: null,
             searchValue: '',
-            dev: true
+            dev: true,
+            ui: {
+                imgShade: {
+                    origin: null,
+                    style: {}
+                }
+            }
         };
         this.retrieveUserSession = this.retrieveUserSession.bind(this);
         this.logout = this.logout.bind(this);
@@ -25,6 +32,7 @@ class App extends React.Component {
         this.callGoogleApi = this.callGoogleApi.bind(this);
         this.handleInput = this.handleInput.bind(this);
         this.pushToBrowserHistory = this.pushToBrowserHistory.bind(this);
+        this.toggleImgShade = this.toggleImgShade.bind(this);
     }
 
     retrieveUserSession() {
@@ -77,7 +85,12 @@ class App extends React.Component {
 
     searchForBook(evt) {
         const keyword = evt.target.value;
+        const dev = this.state.dev;
+
         console.log('keyword @ searchForBook:', keyword);
+
+        if (dev) this.setState({ searchResults: sample });
+        else
         if (keyword.length) this.getApiKey()
         .then(apiKey => {
             console.log('apiKey:', apiKey);
@@ -98,9 +111,26 @@ class App extends React.Component {
         this.props.history.push(route);
     }
 
+    toggleImgShade(evt) {
+        const shadeId = evt.target.id;
+        console.log('shadeId:', shadeId);
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                imgShade: {
+                    ...this.state.ui.imgShade,
+                    origin: this.state.ui.imgShade.origin ? null : shadeId,
+                    style: this.state.ui.imgShade.style.hasOwnProperty('backgroundColor') ?
+                    {} : {backgroundColor: 'rgba(0,0,0,.4)'}
+                }
+            }
+        })
+    }
+
     componentDidMount() {
         console.log('cmpDidMnt');
-        const socket = socketIOClient();
+        // const socket = socketIOClient();
         this.retrieveUserSession();
     }
 
@@ -110,6 +140,7 @@ class App extends React.Component {
         const handleInput = this.handleInput;
         const searchForBook = this.searchForBook;
         const pushToBrowserHistory = this.pushToBrowserHistory;
+        const toggleImgShade = this.toggleImgShade;
 
         return (
         <div className='app-container'>
@@ -124,8 +155,8 @@ class App extends React.Component {
                     pushToBrowserHistory={pushToBrowserHistory}/>
                 <div className='content-container'>
                     <Switch>
-                        <Route path='/results' render={() => <SearchResults state={state}
-                            />}/>
+                        <Route path='/search' render={() => <SearchResults state={state}
+                            toggleImgShade={toggleImgShade}/>}/>
                         <Route path='/profile' render={() => <Profile state={state}/>} />
                         <Route exact path='/login' render={() => <LoginForm />} />
                         <Route path='/signup' render={() => <SignupForm />} />
