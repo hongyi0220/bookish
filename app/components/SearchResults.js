@@ -35,7 +35,8 @@ export const SearchResults = props => {
         <div className='results-container'>
             {(searchResults && gridView) ? searchResults.items.map((item, i) => {
                 const book = item.volumeInfo;
-                const authorName = book.authors[0];
+                const authorName = book.authors ? book.authors[0] : 'Unknown';
+                console.log('book.authors:', author);
                 const author = removeMiddleName(authorName);
                 const title = shortenTitle(book.title, 18);
                 // const imageSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
@@ -75,9 +76,9 @@ export const SearchResults = props => {
                 const book = item.volumeInfo;
                 const imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
                 const title = shortenTitle(book.title, 25);
-                const authorName = book.authors[0];
+                const authorName = book.authors ? book.authors[0] : 'Unknown';
                 const author = removeMiddleName(authorName);
-                // console.log('author:', author);
+                console.log('book.authors:', author);
 
                 return (
                     <div key={i} className='book-list-view'>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export const SignupForm = props => {
     return (
         <div className='form-container'>
-            <h2>Sign up for your FREE account</h2>
+            <h2>Sign up for your account</h2>
             <div className='link-wrapper'>Already have an account?&nbsp;
                 <Link className='link' to='/login'>Log In</Link>
             </div>

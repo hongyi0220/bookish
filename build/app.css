@@ -165,6 +165,7 @@
     box-shadow: 0 .2px 1px grey; }
   .results-container .book-list-view .img-wrapper img {
     height: 60px;
+    width: 40px;
     border-radius: 4px; }
   .results-container .book-list-view .title {
     padding-left: .5em;

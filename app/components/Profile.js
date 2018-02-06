@@ -2,14 +2,17 @@ import React from 'react';
 
 export const Profile = props => {
     const state = props.state;
-    const user = state.user ? state.user : '';
-    const username = user.username;
-    const password = user.password;
-    const location = user.location || 'city, state';
+    const user = state.user;
+    console.log('user:', user);
+    const username = user ? user.username : '';
+    const password = user ? user.password : '';
+    console.log('username:', username);
+    console.log('password:', password);
+    const location = user ? (user.location || 'city, state') : '';
     const masked =
     (function maskPassword(password) {
         let masked = '';
-        for (let i = 0; i < password.length; i++) masked += '*';
+        for (let i = 0; i < password.length; i++) masked += '🙈';
         return masked;
     })(password);
 

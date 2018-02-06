@@ -39,6 +39,7 @@ class App extends React.Component {
     }
 
     retrieveUserSession() {
+        console.log('retrieving user session');
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/session';
@@ -46,7 +47,7 @@ class App extends React.Component {
         .then(res => res.json())
         .then(resJson => {
             console.log('resJson:', resJson);
-            this.setState({ user: resJson });
+            this.setState({ user: resJson }, () => console.log('set user in state'));
         })
         .catch(err => console.error(err));
     }
@@ -144,6 +145,11 @@ class App extends React.Component {
                 gridView: isGridView
             }
         });
+    }
+
+    componentWillMount() {
+        console.log('cmpWillMnt called');
+        // this.retrieveUserSession();
     }
 
     componentDidMount() {

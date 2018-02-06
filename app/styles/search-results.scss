@@ -125,6 +125,7 @@
             img {
                 // border: 2px solid purple;
                 height: $list-row-height;
+                width: $list-row-height / 1.5;
                 border-radius: $bd-radius;
             }
         }

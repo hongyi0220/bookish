@@ -45991,6 +45991,7 @@ var App = function (_React$Component) {
         value: function retrieveUserSession() {
             var _this2 = this;
 
+            console.log('retrieving user session');
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/session';
@@ -45998,7 +45999,9 @@ var App = function (_React$Component) {
                 return res.json();
             }).then(function (resJson) {
                 console.log('resJson:', resJson);
-                _this2.setState({ user: resJson });
+                _this2.setState({ user: resJson }, function () {
+                    return console.log('set user in state');
+                });
             }).catch(function (err) {
                 return console.error(err);
             });
@@ -46108,6 +46111,12 @@ var App = function (_React$Component) {
                     gridView: isGridView
                 })
             }));
+        }
+    }, {
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            console.log('cmpWillMnt called');
+            // this.retrieveUserSession();
         }
     }, {
         key: 'componentDidMount',
@@ -69999,7 +70008,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
         _react2.default.createElement(
             'h2',
             null,
-            'Sign up for your FREE account'
+            'Sign up for your account'
         ),
         _react2.default.createElement(
             'div',
@@ -70142,14 +70151,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Profile = exports.Profile = function Profile(props) {
     var state = props.state;
-    var user = state.user ? state.user : '';
-    var username = user.username;
-    var password = user.password;
-    var location = user.location || 'city, state';
+    var user = state.user;
+    console.log('user:', user);
+    var username = user ? user.username : '';
+    var password = user ? user.password : '';
+    console.log('username:', username);
+    console.log('password:', password);
+    var location = user ? user.location || 'city, state' : '';
     var masked = function maskPassword(password) {
         var masked = '';
         for (var i = 0; i < password.length; i++) {
-            masked += '*';
+            masked += '🙈';
         }return masked;
     }(password);
 
@@ -70264,7 +70276,8 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
         { className: 'results-container' },
         searchResults && gridView ? searchResults.items.map(function (item, i) {
             var book = item.volumeInfo;
-            var authorName = book.authors[0];
+            var authorName = book.authors ? book.authors[0] : 'Unknown';
+            console.log('book.authors:', author);
             var author = removeMiddleName(authorName);
             var title = shortenTitle(book.title, 18);
             // const imageSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
@@ -70326,9 +70339,9 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
             var book = item.volumeInfo;
             var imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
             var title = shortenTitle(book.title, 25);
-            var authorName = book.authors[0];
+            var authorName = book.authors ? book.authors[0] : 'Unknown';
             var author = removeMiddleName(authorName);
-            // console.log('author:', author);
+            console.log('book.authors:', author);
 
             return _react2.default.createElement(
                 'div',

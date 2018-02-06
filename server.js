@@ -63,6 +63,30 @@ passport.deserializeUser(function(id, done) {
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.post('/profile', (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const location = req.body.location;
+    console.log('updating porfile; req.user:', req.user);
+    MongoClient.connect(dbURL, (err, db) => {
+        // console.log('connected');
+        if (err) console.error(dbErrMsg, err);
+        // Check if the username is already taken
+        const Users = db.collection('users');
+
+        Users.updateOne(
+            { username: username },
+            { $set: {
+                username: username,
+                password: password,
+                location: location
+            }}
+        );
+        db.close();
+        res.redirect('/profile');
+    });
+});
+
 app.get('/apikey', (req, res) => {
     console.log('apiKey requested:', googleApiKey);
     res.send({apiKey: googleApiKey});
@@ -70,7 +94,7 @@ app.get('/apikey', (req, res) => {
 
 app.get('/session', (req, res) => {
     // console.log('req.session:', req.session);
-    // console.log('req.user:', req.user);
+    console.log('req.user:', req.user);
     res.send(req.user);
 });
 
@@ -123,6 +147,7 @@ console.log('hi');
 app.use(express.static('build'));
 
 app.get('*', (req, res) => {
+    console.log('sending index.html');
     res.sendFile(__dirname + '/build/index.html')
 });
 // Listen for change on the front-end, then emit to all pertinent connected users
