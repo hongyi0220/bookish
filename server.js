@@ -42,14 +42,14 @@ app.use(bodyParser.json());
 
 // This stores user in session after authentication
 passport.serializeUser(function(user, done) {
-    console.log('serializing user:', user);
+    // console.log('serializing user:', user);
     done(null, user._id);
 });
 
 // This retrieves user info from database using user._id set in session
 //and store it in req.user because it is more secure not to store user info in session cookie
 passport.deserializeUser(function(id, done) {
-    console.log('deserializing user; id:', id);
+    // console.log('deserializing user; id:', id);
     MongoClient.connect(dbURL, (err, db) => {
         if (err) console.error(dbErrMsg, err);
         const Users = db.collection('users');
@@ -62,6 +62,59 @@ passport.deserializeUser(function(id, done) {
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.get('/getbooks', (req, res) => {
+    MongoClient.connect(dbURL, (err, db) => {
+        if (err) console.error(dbErrMsg, err);
+        const Books = db.collection('books');
+        Books.find({})
+        .toArray((err, docs) => {
+            if (err) console.error(err);
+            db.close();
+            res.send(docs);
+        });
+    });
+});
+
+app.post('/addbook', (req, res) => {
+    const book = req.body.book;
+    // console.log('@/addbook; book:', book);
+    const bookId = book.id;
+    // console.log('req.user @ /addbook:', req.user);
+    const username = req.body.username;
+
+
+    MongoClient.connect(dbURL, (err, db) => {
+        if (err) console.error(dbErrMsg, err);
+        // console.log('DB connected');
+        const Books = db.collection('books');
+        Books.findOne({ bookId: bookId })
+        .then(doc => {
+            // console.log('doc:', doc);
+            if (!doc) {
+                // console.log('book not found, inserting book');
+                Books.insertOne({
+                    bookId: bookId,
+                    book: book,
+                    ownedby: [username]
+                });
+                db.close();
+                res.end();
+            } else {
+                // console.log('book found, updating its content');
+                Books.updateOne(
+                    {bookId: bookId},
+                    {$push: {
+                        ownedby: username
+                    }}
+                );
+                db.close();
+                res.end();
+            }
+        })
+        .catch(err => console.error(err));
+    });
+});
 
 app.post('/profile', (req, res) => {
     const username = req.body.username;

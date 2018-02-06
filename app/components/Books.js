@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const SearchResults = props => {
+export const Books = props => {
     const state = props.state;
-    const searchResult = state.searchResult;
+    const books = state.books;
     const imgRootUrl = 'http://books.google.com/books/content?id=';
     const params = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
     const toggleImgShade = props.toggleImgShade;
@@ -12,7 +12,7 @@ export const SearchResults = props => {
     const imgClass = state.ui.imgShade.class;
     const isLoggedIn = state.user;
     const gridView = state.ui.gridView;
-    const addBook = props.addBook;
+    // const addBook = props.addBook;
     // const toggleViewFormat = props.toggleViewFormat;
     // console.log('imgClass:',imgClass);
     // console.log('imgShadeStyle:',imgShadeStyle);
@@ -34,15 +34,16 @@ export const SearchResults = props => {
 
     return (
         <div className='results-container'>
-            {(searchResult && gridView) ? searchResult.items.map((item, i) => {
-                const book = item.volumeInfo;
-                const bookId = item.id;
-                const authorName = book.authors ? book.authors[0] : 'Unknown';
+            {(books && gridView) ? books.map((book, i) => {
+                book = book.book;
+                const volumeInfo = book.volumeInfo;
+                const bookId = book.id;
+                const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
                 // console.log('book.authors:', author);
                 const author = removeMiddleName(authorName);
-                const title = shortenTitle(book.title, 18);
+                const title = shortenTitle(volumeInfo.title, 18);
                 // const imageSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
-                const imgUrl = imgRootUrl + item.id + params;
+                const imgUrl = imgRootUrl + bookId + params;
                 let imgStyle = {
                     backgroundImage: 'url(' + imgUrl + ')',
                 };
@@ -68,19 +69,21 @@ export const SearchResults = props => {
                         </div>
                         <div className='trade-button-container'>
                             {isLoggedIn ?
-                                <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div> :
-                             <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>}
+                                <div className='text-wrapper' onClick={() => {}}>Request 📘</div> :
+                             <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
+                            }
                         </div>
                     </div>
                 );
             }) : ''}
-            {(searchResult && !gridView) ?
-            searchResult.items.map((item, i) => {
-                const book = item.volumeInfo;
-                const bookId = item.id;
-                const imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
-                const title = shortenTitle(book.title, 25);
-                const authorName = book.authors ? book.authors[0] : 'Unknown';
+            {(books && !gridView) ?
+            books.map((book, i) => {
+                book = book.book;
+                const volumeInfo = item.volumeInfo;
+                const bookId = book.id;
+                const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
+                const title = shortenTitle(volumeInfo.title, 25);
+                const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
                 const author = removeMiddleName(authorName);
                 // console.log('book.authors:', author);
 
@@ -97,8 +100,9 @@ export const SearchResults = props => {
                         </div>
                         <div className='trade-button-container'>
                             {isLoggedIn ?
-                                <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div> :
-                             <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>}
+                                <div className='text-wrapper' onClick={() => {}}>Request 📘</div> :
+                             <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
+                            }
                         </div>
                     </div>
                 );
