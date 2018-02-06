@@ -3,7 +3,9 @@
 @import 'user-nav';
 @import 'nav';
 @import 'search-results';
-
+* {
+    box-sizing: border-box;
+}
 .app-container {
     background-color: $bg-grey;
     .title-wrapper, .subtitle-wrapper {
@@ -39,15 +41,15 @@
             float: right;
         }
         .nav-container, .content-container, .user-nav-container {
-            min-width: 200px;
+            // min-width: 200px;
         }
         .nav-container {
             flex-grow: 1;
         }
         .content-container {
             flex-grow: 8;
-            min-width: 300px;
-            width: 100%;
+            // min-width: 300px;
+            // width: 100%;
         }
     }
 }

@@ -21,8 +21,10 @@ class App extends React.Component {
             ui: {
                 imgShade: {
                     origin: null,
-                    style: {}
-                }
+                    style: {},
+                    class: ''
+                },
+                gridView: true
             }
         };
         this.retrieveUserSession = this.retrieveUserSession.bind(this);
@@ -33,6 +35,7 @@ class App extends React.Component {
         this.handleInput = this.handleInput.bind(this);
         this.pushToBrowserHistory = this.pushToBrowserHistory.bind(this);
         this.toggleImgShade = this.toggleImgShade.bind(this);
+        this.toggleViewFormat = this.toggleViewFormat.bind(this);
     }
 
     retrieveUserSession() {
@@ -89,8 +92,8 @@ class App extends React.Component {
 
         console.log('keyword @ searchForBook:', keyword);
 
-        if (dev) this.setState({ searchResults: sample });
-        else
+        // if (dev) this.setState({ searchResults: sample });
+        // else
         if (keyword.length) this.getApiKey()
         .then(apiKey => {
             console.log('apiKey:', apiKey);
@@ -99,6 +102,7 @@ class App extends React.Component {
             .catch(err => console.error(err));
         })
         .catch(err => console.error(err));
+        this.pushToBrowserHistory('/search');
     }
 
     handleInput(evt) {
@@ -122,16 +126,31 @@ class App extends React.Component {
                     ...this.state.ui.imgShade,
                     origin: this.state.ui.imgShade.origin ? null : shadeId,
                     style: this.state.ui.imgShade.style.hasOwnProperty('backgroundColor') ?
-                    {} : {backgroundColor: 'rgba(0,0,0,.4)'}
+                    {} : {backgroundColor: 'rgba(0,0,0,.4)'},
+                    class: this.state.ui.imgShade.class ? '' : ' zoom'
                 }
             }
         })
+    }
+
+    toggleViewFormat(evt) {
+        const id = evt.target.id;
+        const isGridView = id === 'grid';
+        console.log('viewFormat toggled:', this.state.ui.gridView);
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                gridView: isGridView
+            }
+        });
     }
 
     componentDidMount() {
         console.log('cmpDidMnt');
         // const socket = socketIOClient();
         this.retrieveUserSession();
+        // console.log('history:', this.props.history.location.pathname);
     }
 
     render() {
@@ -141,15 +160,26 @@ class App extends React.Component {
         const searchForBook = this.searchForBook;
         const pushToBrowserHistory = this.pushToBrowserHistory;
         const toggleImgShade = this.toggleImgShade;
-
+        const toggleViewFormat = this.toggleViewFormat;
+        const browsingLocation = this.props.history.location.pathname;
+        console.log('history:', this.props.history.location.pathname);
         return (
         <div className='app-container'>
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
+            <Route path='/search' render={() => <div className='layout-buttons-container'>
+                <Icon id='list' className='icon' name='list layout' onClick={toggleViewFormat}></Icon>
+                <Icon id='grid' className='icon' name='grid layout' onClick={toggleViewFormat}></Icon>
+            </div>}/>
+            <Route path='/books' render={() => <div className='layout-buttons-container'>
+                <Icon className='icon' name='list layout' onClick={toggleViewFormat}></Icon>
+                <Icon className='icon' name='grid layout' onClick={toggleViewFormat}></Icon>
+            </div>}/>
+            {/* {browsingLocation === ('/search' || '/books') ?
             <div className='layout-buttons-container'>
-                <Icon className='icon' name='list layout'></Icon>
-                <Icon className='icon' name='grid layout'></Icon>
-            </div>
+                <Icon className='icon' name='list layout' onClick={toggleViewFormat}></Icon>
+                <Icon className='icon' name='grid layout' onClick={toggleViewFormat}></Icon>
+            </div> : ''} */}
             <div className='flexbox-container'>
                 <Nav state={state} handleInput={handleInput} searchForBook={searchForBook}
                     pushToBrowserHistory={pushToBrowserHistory}/>

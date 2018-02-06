@@ -1236,7 +1236,7 @@ module.exports = isObjectLike;
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(52),
+var isFunction = __webpack_require__(53),
     isLength = __webpack_require__(168);
 
 /**
@@ -2007,12 +2007,12 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject = __webpack_require__(46);
+var anObject = __webpack_require__(47);
 var IE8_DOM_DEFINE = __webpack_require__(244);
 var toPrimitive = __webpack_require__(149);
 var dP = Object.defineProperty;
 
-exports.f = __webpack_require__(47) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+exports.f = __webpack_require__(48) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
   anObject(O);
   P = toPrimitive(P, true);
   anObject(Attributes);
@@ -2118,197 +2118,6 @@ module.exports = identity;
 
 /***/ }),
 /* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__(59);
-module.exports = function (it) {
-  if (!isObject(it)) throw TypeError(it + ' is not an object!');
-  return it;
-};
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(60)(function () {
-  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
-});
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports) {
-
-var hasOwnProperty = {}.hasOwnProperty;
-module.exports = function (it, key) {
-  return hasOwnProperty.call(it, key);
-};
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__(247);
-var defined = __webpack_require__(151);
-module.exports = function (it) {
-  return IObject(defined(it));
-};
-
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseGetTag = __webpack_require__(32),
-    isObjectLike = __webpack_require__(28);
-
-/** `Object#toString` result references. */
-var symbolTag = '[object Symbol]';
-
-/**
- * Checks if `value` is classified as a `Symbol` primitive or object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
- * @example
- *
- * _.isSymbol(Symbol.iterator);
- * // => true
- *
- * _.isSymbol('abc');
- * // => false
- */
-function isSymbol(value) {
-  return typeof value == 'symbol' ||
-    (isObjectLike(value) && baseGetTag(value) == symbolTag);
-}
-
-module.exports = isSymbol;
-
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseIsNative = __webpack_require__(527),
-    getValue = __webpack_require__(530);
-
-/**
- * Gets the native function at `key` of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {string} key The key of the method to get.
- * @returns {*} Returns the function if it's native, else `undefined`.
- */
-function getNative(object, key) {
-  var value = getValue(object, key);
-  return baseIsNative(value) ? value : undefined;
-}
-
-module.exports = getNative;
-
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseGetTag = __webpack_require__(32),
-    isObject = __webpack_require__(22);
-
-/** `Object#toString` result references. */
-var asyncTag = '[object AsyncFunction]',
-    funcTag = '[object Function]',
-    genTag = '[object GeneratorFunction]',
-    proxyTag = '[object Proxy]';
-
-/**
- * Checks if `value` is classified as a `Function` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a function, else `false`.
- * @example
- *
- * _.isFunction(_);
- * // => true
- *
- * _.isFunction(/abc/);
- * // => false
- */
-function isFunction(value) {
-  if (!isObject(value)) {
-    return false;
-  }
-  // The use of `Object#toString` avoids issues with the `typeof` operator
-  // in Safari 9 which returns 'object' for typed arrays and other constructors.
-  var tag = baseGetTag(value);
-  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
-}
-
-module.exports = isFunction;
-
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isSymbol = __webpack_require__(50);
-
-/** Used as references for various `Number` constants. */
-var INFINITY = 1 / 0;
-
-/**
- * Converts `value` to a string key if it's not a string or symbol.
- *
- * @private
- * @param {*} value The value to inspect.
- * @returns {string|symbol} Returns the key.
- */
-function toKey(value) {
-  if (typeof value == 'string' || isSymbol(value)) {
-    return value;
-  }
-  var result = (value + '');
-  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
-}
-
-module.exports = toKey;
-
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseForOwn = __webpack_require__(174),
-    createBaseEach = __webpack_require__(563);
-
-/**
- * The base implementation of `_.forEach` without support for iteratee shorthands.
- *
- * @private
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array|Object} Returns `collection`.
- */
-var baseEach = createBaseEach(baseForOwn);
-
-module.exports = baseEach;
-
-
-/***/ }),
-/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2364,6 +2173,197 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(59);
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(60)(function () {
+  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports) {
+
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function (it, key) {
+  return hasOwnProperty.call(it, key);
+};
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = __webpack_require__(247);
+var defined = __webpack_require__(151);
+module.exports = function (it) {
+  return IObject(defined(it));
+};
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(32),
+    isObjectLike = __webpack_require__(28);
+
+/** `Object#toString` result references. */
+var symbolTag = '[object Symbol]';
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && baseGetTag(value) == symbolTag);
+}
+
+module.exports = isSymbol;
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseIsNative = __webpack_require__(527),
+    getValue = __webpack_require__(530);
+
+/**
+ * Gets the native function at `key` of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {string} key The key of the method to get.
+ * @returns {*} Returns the function if it's native, else `undefined`.
+ */
+function getNative(object, key) {
+  var value = getValue(object, key);
+  return baseIsNative(value) ? value : undefined;
+}
+
+module.exports = getNative;
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(32),
+    isObject = __webpack_require__(22);
+
+/** `Object#toString` result references. */
+var asyncTag = '[object AsyncFunction]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]',
+    proxyTag = '[object Proxy]';
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  if (!isObject(value)) {
+    return false;
+  }
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 9 which returns 'object' for typed arrays and other constructors.
+  var tag = baseGetTag(value);
+  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+}
+
+module.exports = isFunction;
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isSymbol = __webpack_require__(51);
+
+/** Used as references for various `Number` constants. */
+var INFINITY = 1 / 0;
+
+/**
+ * Converts `value` to a string key if it's not a string or symbol.
+ *
+ * @private
+ * @param {*} value The value to inspect.
+ * @returns {string|symbol} Returns the key.
+ */
+function toKey(value) {
+  if (typeof value == 'string' || isSymbol(value)) {
+    return value;
+  }
+  var result = (value + '');
+  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
+}
+
+module.exports = toKey;
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseForOwn = __webpack_require__(174),
+    createBaseEach = __webpack_require__(563);
+
+/**
+ * The base implementation of `_.forEach` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ */
+var baseEach = createBaseEach(baseForOwn);
+
+module.exports = baseEach;
 
 
 /***/ }),
@@ -3154,7 +3154,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
 
 var dP = __webpack_require__(42);
 var createDesc = __webpack_require__(71);
-module.exports = __webpack_require__(47) ? function (object, key, value) {
+module.exports = __webpack_require__(48) ? function (object, key, value) {
   return dP.f(object, key, createDesc(1, value));
 } : function (object, key, value) {
   object[key] = value;
@@ -3235,7 +3235,7 @@ module.exports = Symbol;
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayEach = __webpack_require__(77),
-    baseEach = __webpack_require__(54),
+    baseEach = __webpack_require__(55),
     castFunction = __webpack_require__(285),
     isArray = __webpack_require__(12);
 
@@ -4359,7 +4359,7 @@ __webpack_require__(250)(String, 'String', function (iterated) {
 /* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(51);
+var getNative = __webpack_require__(52);
 
 /* Built-in method references that are verified to be native. */
 var nativeCreate = getNative(Object, 'create');
@@ -4530,7 +4530,7 @@ module.exports = apply;
 /***/ (function(module, exports, __webpack_require__) {
 
 var castPath = __webpack_require__(72),
-    toKey = __webpack_require__(53);
+    toKey = __webpack_require__(54);
 
 /**
  * The base implementation of `_.get` without support for default values.
@@ -4829,7 +4829,7 @@ module.exports = isUndefined;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(22),
-    isSymbol = __webpack_require__(50);
+    isSymbol = __webpack_require__(51);
 
 /** Used as references for various `Number` constants. */
 var NAN = 0 / 0;
@@ -5686,7 +5686,7 @@ Icon.create = Object(__WEBPACK_IMPORTED_MODULE_9__lib__["m" /* createShorthandFa
 /***/ (function(module, exports, __webpack_require__) {
 
 var arrayReduce = __webpack_require__(125),
-    baseEach = __webpack_require__(54),
+    baseEach = __webpack_require__(55),
     baseIteratee = __webpack_require__(24),
     baseReduce = __webpack_require__(721),
     isArray = __webpack_require__(12);
@@ -7511,7 +7511,7 @@ module.exports = true;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = __webpack_require__(46);
+var anObject = __webpack_require__(47);
 var dPs = __webpack_require__(498);
 var enumBugKeys = __webpack_require__(155);
 var IE_PROTO = __webpack_require__(153)('IE_PROTO');
@@ -7558,7 +7558,7 @@ module.exports = Object.create || function create(O, Properties) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var def = __webpack_require__(42).f;
-var has = __webpack_require__(48);
+var has = __webpack_require__(49);
 var TAG = __webpack_require__(27)('toStringTag');
 
 module.exports = function (it, tag, stat) {
@@ -7619,13 +7619,13 @@ module.exports = function (name) {
 
 var pIE = __webpack_require__(92);
 var createDesc = __webpack_require__(71);
-var toIObject = __webpack_require__(49);
+var toIObject = __webpack_require__(50);
 var toPrimitive = __webpack_require__(149);
-var has = __webpack_require__(48);
+var has = __webpack_require__(49);
 var IE8_DOM_DEFINE = __webpack_require__(244);
 var gOPD = Object.getOwnPropertyDescriptor;
 
-exports.f = __webpack_require__(47) ? gOPD : function getOwnPropertyDescriptor(O, P) {
+exports.f = __webpack_require__(48) ? gOPD : function getOwnPropertyDescriptor(O, P) {
   O = toIObject(O);
   P = toPrimitive(P, true);
   if (IE8_DOM_DEFINE) try {
@@ -7640,7 +7640,7 @@ exports.f = __webpack_require__(47) ? gOPD : function getOwnPropertyDescriptor(O
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArray = __webpack_require__(12),
-    isSymbol = __webpack_require__(50);
+    isSymbol = __webpack_require__(51);
 
 /** Used to match property names within property paths. */
 var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
@@ -7712,7 +7712,7 @@ module.exports = MapCache;
 /* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(51),
+var getNative = __webpack_require__(52),
     root = __webpack_require__(21);
 
 /* Built-in method references that are verified to be native. */
@@ -7728,7 +7728,7 @@ module.exports = Map;
 var Symbol = __webpack_require__(63),
     arrayMap = __webpack_require__(34),
     isArray = __webpack_require__(12),
-    isSymbol = __webpack_require__(50);
+    isSymbol = __webpack_require__(51);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -13478,7 +13478,7 @@ module.exports = function(obj, fn){
 /* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__(47) && !__webpack_require__(60)(function () {
+module.exports = !__webpack_require__(48) && !__webpack_require__(60)(function () {
   return Object.defineProperty(__webpack_require__(245)('div'), 'a', { get: function () { return 7; } }).a != 7;
 });
 
@@ -13500,8 +13500,8 @@ module.exports = function (it) {
 /* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var has = __webpack_require__(48);
-var toIObject = __webpack_require__(49);
+var has = __webpack_require__(49);
+var toIObject = __webpack_require__(50);
 var arrayIndexOf = __webpack_require__(490)(false);
 var IE_PROTO = __webpack_require__(153)('IE_PROTO');
 
@@ -13559,7 +13559,7 @@ var LIBRARY = __webpack_require__(157);
 var $export = __webpack_require__(40);
 var redefine = __webpack_require__(251);
 var hide = __webpack_require__(58);
-var has = __webpack_require__(48);
+var has = __webpack_require__(49);
 var Iterators = __webpack_require__(62);
 var $iterCreate = __webpack_require__(497);
 var setToStringTag = __webpack_require__(159);
@@ -13638,7 +13638,7 @@ module.exports = __webpack_require__(58);
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has = __webpack_require__(48);
+var has = __webpack_require__(49);
 var toObject = __webpack_require__(93);
 var IE_PROTO = __webpack_require__(153)('IE_PROTO');
 var ObjectProto = Object.prototype;
@@ -13674,7 +13674,7 @@ var castPath = __webpack_require__(72),
     isArray = __webpack_require__(12),
     isIndex = __webpack_require__(74),
     isLength = __webpack_require__(168),
-    toKey = __webpack_require__(53);
+    toKey = __webpack_require__(54);
 
 /**
  * Checks if `path` exists on `object`.
@@ -13938,7 +13938,7 @@ module.exports = overRest;
 /* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(51);
+var getNative = __webpack_require__(52);
 
 var defineProperty = (function() {
   try {
@@ -14577,7 +14577,7 @@ module.exports = stubArray;
 /* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(51),
+var getNative = __webpack_require__(52),
     root = __webpack_require__(21);
 
 /* Built-in method references that are verified to be native. */
@@ -14590,7 +14590,7 @@ module.exports = Set;
 /* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(51),
+var getNative = __webpack_require__(52),
     root = __webpack_require__(21);
 
 /* Built-in method references that are verified to be native. */
@@ -15741,7 +15741,7 @@ var assignValue = __webpack_require__(123),
     castPath = __webpack_require__(72),
     isIndex = __webpack_require__(74),
     isObject = __webpack_require__(22),
-    toKey = __webpack_require__(53);
+    toKey = __webpack_require__(54);
 
 /**
  * The base implementation of `_.set`.
@@ -15827,7 +15827,7 @@ module.exports = compact;
 /* 312 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseEach = __webpack_require__(54),
+var baseEach = __webpack_require__(55),
     isArrayLike = __webpack_require__(29);
 
 /**
@@ -25000,7 +25000,7 @@ var _reactDom = __webpack_require__(137);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _reactRouterDom = __webpack_require__(55);
+var _reactRouterDom = __webpack_require__(46);
 
 var _App = __webpack_require__(459);
 
@@ -45922,7 +45922,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(55);
+var _reactRouterDom = __webpack_require__(46);
 
 var _socket = __webpack_require__(460);
 
@@ -45968,8 +45968,10 @@ var App = function (_React$Component) {
             ui: {
                 imgShade: {
                     origin: null,
-                    style: {}
-                }
+                    style: {},
+                    class: ''
+                },
+                gridView: true
             }
         };
         _this.retrieveUserSession = _this.retrieveUserSession.bind(_this);
@@ -45980,6 +45982,7 @@ var App = function (_React$Component) {
         _this.handleInput = _this.handleInput.bind(_this);
         _this.pushToBrowserHistory = _this.pushToBrowserHistory.bind(_this);
         _this.toggleImgShade = _this.toggleImgShade.bind(_this);
+        _this.toggleViewFormat = _this.toggleViewFormat.bind(_this);
         return _this;
     }
 
@@ -46053,7 +46056,9 @@ var App = function (_React$Component) {
 
             console.log('keyword @ searchForBook:', keyword);
 
-            if (dev) this.setState({ searchResults: _sampleData.sample });else if (keyword.length) this.getApiKey().then(function (apiKey) {
+            // if (dev) this.setState({ searchResults: sample });
+            // else
+            if (keyword.length) this.getApiKey().then(function (apiKey) {
                 console.log('apiKey:', apiKey);
                 _this3.callGoogleApi(keyword, apiKey).then(function (books) {
                     return _this3.setState({ searchResults: books });
@@ -46063,6 +46068,7 @@ var App = function (_React$Component) {
             }).catch(function (err) {
                 return console.error(err);
             });
+            this.pushToBrowserHistory('/search');
         }
     }, {
         key: 'handleInput',
@@ -46085,8 +46091,21 @@ var App = function (_React$Component) {
                 ui: _extends({}, this.state.ui, {
                     imgShade: _extends({}, this.state.ui.imgShade, {
                         origin: this.state.ui.imgShade.origin ? null : shadeId,
-                        style: this.state.ui.imgShade.style.hasOwnProperty('backgroundColor') ? {} : { backgroundColor: 'rgba(0,0,0,.4)' }
+                        style: this.state.ui.imgShade.style.hasOwnProperty('backgroundColor') ? {} : { backgroundColor: 'rgba(0,0,0,.4)' },
+                        class: this.state.ui.imgShade.class ? '' : ' zoom'
                     })
+                })
+            }));
+        }
+    }, {
+        key: 'toggleViewFormat',
+        value: function toggleViewFormat(evt) {
+            var id = evt.target.id;
+            var isGridView = id === 'grid';
+            console.log('viewFormat toggled:', this.state.ui.gridView);
+            this.setState(_extends({}, this.state, {
+                ui: _extends({}, this.state.ui, {
+                    gridView: isGridView
                 })
             }));
         }
@@ -46096,6 +46115,7 @@ var App = function (_React$Component) {
             console.log('cmpDidMnt');
             // const socket = socketIOClient();
             this.retrieveUserSession();
+            // console.log('history:', this.props.history.location.pathname);
         }
     }, {
         key: 'render',
@@ -46106,7 +46126,9 @@ var App = function (_React$Component) {
             var searchForBook = this.searchForBook;
             var pushToBrowserHistory = this.pushToBrowserHistory;
             var toggleImgShade = this.toggleImgShade;
-
+            var toggleViewFormat = this.toggleViewFormat;
+            var browsingLocation = this.props.history.location.pathname;
+            console.log('history:', this.props.history.location.pathname);
             return _react2.default.createElement(
                 'div',
                 { className: 'app-container' },
@@ -46120,12 +46142,22 @@ var App = function (_React$Component) {
                     { className: 'subtitle-wrapper' },
                     'Book trading made easy'
                 ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'layout-buttons-container' },
-                    _react2.default.createElement(_semanticUiReact.Icon, { className: 'icon', name: 'list layout' }),
-                    _react2.default.createElement(_semanticUiReact.Icon, { className: 'icon', name: 'grid layout' })
-                ),
+                _react2.default.createElement(_reactRouterDom.Route, { path: '/search', render: function render() {
+                        return _react2.default.createElement(
+                            'div',
+                            { className: 'layout-buttons-container' },
+                            _react2.default.createElement(_semanticUiReact.Icon, { id: 'list', className: 'icon', name: 'list layout', onClick: toggleViewFormat }),
+                            _react2.default.createElement(_semanticUiReact.Icon, { id: 'grid', className: 'icon', name: 'grid layout', onClick: toggleViewFormat })
+                        );
+                    } }),
+                _react2.default.createElement(_reactRouterDom.Route, { path: '/books', render: function render() {
+                        return _react2.default.createElement(
+                            'div',
+                            { className: 'layout-buttons-container' },
+                            _react2.default.createElement(_semanticUiReact.Icon, { className: 'icon', name: 'list layout', onClick: toggleViewFormat }),
+                            _react2.default.createElement(_semanticUiReact.Icon, { className: 'icon', name: 'grid layout', onClick: toggleViewFormat })
+                        );
+                    } }),
                 _react2.default.createElement(
                     'div',
                     { className: 'flexbox-container' },
@@ -50046,7 +50078,7 @@ module.exports = !$assign || __webpack_require__(60)(function () {
 
 // false -> Array#indexOf
 // true  -> Array#includes
-var toIObject = __webpack_require__(49);
+var toIObject = __webpack_require__(50);
 var toLength = __webpack_require__(248);
 var toAbsoluteIndex = __webpack_require__(491);
 module.exports = function (IS_INCLUDES) {
@@ -50099,7 +50131,7 @@ module.exports = function defineProperty(it, key, desc) {
 
 var $export = __webpack_require__(40);
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-$export($export.S + $export.F * !__webpack_require__(47), 'Object', { defineProperty: __webpack_require__(42).f });
+$export($export.S + $export.F * !__webpack_require__(48), 'Object', { defineProperty: __webpack_require__(42).f });
 
 
 /***/ }),
@@ -50165,10 +50197,10 @@ module.exports = function (Constructor, NAME, next) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(42);
-var anObject = __webpack_require__(46);
+var anObject = __webpack_require__(47);
 var getKeys = __webpack_require__(90);
 
-module.exports = __webpack_require__(47) ? Object.defineProperties : function defineProperties(O, Properties) {
+module.exports = __webpack_require__(48) ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
   var keys = getKeys(Properties);
   var length = keys.length;
@@ -50196,7 +50228,7 @@ module.exports = document && document.documentElement;
 var addToUnscopables = __webpack_require__(501);
 var step = __webpack_require__(502);
 var Iterators = __webpack_require__(62);
-var toIObject = __webpack_require__(49);
+var toIObject = __webpack_require__(50);
 
 // 22.1.3.4 Array.prototype.entries()
 // 22.1.3.13 Array.prototype.keys()
@@ -50269,8 +50301,8 @@ module.exports = __webpack_require__(20).Symbol;
 
 // ECMAScript 6 symbols shim
 var global = __webpack_require__(41);
-var has = __webpack_require__(48);
-var DESCRIPTORS = __webpack_require__(47);
+var has = __webpack_require__(49);
+var DESCRIPTORS = __webpack_require__(48);
 var $export = __webpack_require__(40);
 var redefine = __webpack_require__(251);
 var META = __webpack_require__(506).KEY;
@@ -50283,9 +50315,9 @@ var wksExt = __webpack_require__(161);
 var wksDefine = __webpack_require__(162);
 var enumKeys = __webpack_require__(507);
 var isArray = __webpack_require__(508);
-var anObject = __webpack_require__(46);
+var anObject = __webpack_require__(47);
 var isObject = __webpack_require__(59);
-var toIObject = __webpack_require__(49);
+var toIObject = __webpack_require__(50);
 var toPrimitive = __webpack_require__(149);
 var createDesc = __webpack_require__(71);
 var _create = __webpack_require__(158);
@@ -50508,7 +50540,7 @@ setToStringTag(global.JSON, 'JSON', true);
 
 var META = __webpack_require__(91)('meta');
 var isObject = __webpack_require__(59);
-var has = __webpack_require__(48);
+var has = __webpack_require__(49);
 var setDesc = __webpack_require__(42).f;
 var id = 0;
 var isExtensible = Object.isExtensible || function () {
@@ -50598,7 +50630,7 @@ module.exports = Array.isArray || function isArray(arg) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = __webpack_require__(49);
+var toIObject = __webpack_require__(50);
 var gOPN = __webpack_require__(253).f;
 var toString = {}.toString;
 
@@ -50668,7 +50700,7 @@ $export($export.S, 'Object', { setPrototypeOf: __webpack_require__(516).set });
 // Works with __proto__ only. Old v8 can't work with null proto objects.
 /* eslint-disable no-proto */
 var isObject = __webpack_require__(59);
-var anObject = __webpack_require__(46);
+var anObject = __webpack_require__(47);
 var check = function (O, proto) {
   anObject(O);
   if (!isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
@@ -50945,7 +50977,7 @@ module.exports = hashClear;
 /* 527 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(52),
+var isFunction = __webpack_require__(53),
     isMasked = __webpack_require__(528),
     isObject = __webpack_require__(22),
     toSource = __webpack_require__(258);
@@ -51456,7 +51488,7 @@ var apply = __webpack_require__(100),
     castPath = __webpack_require__(72),
     last = __webpack_require__(259),
     parent = __webpack_require__(547),
-    toKey = __webpack_require__(53);
+    toKey = __webpack_require__(54);
 
 /**
  * The base implementation of `_.invoke` without support for individual
@@ -51975,7 +52007,7 @@ module.exports = isFlattenable;
 /* 556 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseEach = __webpack_require__(54);
+var baseEach = __webpack_require__(55);
 
 /**
  * The base implementation of `_.filter` without support for iteratee shorthands.
@@ -52747,7 +52779,7 @@ module.exports = equalObjects;
 /* 574 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(51),
+var getNative = __webpack_require__(52),
     root = __webpack_require__(21);
 
 /* Built-in method references that are verified to be native. */
@@ -52760,7 +52792,7 @@ module.exports = DataView;
 /* 575 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(51),
+var getNative = __webpack_require__(52),
     root = __webpack_require__(21);
 
 /* Built-in method references that are verified to be native. */
@@ -52809,7 +52841,7 @@ var baseIsEqual = __webpack_require__(176),
     isKey = __webpack_require__(164),
     isStrictComparable = __webpack_require__(281),
     matchesStrictComparable = __webpack_require__(282),
-    toKey = __webpack_require__(53);
+    toKey = __webpack_require__(54);
 
 /** Used to compose bitmasks for value comparisons. */
 var COMPARE_PARTIAL_FLAG = 1,
@@ -52864,7 +52896,7 @@ module.exports = baseHasIn;
 var baseProperty = __webpack_require__(284),
     basePropertyDeep = __webpack_require__(580),
     isKey = __webpack_require__(164),
-    toKey = __webpack_require__(53);
+    toKey = __webpack_require__(54);
 
 /**
  * Creates a function that returns the value at `path` of a given object.
@@ -53203,7 +53235,7 @@ module.exports = __webpack_require__(590);
 /* 590 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject = __webpack_require__(46);
+var anObject = __webpack_require__(47);
 var get = __webpack_require__(287);
 module.exports = __webpack_require__(20).getIterator = function (it) {
   var iterFn = get(it);
@@ -53315,7 +53347,7 @@ module.exports = arrayAggregator;
 /* 594 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseEach = __webpack_require__(54);
+var baseEach = __webpack_require__(55);
 
 /**
  * Aggregates elements of `collection` on `accumulator` with keys transformed
@@ -53422,7 +53454,7 @@ module.exports = createFind;
 /* 597 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseEach = __webpack_require__(54);
+var baseEach = __webpack_require__(55);
 
 /**
  * The base implementation of `_.some` without support for iteratee shorthands.
@@ -54068,7 +54100,7 @@ $export($export.S + $export.F * !__webpack_require__(606)(function (iter) { Arra
 /***/ (function(module, exports, __webpack_require__) {
 
 // call something on iterator step with safe closing on error
-var anObject = __webpack_require__(46);
+var anObject = __webpack_require__(47);
 module.exports = function (iterator, fn, value, entries) {
   try {
     return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -55108,7 +55140,7 @@ module.exports = {
   'curry': __webpack_require__(306),
   'forEach': __webpack_require__(77),
   'isArray': __webpack_require__(12),
-  'isFunction': __webpack_require__(52),
+  'isFunction': __webpack_require__(53),
   'iteratee': __webpack_require__(642),
   'keys': __webpack_require__(113),
   'rearg': __webpack_require__(643),
@@ -56421,9 +56453,9 @@ module.exports = flatten;
 var arrayMap = __webpack_require__(34),
     copyArray = __webpack_require__(121),
     isArray = __webpack_require__(12),
-    isSymbol = __webpack_require__(50),
+    isSymbol = __webpack_require__(51),
     stringToPath = __webpack_require__(256),
-    toKey = __webpack_require__(53),
+    toKey = __webpack_require__(54),
     toString = __webpack_require__(33);
 
 /**
@@ -56708,7 +56740,7 @@ module.exports = func;
 /***/ (function(module, exports, __webpack_require__) {
 
 var convert = __webpack_require__(14),
-    func = convert('isFunction', __webpack_require__(52), __webpack_require__(36));
+    func = convert('isFunction', __webpack_require__(53), __webpack_require__(36));
 
 func.placeholder = __webpack_require__(13);
 module.exports = func;
@@ -56976,7 +57008,7 @@ module.exports = compareMultiple;
 /* 667 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isSymbol = __webpack_require__(50);
+var isSymbol = __webpack_require__(51);
 
 /**
  * Compares values to sort them in ascending order.
@@ -57110,7 +57142,7 @@ module.exports = min;
 /* 672 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isSymbol = __webpack_require__(50);
+var isSymbol = __webpack_require__(51);
 
 /**
  * The base implementation of methods like `_.max` and `_.min` which accepts a
@@ -57693,7 +57725,7 @@ var normalizeTarget = function normalizeTarget(target) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_uniq__ = __webpack_require__(316);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_uniq___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_uniq__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_isFunction__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_isFunction__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_isFunction___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_isFunction__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_isArray__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_isArray___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_isArray__);
@@ -59108,7 +59140,7 @@ var arrayEach = __webpack_require__(77),
     getPrototype = __webpack_require__(124),
     isArray = __webpack_require__(12),
     isBuffer = __webpack_require__(75),
-    isFunction = __webpack_require__(52),
+    isFunction = __webpack_require__(53),
     isObject = __webpack_require__(22),
     isTypedArray = __webpack_require__(112);
 
@@ -61589,7 +61621,7 @@ Select.Menu = __WEBPACK_IMPORTED_MODULE_3__modules_Dropdown__["a" /* default */]
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_lodash_escapeRegExp___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_lodash_escapeRegExp__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_lodash_deburr__ = __webpack_require__(343);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_lodash_deburr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16_lodash_deburr__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_lodash_isFunction__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_lodash_isFunction__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_lodash_isFunction___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17_lodash_isFunction__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_lodash_filter__ = __webpack_require__(173);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_lodash_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18_lodash_filter__);
@@ -62947,7 +62979,7 @@ module.exports = function getOwnPropertyDescriptor(it, key) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-var toIObject = __webpack_require__(49);
+var toIObject = __webpack_require__(50);
 var $getOwnPropertyDescriptor = __webpack_require__(163).f;
 
 __webpack_require__(348)('getOwnPropertyDescriptor', function () {
@@ -63052,7 +63084,7 @@ module.exports = arrayEvery;
 /* 749 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseEach = __webpack_require__(54);
+var baseEach = __webpack_require__(55);
 
 /**
  * The base implementation of `_.every` without support for iteratee shorthands.
@@ -69699,7 +69731,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(55);
+var _reactRouterDom = __webpack_require__(46);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69708,18 +69740,16 @@ var Nav = exports.Nav = function Nav(props) {
     var searchValue = state.searchValue;
     var handleInput = props.handleInput;
     var searchForBook = props.searchForBook;
-    var pushToBrowserHistory = props.pushToBrowserHistory;
+    // const pushToBrowserHistory = props.pushToBrowserHistory;
 
     return _react2.default.createElement(
         'div',
         { className: 'nav-container' },
         _react2.default.createElement(
             'div',
-            { className: 'nav-item-wrapper' },
+            { className: 'nav-item-container' },
             _react2.default.createElement('input', { type: 'text', placeholder: 'Search', onChange: handleInput, value: searchValue,
-                onKeyUp: searchForBook, onClick: function onClick() {
-                    pushToBrowserHistory('/search');
-                } }),
+                onKeyUp: searchForBook /*onClick={() => {pushToBrowserHistory('/search')}}*/ }),
             _react2.default.createElement(
                 'div',
                 { className: 'emoji-wrapper' },
@@ -69731,7 +69761,7 @@ var Nav = exports.Nav = function Nav(props) {
             { to: '/' },
             _react2.default.createElement(
                 'div',
-                { className: 'nav-item-wrapper' },
+                { className: 'nav-item-container' },
                 _react2.default.createElement(
                     'div',
                     { className: 'text-wrapper' },
@@ -69745,22 +69775,26 @@ var Nav = exports.Nav = function Nav(props) {
             )
         ),
         _react2.default.createElement(
-            'div',
-            { className: 'nav-item-wrapper' },
+            _reactRouterDom.Link,
+            { to: '/books' },
             _react2.default.createElement(
                 'div',
-                { className: 'text-wrapper' },
-                'Books'
-            ),
-            _react2.default.createElement(
-                'div',
-                { className: 'emoji-wrapper' },
-                '\uD83D\uDCDA'
+                { className: 'nav-item-container' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'text-wrapper' },
+                    'Books'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'emoji-wrapper' },
+                    '\uD83D\uDCDA'
+                )
             )
         ),
         _react2.default.createElement(
             'div',
-            { className: 'nav-item-wrapper' },
+            { className: 'nav-item-container' },
             _react2.default.createElement(
                 'div',
                 { className: 'text-wrapper' },
@@ -69774,7 +69808,7 @@ var Nav = exports.Nav = function Nav(props) {
         ),
         _react2.default.createElement(
             'div',
-            { className: 'nav-item-wrapper' },
+            { className: 'nav-item-container' },
             _react2.default.createElement(
                 'div',
                 { className: 'text-wrapper' },
@@ -69805,7 +69839,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(55);
+var _reactRouterDom = __webpack_require__(46);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69823,7 +69857,7 @@ var UserNav = exports.UserNav = function UserNav(props) {
             { className: 'user-window' },
             _react2.default.createElement(
                 'div',
-                { className: 'nav-item-wrapper greeting-wrapper' },
+                { className: 'nav-item-container greeting-wrapper' },
                 _react2.default.createElement(
                     'div',
                     { className: 'text-wrapper' },
@@ -69849,7 +69883,7 @@ var UserNav = exports.UserNav = function UserNav(props) {
                     { to: '/profile' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'nav-item-wrapper' },
+                        { className: 'nav-item-container' },
                         _react2.default.createElement(
                             'div',
                             { className: 'text-wrapper' },
@@ -69867,7 +69901,7 @@ var UserNav = exports.UserNav = function UserNav(props) {
                     { to: '/mybooks' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'nav-item-wrapper' },
+                        { className: 'nav-item-container' },
                         _react2.default.createElement(
                             'div',
                             { className: 'text-wrapper' },
@@ -69882,7 +69916,7 @@ var UserNav = exports.UserNav = function UserNav(props) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'nav-item-wrapper', onClick: logout },
+                    { className: 'nav-item-container', onClick: logout },
                     _react2.default.createElement(
                         'div',
                         { className: 'text-wrapper' },
@@ -69903,7 +69937,7 @@ var UserNav = exports.UserNav = function UserNav(props) {
                 { className: 'auth-link', to: '/login' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'auth-link-container' },
+                    { className: 'nav-item-container' },
                     _react2.default.createElement(
                         'div',
                         { className: 'text-wrapper' },
@@ -69921,7 +69955,7 @@ var UserNav = exports.UserNav = function UserNav(props) {
                 { className: 'auth-link', to: '/signup' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'auth-link-container' },
+                    { className: 'nav-item-container' },
                     _react2.default.createElement(
                         'div',
                         { className: 'text-wrapper' },
@@ -69954,7 +69988,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(55);
+var _reactRouterDom = __webpack_require__(46);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70029,7 +70063,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(55);
+var _reactRouterDom = __webpack_require__(46);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70193,6 +70227,8 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(46);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var SearchResults = exports.SearchResults = function SearchResults(props) {
@@ -70203,56 +70239,54 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
     var toggleImgShade = props.toggleImgShade;
     var imgShadeStyle = state.ui.imgShade.style;
     var shadeId = state.ui.imgShade.origin;
+    var imgClass = state.ui.imgShade.class;
+    var isLoggedIn = state.user;
+    var gridView = state.ui.gridView;
+    // const toggleViewFormat = props.toggleViewFormat;
+    console.log('imgClass:', imgClass);
     console.log('imgShadeStyle:', imgShadeStyle);
     console.log('shadeId:', shadeId);
-    // let layerStyle = {};
-    // function dim() {
-    //     layerStyle = {
-    //         backgroundColor : 'rgba(0,0,0,.4)'
-    //     }
-    // }
+    function shortenTitle(title, length) {
+        var result = void 0;
+        if (title.length > length) {
+            result = title.slice(0, length) + '...';
+            return result;
+        } else return title;
+    }
+    function removeMiddleName(name) {
+        var result = void 0;
+        result = name.split(' ');
+        if (result.length > 2) return result[0] + ' ' + result[result.length - 1];else return name;
+    }
 
     return _react2.default.createElement(
         'div',
         { className: 'results-container' },
-        searchResults ? searchResults.items.map(function (item, i) {
+        searchResults && gridView ? searchResults.items.map(function (item, i) {
             var book = item.volumeInfo;
-            function shortenTitle(title, length) {
-                var result = void 0;
-                if (title.length > length) {
-                    result = title.slice(0, length) + '...';
-                    return result;
-                } else return title;
-            }
-            // function dim() {
-            //     layerStyle.backgroundColor = 'rgba(0,0,0,.4)';
-            // }
+            var authorName = book.authors[0];
+            var author = removeMiddleName(authorName);
             var title = shortenTitle(book.title, 18);
             // const imageSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
             var imgUrl = imgRootUrl + item.id + params;
             var imgStyle = {
                 backgroundImage: 'url(' + imgUrl + ')'
             };
-            // let layerStyle = {}
-            // function dim() {
-            //     layerStyle = {
-            //         backgroundColor : 'rgba(0,0,0,.4)'
-            //     }
-            // }
+
             return _react2.default.createElement(
                 'div',
                 { key: i, className: 'book' },
-                _react2.default.createElement('div', { className: 'img', style: imgStyle }),
+                _react2.default.createElement('div', { className: 'shade' + i === shadeId ? 'img' + imgClass : 'img', style: imgStyle }),
                 _react2.default.createElement(
                     'div',
                     { id: 'shade' + i, className: 'img-shade',
                         style: 'shade' + i === shadeId ? imgShadeStyle : {},
                         onMouseEnter: toggleImgShade, onMouseLeave: toggleImgShade },
-                    _react2.default.createElement(
+                    'shade' + i === shadeId ? _react2.default.createElement(
                         'div',
                         { className: 'view-detail-button' },
                         'View Detail'
-                    )
+                    ) : ''
                 ),
                 _react2.default.createElement(
                     'div',
@@ -70267,6 +70301,69 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
                         { className: 'author' },
                         'Author:\xA0',
                         book.authors
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'trade-button-container' },
+                    isLoggedIn ? _react2.default.createElement(
+                        'div',
+                        { className: 'text-wrapper' },
+                        'Request \uD83D\uDCD8'
+                    ) : _react2.default.createElement(
+                        _reactRouterDom.Link,
+                        { to: '/login' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'text-wrapper' },
+                            'Log in & request \uD83D\uDCD8'
+                        )
+                    )
+                )
+            );
+        }) : '',
+        searchResults && !gridView ? searchResults.items.map(function (item, i) {
+            var book = item.volumeInfo;
+            var imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
+            var title = shortenTitle(book.title, 25);
+            var authorName = book.authors[0];
+            var author = removeMiddleName(authorName);
+            // console.log('author:', author);
+
+            return _react2.default.createElement(
+                'div',
+                { key: i, className: 'book-list-view' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'img-wrapper' },
+                    _react2.default.createElement('img', { src: imgSrc })
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'title' },
+                    title
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'author' },
+                    'Author:\xA0',
+                    author
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'trade-button-container' },
+                    isLoggedIn ? _react2.default.createElement(
+                        'div',
+                        { className: 'text-wrapper' },
+                        'Request \uD83D\uDCD8'
+                    ) : _react2.default.createElement(
+                        _reactRouterDom.Link,
+                        { to: '/login' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'text-wrapper' },
+                            'Log in & request \uD83D\uDCD8'
+                        )
                     )
                 )
             );

@@ -54,65 +54,44 @@
     color: #22A7F0; }
     .user-nav-container .user-window .greeting-wrapper .username-wrapper:hover {
       cursor: pointer; }
-  .user-nav-container .user-window .user-menu-container .menu-item-wrapper {
-    color: #22A7F0; }
-    .user-nav-container .user-window .user-menu-container .menu-item-wrapper:hover {
-      cursor: pointer; }
-  .user-nav-container .auth-links-container .auth-link-container {
-    height: 3em; }
-    .user-nav-container .auth-links-container .auth-link-container:hover {
-      border-radius: 4px;
-      background-color: white;
-      box-shadow: 0 .2px 1px grey;
-      cursor: pointer; }
-    .user-nav-container .auth-links-container .auth-link-container .text-wrapper {
-      display: inline-block;
-      color: grey;
-      line-height: 3em;
-      margin-left: 1em; }
-    .user-nav-container .auth-links-container .auth-link-container .emoji-wrapper {
-      line-height: 3em;
-      margin-right: 1em; }
 
-.nav-item-wrapper.greeting-wrapper {
+.nav-item-container.greeting-wrapper {
   border-radius: 4px;
   background-color: white;
   box-shadow: 0 .2px 1px grey;
   cursor: pointer; }
 
-.nav-item-wrapper {
-  position: relative; }
-  .nav-item-wrapper input {
+.nav-item-container {
+  height: 3em;
+  transition: all .1s ease;
+  position: relative;
+  min-width: 150px; }
+  .nav-item-container:hover {
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 .2px 1px grey;
+    cursor: pointer; }
+  .nav-item-container .text-wrapper {
+    display: inline-block;
+    color: grey;
+    line-height: 3em;
+    margin-left: 1em; }
+  .nav-item-container input {
     background: #f2f2f2;
     width: 100%;
     height: 3em;
     border: none;
     padding-left: 1em;
     border-radius: 4px; }
-    .nav-item-wrapper input:focus {
+    .nav-item-container input:focus {
       outline: none;
       background-color: white;
       box-shadow: 0 .2px 1px grey; }
-  .nav-item-wrapper .emoji-wrapper {
+  .nav-item-container .emoji-wrapper {
+    line-height: 3em;
+    margin-right: 1em;
     position: absolute;
     right: 0; }
-
-.nav-item-wrapper {
-  height: 3em;
-  transition: all .1s ease; }
-  .nav-item-wrapper:hover {
-    border-radius: 4px;
-    background-color: white;
-    box-shadow: 0 .2px 1px grey;
-    cursor: pointer; }
-  .nav-item-wrapper .text-wrapper {
-    display: inline-block;
-    color: grey;
-    line-height: 3em;
-    margin-left: 1em; }
-  .nav-item-wrapper .emoji-wrapper {
-    line-height: 3em;
-    margin-right: 1em; }
 
 .results-container .book {
   margin: .5em;
@@ -124,17 +103,19 @@
   .results-container .book .img {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    width: 150px;
+    width: 160px;
     height: 200px;
     background-position: center;
     background-size: 150px; }
+  .results-container .book .img.zoom {
+    background-size: 180px; }
   .results-container .book .img-shade {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     position: absolute;
     top: 0;
     right: 0;
-    bottom: 90px;
+    bottom: 130px;
     left: 0;
     transition: all .3s ease; }
     .results-container .book .img-shade .view-detail-button {
@@ -146,10 +127,74 @@
       transform: translateY(-10px);
       width: 75px;
       margin: auto; }
+      .results-container .book .img-shade .view-detail-button:hover {
+        cursor: pointer; }
   .results-container .book .summary-container {
-    width: 150px;
+    width: 160px;
     height: 90px;
     padding-left: .3em; }
+    .results-container .book .summary-container .title {
+      margin-top: .3em;
+      font-weight: 900;
+      font-size: 1.35em; }
+    .results-container .book .summary-container .author {
+      color: grey; }
+  .results-container .book .trade-button-container {
+    border-top: 1px solid #f2f2f2;
+    height: 40px;
+    transition: all .3s ease; }
+    .results-container .book .trade-button-container:hover {
+      cursor: pointer;
+      background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%); }
+    .results-container .book .trade-button-container .text-wrapper {
+      color: black;
+      text-align: center;
+      line-height: 40px;
+      transition: all .3s ease; }
+      .results-container .book .trade-button-container .text-wrapper:hover {
+        color: white; }
+
+.results-container .book-list-view {
+  white-space: nowrap;
+  min-width: 600px;
+  margin: .5em;
+  height: 60px; }
+  .results-container .book-list-view:hover {
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 .2px 1px grey; }
+  .results-container .book-list-view .img-wrapper img {
+    height: 60px;
+    border-radius: 4px; }
+  .results-container .book-list-view .title {
+    padding-left: .5em;
+    width: 200px; }
+  .results-container .book-list-view .author {
+    border-left: 1px solid #f2f2f2;
+    vertical-align: top;
+    padding-left: .5em; }
+  .results-container .book-list-view .trade-button-container {
+    border-radius: 4px;
+    float: right;
+    text-align: center;
+    transition: all .3s ease;
+    padding: 0 .5em 0 .5em; }
+    .results-container .book-list-view .trade-button-container:hover {
+      cursor: pointer;
+      background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%); }
+    .results-container .book-list-view .trade-button-container .text-wrapper {
+      color: black;
+      text-align: center;
+      transition: all .3s ease; }
+      .results-container .book-list-view .trade-button-container .text-wrapper:hover {
+        color: white; }
+  .results-container .book-list-view .img-wrapper, .results-container .book-list-view .title, .results-container .book-list-view .author, .results-container .book-list-view .trade-button-container {
+    vertical-align: top;
+    line-height: 60px;
+    display: inline-block; }
+
+* {
+  box-sizing: border-box; }
 
 .app-container {
   background-color: #fafafa; }
@@ -178,11 +223,7 @@
     .app-container .flexbox-container .emoji-wrapper {
       display: inline-block;
       float: right; }
-    .app-container .flexbox-container .nav-container, .app-container .flexbox-container .content-container, .app-container .flexbox-container .user-nav-container {
-      min-width: 200px; }
     .app-container .flexbox-container .nav-container {
       flex-grow: 1; }
     .app-container .flexbox-container .content-container {
-      flex-grow: 8;
-      min-width: 300px;
-      width: 100%; }
+      flex-grow: 8; }
