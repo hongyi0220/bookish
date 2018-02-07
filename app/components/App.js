@@ -46,6 +46,8 @@ class App extends React.Component {
         this.findBookById = this.findBookById.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.shortenTitle = this.shortenTitle.bind(this);
+        this.removeMiddleName = this.removeMiddleName.bind(this);
     }
 
     retrieveUserSession() {
@@ -129,10 +131,12 @@ class App extends React.Component {
     toggleImgShadeOn(evt) {
         // console.log('evt.target @ toggleImgShadeON:', evt.target);
         // console.log('evt.target.classON:',evt.target.className);
+        const browsingLocation = this.props.history.location.pathname;
         const bookId = evt.target.id;
-        const books = this.state.searchResult.items;
+        const books = browsingLocation === '/search' ? this.state.searchResult.items : this.state.books.map(b => b.book);
         // const className = evt.target.className;
         // console.log('evt.currentTarget:',evt.currentTarget);
+
         if (evt.target === evt.currentTarget) {
             this.setState({
                 ...this.state,
@@ -272,6 +276,22 @@ class App extends React.Component {
         // evt.stopPropagation();
     }
 
+    shortenTitle(title, length) {
+        let result;
+        if(title.length > length) {
+            result = title.slice(0, length) + '...';
+            return result;
+        }
+        else return title;
+    }
+
+    removeMiddleName(name) {
+        let result;
+        result = name.split(' ');
+        if (result.length > 2) return result[0] + ' ' + result[result.length - 1];
+        else return name;
+    }
+
     componentWillMount() {
         // console.log('cmpWillMnt called');
         // this.retrieveUserSession();
@@ -301,6 +321,8 @@ class App extends React.Component {
         const findBookById = this.findBookById;
         const openModal = this.openModal;
         const closeModal = this.closeModal;
+        const shortenTitle =this.shortenTitle;
+        const removeMiddleName = this.removeMiddleName;
         // console.log('history:', this.props.history.location.pathname);
 
         return (
@@ -326,10 +348,11 @@ class App extends React.Component {
                 <div className='content-container'>
                     <Switch>
                         <Route path='/books' render={() => <Books state={state}
-                            toggleImgShadeOn={toggleImgShadeOn}/>}/>
+                            toggleImgShadeOn={toggleImgShadeOn} openModal={openModal}
+                            closeModal={closeModal} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
                         <Route path='/search' render={() => <SearchResults state={state}
                             toggleImgShadeOn={toggleImgShadeOn} addBook={addBook} openModal={openModal}
-                            closeModal={closeModal}/*findBookById={findBookById}*//>}/>
+                            closeModal={closeModal} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
                         <Route path='/profile' render={() => <Profile state={state}/>} />
                         <Route exact path='/login' render={() => <LoginForm />} />
                         <Route path='/signup' render={() => <SignupForm />} />

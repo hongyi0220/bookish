@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Header, Image, Modal, Icon } from 'semantic-ui-react'
+// import { Header, Image, Modal, Icon } from 'semantic-ui-react';
+import { Dialog } from './Dialog';
 
 export const SearchResults = props => {
     const state = props.state;
@@ -18,31 +19,11 @@ export const SearchResults = props => {
     const foundBook = state.foundBook;
     const openModal = props.openModal;
     const closeModal = props.closeModal;
-    const isModalOepn = state.ui.isModalOpen;
-    // const foundBookId = foundBook.id;
-    // const foundBookTitle = foundBook.volumeInfo.title;
-    // const foundBookDescription = foundBook.volumeInfo.description;
-    // const foundBookAuthor = foundBook.volumeInfo.authors;
-    // const foundBookCategory = foundBook.volumeInfo.categories;
-    // const foundBookPageCount = foundBook.volumeInfo.pageCount;
-    // const toggleViewFormat = props.toggleViewFormat;
+    // const isModalOepn = state.ui.isModalOpen;
     console.log('searchResult',searchResult);
-    // console.log('imgShadeStyle:',imgShadeStyle);
-    // console.log('shadeId:',shadeId);
-    function shortenTitle(title, length) {
-        let result;
-        if(title.length > length) {
-            result = title.slice(0, length) + '...';
-            return result;
-        }
-        else return title;
-    }
-    function removeMiddleName(name) {
-        let result;
-        result = name.split(' ');
-        if (result.length > 2) return result[0] + ' ' + result[result.length - 1];
-        else return name;
-    }
+
+    const shortenTitle = props.shortenTitle;
+    const removeMiddleName = props.removeMiddleName;
     const requestButtonHeight = 65;
     const requestButtonStyles = {
         borderTop: '1px solid rgb(242,242,242)',
@@ -131,34 +112,9 @@ export const SearchResults = props => {
                     </div>
                 );
             }) : ''}
-            {foundBook ?
-                <Modal dimmer={'blurring'} open={isModalOepn} onClose={closeModal} closeIcon>
-                    <Modal.Header>{foundBook.volumeInfo.title}</Modal.Header>
-                    <Modal.Content image>
-                        <Image wrapped size='medium' src={imgRootUrl + foundBook.id + params}/>
-                        <Modal.Description>
-                            <Header>{foundBook.volumeInfo.title}</Header>
-                            {/* const foundBookAuthor = foundBook.volumeInfo.authors;
-                            const foundBookCategory = foundBook.volumeInfo.categories;
-                            const foundBookPageCount = foundBook.volumeInfo.pageCount;
-                            foundBook.volumeInfo.publishedDate; */}
-                            {/* <div className='book-info-container'> */}
-                                <p>{foundBook.volumeInfo.description}</p>
-                                <p>Author:&nbsp;{foundBook.volumeInfo.authors}</p>
-                                <p>Category:&nbsp;{foundBook.volumeInfo.categories}</p>
-                                <p>Published date:&nbsp;{foundBook.volumeInfo.publishedDate}</p>
-                                <p>Page count:&nbsp;{foundBook.volumeInfo.pageCount}</p>
-                            {/* </div> */}
-                        </Modal.Description>
-                    </Modal.Content>
-                    <div className='request-button-container' style={requestButtonStyles}>
-                        {isLoggedIn ?
-                            <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div> :
-                            <Link to='/login'>
-                                <div className='text-wrapper' style={textWrapperStyles}>Log in & add 📘</div>
-                            </Link>}
-                    </div>
-                </Modal>
+            {foundBook ? <Dialog state={state} openModal={openModal} closeModal={closeModal}
+                imgRootUrl={imgRootUrl} params={params} requestButtonHeight={requestButtonHeight}
+                requestButtonStyles={requestButtonStyles} textWrapperStyles={textWrapperStyles}/>
             : ''}
         </div>
     );

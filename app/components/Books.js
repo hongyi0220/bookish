@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Dialog } from './Dialog';
 
 export const Books = props => {
     const state = props.state;
@@ -7,9 +8,9 @@ export const Books = props => {
     const imgRootUrl = 'http://books.google.com/books/content?id=';
     const params = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
     const toggleImgShadeOn = props.toggleImgShadeOn;
-    const imgShadeStyle = state.ui.imgShade.style;
-    const shadeId = state.ui.imgShade.origin;
-    const imgClass = state.ui.imgShade.class;
+    const imgShadeStyle = state.ui.selected.style;
+    const selectedId = state.ui.selected.origin;
+    const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
     const gridView = state.ui.gridView;
     // const addBook = props.addBook;
@@ -17,19 +18,24 @@ export const Books = props => {
     // console.log('imgClass:',imgClass);
     // console.log('imgShadeStyle:',imgShadeStyle);
     // console.log('shadeId:',shadeId);
-    function shortenTitle(title, length) {
-        let result;
-        if(title.length > length) {
-            result = title.slice(0, length) + '...';
-            return result;
-        }
-        else return title;
+
+    const foundBook = state.foundBook;
+    const openModal = props.openModal;
+    const closeModal = props.closeModal;
+    // const isModalOepn = state.ui.isModalOpen;
+    const shortenTitle = props.shortenTitle;
+    const removeMiddleName = props.removeMiddleName;
+    const requestButtonHeight = 65;
+    const requestButtonStyles = {
+        borderTop: '1px solid rgb(242,242,242)',
+        height: requestButtonHeight + 'px',
+        background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)'
     }
-    function removeMiddleName(name) {
-        let result;
-        result = name.split(' ');
-        if (result.length > 2) return result[0] + ' ' + result[result.length - 1];
-        else return name;
+    const textWrapperStyles = {
+        color: 'black',
+        textAlign: 'center',
+        lineHeight: requestButtonHeight + 'px',
+        fontSize: '1.4em'
     }
 
     return (
@@ -50,13 +56,15 @@ export const Books = props => {
 
                 return (
                     <div key={i} className='book'>
-                        <div className={'shade' + i === shadeId ? 'img' + imgClass : 'img'} style={imgStyle}></div>
+                        <div className={bookId === selectedId ? 'img' + imgClass : 'img'} style={imgStyle}></div>
 
-                         <div id={'shade' + i} className='img-shade'
-                             style={'shade' + i === shadeId ? imgShadeStyle : {}}
+                         <div id={bookId} className='img-shade'
+                             style={bookId === selectedId ? imgShadeStyle : {}}
                               onMouseOver={toggleImgShadeOn}/*onMouseEnter={toggleImgShade} onMouseLeave={toggleImgShade}*/>
 
-                            {'shade' + i === shadeId ? <div className='view-detail-button'>View Detail</div> : ''}
+                            {bookId === selectedId ?
+                                <div className='view-detail-button' onClick={openModal}>View Detail</div>
+                            : ''}
 
                         </div>
                         <div className='summary-container'>
@@ -107,6 +115,10 @@ export const Books = props => {
                     </div>
                 );
             }) : ''}
+            {foundBook ? <Dialog state={state} openModal={openModal} closeModal={closeModal}
+                imgRootUrl={imgRootUrl} params={params} requestButtonHeight={requestButtonHeight}
+                requestButtonStyles={requestButtonStyles} textWrapperStyles={textWrapperStyles}/>
+            : ''}
         </div>
     );
 }
