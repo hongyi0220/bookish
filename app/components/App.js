@@ -21,6 +21,7 @@ class App extends React.Component {
             books: null,
             foundBook: null,
             dev: true,
+            pathname: null,
             ui: {
                 selected: {
                     origin: null,
@@ -37,7 +38,7 @@ class App extends React.Component {
         this.getApiKey = this.getApiKey.bind(this);
         this.callGoogleApi = this.callGoogleApi.bind(this);
         this.handleInput = this.handleInput.bind(this);
-        this.pushToBrowserHistory = this.pushToBrowserHistory.bind(this);
+        this.navigateTo = this.navigateTo.bind(this);
         this.toggleImgShadeOn = this.toggleImgShadeOn.bind(this);
         this.toggleImgShadeOff = this.toggleImgShadeOff.bind(this);
         this.toggleViewFormat = this.toggleViewFormat.bind(this);
@@ -115,7 +116,7 @@ class App extends React.Component {
             .catch(err => console.error(err));
         })
         .catch(err => console.error(err));
-        this.pushToBrowserHistory('/search');
+        // this.navigateTo('/search');
     }
 
     handleInput(evt) {
@@ -124,8 +125,9 @@ class App extends React.Component {
         this.setState({ searchValue: searchValue });
     }
 
-    pushToBrowserHistory(route) {
+    navigateTo(route) {
         this.props.history.push(route);
+        this.setState({ pathname: route });
     }
 
     toggleImgShadeOn(evt) {
@@ -312,7 +314,7 @@ class App extends React.Component {
         const logout = this.logout;
         const handleInput = this.handleInput;
         const searchForBook = this.searchForBook;
-        const pushToBrowserHistory = this.pushToBrowserHistory;
+        const navigateTo = this.navigateTo;
         const toggleImgShadeOn = this.toggleImgShadeOn;
         const toggleImgShadeOff = this.toggleImgShadeOff;
         const toggleViewFormat = this.toggleViewFormat;
@@ -344,7 +346,7 @@ class App extends React.Component {
             </div> : ''} */}
             <div className='flexbox-container'>
                 <Nav state={state} handleInput={handleInput} searchForBook={searchForBook}
-                    pushToBrowserHistory={pushToBrowserHistory}/>
+                    navigateTo={navigateTo}/>
                 <div className='content-container'>
                     <Switch>
                         <Route path='/books' render={() => <Books state={state}

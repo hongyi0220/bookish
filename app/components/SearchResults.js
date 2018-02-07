@@ -24,18 +24,18 @@ export const SearchResults = props => {
 
     const shortenTitle = props.shortenTitle;
     const removeMiddleName = props.removeMiddleName;
-    const requestButtonHeight = 65;
-    const requestButtonStyles = {
-        borderTop: '1px solid rgb(242,242,242)',
-        height: requestButtonHeight + 'px',
-        background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)'
-    }
-    const textWrapperStyles = {
-        color: 'black',
-        textAlign: 'center',
-        lineHeight: requestButtonHeight + 'px',
-        fontSize: '1.4em'
-    }
+    // const requestButtonHeight = 65;
+    // const requestButtonStyles = {
+    //     borderTop: '1px solid rgb(242,242,242)',
+    //     height: requestButtonHeight + 'px',
+    //     background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)'
+    // }
+    // const textWrapperStyles = {
+    //     color: 'black',
+    //     textAlign: 'center',
+    //     lineHeight: requestButtonHeight + 'px',
+    //     fontSize: '1.4em'
+    // }
 
     return (
         <div className='results-container'>
@@ -113,8 +113,7 @@ export const SearchResults = props => {
                 );
             }) : ''}
             {foundBook ? <Dialog state={state} openModal={openModal} closeModal={closeModal}
-                imgRootUrl={imgRootUrl} params={params} requestButtonHeight={requestButtonHeight}
-                requestButtonStyles={requestButtonStyles} textWrapperStyles={textWrapperStyles}/>
+                imgRootUrl={imgRootUrl} params={params}/>
             : ''}
         </div>
     );

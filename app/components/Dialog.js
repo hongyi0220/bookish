@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { Header, Image, Modal, Icon } from 'semantic-ui-react';
+import { ButtonsContainer } from './buttons/ButtonsContainer';
 
 export const Dialog = props => {
     const state = props.state;
@@ -11,9 +12,9 @@ export const Dialog = props => {
     const foundBook = state.foundBook;
     const imgRootUrl = props.imgRootUrl;
     const params = props.params;
-    const requestButtonHeight = props.requestButtonHeight;
-    const requestButtonStyles = props.requestButtonStyles;
-    const textWrapperStyles = props.textWrapperStyles;
+    // const requestButtonHeight = props.requestButtonHeight;
+    // const requestButtonStyles = props.requestButtonStyles;
+    // const textWrapperStyles = props.textWrapperStyles;
 
     return (
         <Modal dimmer={'blurring'} open={isModalOepn} onClose={closeModal} closeIcon>
@@ -35,13 +36,16 @@ export const Dialog = props => {
                     {/* </div> */}
                 </Modal.Description>
             </Modal.Content>
-            <div className='request-button-container' style={requestButtonStyles}>
-                {isLoggedIn ?
+            <ButtonsContainer state={state}/>
+            {/* <RequestButton requestButtonHeight={requestButtonHeight}
+            requestButtonStyles={requestButtonStyles} textWrapperStyles={textWrapperStyles}/>
+            <div className='request-button-container' style={requestButtonStyles}> */}
+                {/* {isLoggedIn ?
                     <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div> :
                     <Link to='/login'>
                         <div className='text-wrapper' style={textWrapperStyles}>Log in & add 📘</div>
-                    </Link>}
-            </div>
+                    </Link>} */}
+            {/* </div> */}
         </Modal>
     );
 }

@@ -6,13 +6,13 @@ export const Nav = props => {
     const searchValue = state.searchValue;
     const handleInput = props.handleInput;
     const searchForBook = props.searchForBook;
-    // const pushToBrowserHistory = props.pushToBrowserHistory;
+    const navigateTo = props.navigateTo;
 
     return (
         <div className='nav-container'>
             <div className='nav-item-container'>
                 <input type='text' placeholder='Search' onChange={handleInput} value={searchValue}
-                    onKeyUp={searchForBook} /*onClick={() => {pushToBrowserHistory('/search')}}*//>
+                    onKeyUp={(evt) => {searchForBook(evt); navigateTo('/search')}} />
                 <div className='emoji-wrapper'>🔍</div>
             </div>
             <Link to='/'>

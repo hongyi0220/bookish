@@ -25,18 +25,18 @@ export const Books = props => {
     // const isModalOepn = state.ui.isModalOpen;
     const shortenTitle = props.shortenTitle;
     const removeMiddleName = props.removeMiddleName;
-    const requestButtonHeight = 65;
-    const requestButtonStyles = {
-        borderTop: '1px solid rgb(242,242,242)',
-        height: requestButtonHeight + 'px',
-        background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)'
-    }
-    const textWrapperStyles = {
-        color: 'black',
-        textAlign: 'center',
-        lineHeight: requestButtonHeight + 'px',
-        fontSize: '1.4em'
-    }
+    // const requestButtonHeight = 65;
+    // const requestButtonStyles = {
+    //     borderTop: '1px solid rgb(242,242,242)',
+    //     height: requestButtonHeight + 'px',
+    //     background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)'
+    // }
+    // const textWrapperStyles = {
+    //     color: 'black',
+    //     textAlign: 'center',
+    //     lineHeight: requestButtonHeight + 'px',
+    //     fontSize: '1.4em'
+    // }
 
     return (
         <div className='results-container'>
@@ -68,11 +68,9 @@ export const Books = props => {
 
                         </div>
                         <div className='summary-container'>
-                            <div className='title'>
-                                {title}
-                            </div>
+                            <div className='title'>{title}</div>
                             <div className='author'>
-                                Author:&nbsp;{book.authors}
+                                Author:&nbsp;{author}
                             </div>
                         </div>
                         <div className='request-button-container'>
@@ -97,12 +95,8 @@ export const Books = props => {
 
                 return (
                     <div key={i} className='book-list-view'>
-                        <div className='img-wrapper'>
-                            <img src={imgSrc} />
-                        </div>
-                        <div className='title'>
-                            {title}
-                        </div>
+                        <div className='img-wrapper'><img src={imgSrc} /></div>
+                        <div className='title'>{title}</div>
                         <div className='author'>
                             Author:&nbsp;{author}
                         </div>
@@ -116,8 +110,7 @@ export const Books = props => {
                 );
             }) : ''}
             {foundBook ? <Dialog state={state} openModal={openModal} closeModal={closeModal}
-                imgRootUrl={imgRootUrl} params={params} requestButtonHeight={requestButtonHeight}
-                requestButtonStyles={requestButtonStyles} textWrapperStyles={textWrapperStyles}/>
+                imgRootUrl={imgRootUrl} params={params}/>
             : ''}
         </div>
     );
