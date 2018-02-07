@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Header, Image, Modal } from 'semantic-ui-react'
+import { Button, Header, Image, Modal, Icon } from 'semantic-ui-react'
 
 export const SearchResults = props => {
     const state = props.state;
@@ -17,6 +17,7 @@ export const SearchResults = props => {
     // const findBookById = props.findBookById;
     const foundBook = state.foundBook;
     const openModal = props.openModal;
+    const closeModal = props.closeModal;
     const isModalOepn = state.ui.isModalOpen;
     // const foundBookId = foundBook.id;
     // const foundBookTitle = foundBook.volumeInfo.title;
@@ -25,7 +26,7 @@ export const SearchResults = props => {
     // const foundBookCategory = foundBook.volumeInfo.categories;
     // const foundBookPageCount = foundBook.volumeInfo.pageCount;
     // const toggleViewFormat = props.toggleViewFormat;
-    // console.log('imgClass:',imgClass);
+    console.log('searchResult',searchResult);
     // console.log('imgShadeStyle:',imgShadeStyle);
     // console.log('shadeId:',shadeId);
     function shortenTitle(title, length) {
@@ -41,6 +42,18 @@ export const SearchResults = props => {
         result = name.split(' ');
         if (result.length > 2) return result[0] + ' ' + result[result.length - 1];
         else return name;
+    }
+    const requestButtonHeight = 65;
+    const requestButtonStyles = {
+        borderTop: '1px solid rgb(242,242,242)',
+        height: requestButtonHeight + 'px',
+        background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)'
+    }
+    const textWrapperStyles = {
+        color: 'black',
+        textAlign: 'center',
+        lineHeight: requestButtonHeight + 'px',
+        fontSize: '1.4em'
     }
 
     return (
@@ -76,10 +89,10 @@ export const SearchResults = props => {
                                 {title}
                             </div>
                             <div className='author'>
-                                Author:&nbsp;{book.authors}
+                                Author:&nbsp;{author}
                             </div>
                         </div>
-                        <div className='trade-button-container'>
+                        <div className='request-button-container'>
                             {isLoggedIn ?
                                 <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div> :
                              <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>}
@@ -94,6 +107,8 @@ export const SearchResults = props => {
                 const imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
                 const title = shortenTitle(book.title, 25);
                 const authorName = book.authors ? book.authors[0] : 'Unknown';
+                // console.log('book.authors:',book.authors);
+                // console.log('book.authors[0]:',book.authors[0]);
                 const author = removeMiddleName(authorName);
                 // console.log('book.authors:', author);
 
@@ -108,7 +123,7 @@ export const SearchResults = props => {
                         <div className='author'>
                             Author:&nbsp;{author}
                         </div>
-                        <div className='trade-button-container'>
+                        <div className='request-button-container'>
                             {isLoggedIn ?
                                 <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div> :
                              <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>}
@@ -117,28 +132,34 @@ export const SearchResults = props => {
                 );
             }) : ''}
             {foundBook ?
-                <Modal dimmer={'blurring'} open={isModalOepn}>
+                <Modal dimmer={'blurring'} open={isModalOepn} onClose={closeModal} closeIcon>
                     <Modal.Header>{foundBook.volumeInfo.title}</Modal.Header>
-                    <Modal.Content>
-                        <Image size='medium' src={imgRootUrl + foundBook.id + params}/>
+                    <Modal.Content image>
+                        <Image wrapped size='medium' src={imgRootUrl + foundBook.id + params}/>
                         <Modal.Description>
                             <Header>{foundBook.volumeInfo.title}</Header>
                             {/* const foundBookAuthor = foundBook.volumeInfo.authors;
                             const foundBookCategory = foundBook.volumeInfo.categories;
                             const foundBookPageCount = foundBook.volumeInfo.pageCount;
                             foundBook.volumeInfo.publishedDate; */}
-                            <div className='book-info-container'>
+                            {/* <div className='book-info-container'> */}
                                 <p>{foundBook.volumeInfo.description}</p>
-                                <p>{foundBook.volumeInfo.authors}</p>
-                                <p>{foundBook.volumeInfo.categories}</p>
-                                <p>{foundBook.volumeInfo.publishedDate}</p>
-                                <p>{foundBook.volumeInfo.pageCount}</p>
-                            </div>
+                                <p>Author:&nbsp;{foundBook.volumeInfo.authors}</p>
+                                <p>Category:&nbsp;{foundBook.volumeInfo.categories}</p>
+                                <p>Published date:&nbsp;{foundBook.volumeInfo.publishedDate}</p>
+                                <p>Page count:&nbsp;{foundBook.volumeInfo.pageCount}</p>
+                            {/* </div> */}
                         </Modal.Description>
                     </Modal.Content>
+                    <div className='request-button-container' style={requestButtonStyles}>
+                        {isLoggedIn ?
+                            <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div> :
+                            <Link to='/login'>
+                                <div className='text-wrapper' style={textWrapperStyles}>Log in & add 📘</div>
+                            </Link>}
+                    </div>
                 </Modal>
             : ''}
-
         </div>
     );
 }

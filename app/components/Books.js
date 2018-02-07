@@ -67,7 +67,7 @@ export const Books = props => {
                                 Author:&nbsp;{book.authors}
                             </div>
                         </div>
-                        <div className='trade-button-container'>
+                        <div className='request-button-container'>
                             {isLoggedIn ?
                                 <div className='text-wrapper' onClick={() => {}}>Request 📘</div> :
                              <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
@@ -98,7 +98,7 @@ export const Books = props => {
                         <div className='author'>
                             Author:&nbsp;{author}
                         </div>
-                        <div className='trade-button-container'>
+                        <div className='request-button-container'>
                             {isLoggedIn ?
                                 <div className='text-wrapper' onClick={() => {}}>Request 📘</div> :
                              <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>

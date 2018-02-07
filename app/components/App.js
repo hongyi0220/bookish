@@ -45,6 +45,7 @@ class App extends React.Component {
         this.getBooks = this.getBooks.bind(this);
         this.findBookById = this.findBookById.bind(this);
         this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
 
     retrieveUserSession() {
@@ -126,12 +127,12 @@ class App extends React.Component {
     }
 
     toggleImgShadeOn(evt) {
-        console.log('evt.target @ toggleImgShadeON:', evt.target);
+        // console.log('evt.target @ toggleImgShadeON:', evt.target);
         // console.log('evt.target.classON:',evt.target.className);
         const bookId = evt.target.id;
         const books = this.state.searchResult.items;
         // const className = evt.target.className;
-        console.log('evt.currentTarget:',evt.currentTarget);
+        // console.log('evt.currentTarget:',evt.currentTarget);
         if (evt.target === evt.currentTarget) {
             this.setState({
                 ...this.state,
@@ -151,24 +152,24 @@ class App extends React.Component {
     }
 
     toggleImgShadeOff(evt) {
-        console.log('evt.target @ toggleImgShadeOFF:', evt.target);
+        // console.log('evt.target @ toggleImgShadeOFF:', evt.target);
         // console.log('evt.target.classOFF:',evt.target.className);
         // const className = evt.target.className;
         // if (className !== 'view-detail-button') {
-            this.setState({
-                ...this.state,
-                ui: {
-                    ...this.state.ui,
-                    selected: {
-                        ...this.state.ui.selected,
-                        origin: null,
-                        style: {},
-                        class: ''
-                    }
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                selected: {
+                    ...this.state.ui.selected,
+                    origin: null,
+                    style: {},
+                    class: ''
                 }
-            });
+            }
+        });
         // }
-        evt.stopPropagation();
+        // evt.stopPropagation();
     }
 
     toggleViewFormat(evt) {
@@ -200,9 +201,9 @@ class App extends React.Component {
     }
 
     addBook(bookId) {
-        console.log('adding book');
+        // console.log('adding book');
         const books = this.state.searchResult.items;
-        console.log('books@ addBook:', books);
+        // console.log('books@ addBook:', books);
         const foundBook = this.findBookById(bookId, books);
         // function findBook(bookId) {
         //     let found;
@@ -217,7 +218,7 @@ class App extends React.Component {
         //     }
         //     return found;
         // }
-        console.log('foundbook:', foundBook);
+        // console.log('foundbook:', foundBook);
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/addbook';
@@ -247,15 +248,27 @@ class App extends React.Component {
         .catch(err => console.error(err));
     }
 
-    openModal() {
-        console.log('openModal()');
+    openModal(evt) {
+        // console.log('openModal()');
         this.setState({
             ...this.state,
             ui: {
                 ...this.state.ui,
-                isModalOpen: !this.state.ui.isModalOpen
+                isModalOpen: true
             }
         }, () => console.log('isModalOpen:', this.state));
+        evt.stopPropagation();
+    }
+
+    closeModal() {
+        console.log('closeModal()');
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                isModalOpen: false
+            }
+        });
         // evt.stopPropagation();
     }
 
@@ -287,6 +300,7 @@ class App extends React.Component {
         const addBook = this.addBook;
         const findBookById = this.findBookById;
         const openModal = this.openModal;
+        const closeModal = this.closeModal;
         // console.log('history:', this.props.history.location.pathname);
 
         return (
@@ -314,7 +328,8 @@ class App extends React.Component {
                         <Route path='/books' render={() => <Books state={state}
                             toggleImgShadeOn={toggleImgShadeOn}/>}/>
                         <Route path='/search' render={() => <SearchResults state={state}
-                            toggleImgShadeOn={toggleImgShadeOn} addBook={addBook} openModal={openModal}/*findBookById={findBookById}*//>}/>
+                            toggleImgShadeOn={toggleImgShadeOn} addBook={addBook} openModal={openModal}
+                            closeModal={closeModal}/*findBookById={findBookById}*//>}/>
                         <Route path='/profile' render={() => <Profile state={state}/>} />
                         <Route exact path='/login' render={() => <LoginForm />} />
                         <Route path='/signup' render={() => <SignupForm />} />

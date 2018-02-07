@@ -6,9 +6,9 @@
     // }
     // border: 1px solid red;
     // padding
-    .book-info-container {
-        // display: inline-block;
-    }
+    // .book-info-container {
+    //     // display: inline-block;
+    // }
     .book {
         margin: .5em;
         display: inline-block;
@@ -78,7 +78,7 @@
                 color: grey;
             }
         }
-        .trade-button-container {
+        .request-button-container {
             border-top: 1px solid $light-grey;
             // padding: .25em 0 .25em 0;
             height: $request-button-height;
@@ -151,7 +151,7 @@
             // text-align: left;
             // line-height: $list-row-height;
         }
-        .trade-button-container {
+        .request-button-container {
             // border: 1px solid red;
             border-radius: $bd-radius;
             // min-width: 140px;
@@ -175,7 +175,7 @@
                 }
             }
         }
-        .img-wrapper, .title, .author, .trade-button-container {
+        .img-wrapper, .title, .author, .request-button-container {
             // flex-shrink: 0
             // flex-grow: 1;
             // white-space: nowrap;

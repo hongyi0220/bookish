@@ -46510,6 +46510,7 @@ var App = function (_React$Component) {
         _this.getBooks = _this.getBooks.bind(_this);
         _this.findBookById = _this.findBookById.bind(_this);
         _this.openModal = _this.openModal.bind(_this);
+        _this.closeModal = _this.closeModal.bind(_this);
         return _this;
     }
 
@@ -46613,12 +46614,12 @@ var App = function (_React$Component) {
     }, {
         key: 'toggleImgShadeOn',
         value: function toggleImgShadeOn(evt) {
-            console.log('evt.target @ toggleImgShadeON:', evt.target);
+            // console.log('evt.target @ toggleImgShadeON:', evt.target);
             // console.log('evt.target.classON:',evt.target.className);
             var bookId = evt.target.id;
             var books = this.state.searchResult.items;
             // const className = evt.target.className;
-            console.log('evt.currentTarget:', evt.currentTarget);
+            // console.log('evt.currentTarget:',evt.currentTarget);
             if (evt.target === evt.currentTarget) {
                 this.setState(_extends({}, this.state, {
                     ui: _extends({}, this.state.ui, {
@@ -46636,7 +46637,7 @@ var App = function (_React$Component) {
     }, {
         key: 'toggleImgShadeOff',
         value: function toggleImgShadeOff(evt) {
-            console.log('evt.target @ toggleImgShadeOFF:', evt.target);
+            // console.log('evt.target @ toggleImgShadeOFF:', evt.target);
             // console.log('evt.target.classOFF:',evt.target.className);
             // const className = evt.target.className;
             // if (className !== 'view-detail-button') {
@@ -46650,7 +46651,7 @@ var App = function (_React$Component) {
                 })
             }));
             // }
-            evt.stopPropagation();
+            // evt.stopPropagation();
         }
     }, {
         key: 'toggleViewFormat',
@@ -46683,9 +46684,9 @@ var App = function (_React$Component) {
     }, {
         key: 'addBook',
         value: function addBook(bookId) {
-            console.log('adding book');
+            // console.log('adding book');
             var books = this.state.searchResult.items;
-            console.log('books@ addBook:', books);
+            // console.log('books@ addBook:', books);
             var foundBook = this.findBookById(bookId, books);
             // function findBook(bookId) {
             //     let found;
@@ -46700,7 +46701,7 @@ var App = function (_React$Component) {
             //     }
             //     return found;
             // }
-            console.log('foundbook:', foundBook);
+            // console.log('foundbook:', foundBook);
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/addbook';
@@ -46736,17 +46737,28 @@ var App = function (_React$Component) {
         }
     }, {
         key: 'openModal',
-        value: function openModal() {
+        value: function openModal(evt) {
             var _this4 = this;
 
-            console.log('openModal()');
+            // console.log('openModal()');
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
-                    isModalOpen: !this.state.ui.isModalOpen
+                    isModalOpen: true
                 })
             }), function () {
                 return console.log('isModalOpen:', _this4.state);
             });
+            evt.stopPropagation();
+        }
+    }, {
+        key: 'closeModal',
+        value: function closeModal() {
+            console.log('closeModal()');
+            this.setState(_extends({}, this.state, {
+                ui: _extends({}, this.state.ui, {
+                    isModalOpen: false
+                })
+            }));
             // evt.stopPropagation();
         }
     }, {
@@ -46787,6 +46799,7 @@ var App = function (_React$Component) {
             var addBook = this.addBook;
             var findBookById = this.findBookById;
             var openModal = this.openModal;
+            var closeModal = this.closeModal;
             // console.log('history:', this.props.history.location.pathname);
 
             return _react2.default.createElement(
@@ -46835,7 +46848,8 @@ var App = function (_React$Component) {
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/search', render: function render() {
                                     return _react2.default.createElement(_SearchResults.SearchResults, { state: state,
-                                        toggleImgShadeOn: toggleImgShadeOn, addBook: addBook, openModal: openModal /*findBookById={findBookById}*/ });
+                                        toggleImgShadeOn: toggleImgShadeOn, addBook: addBook, openModal: openModal,
+                                        closeModal: closeModal /*findBookById={findBookById}*/ });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/profile', render: function render() {
                                     return _react2.default.createElement(_Profile.Profile, { state: state });
@@ -70398,6 +70412,7 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
     // const findBookById = props.findBookById;
     var foundBook = state.foundBook;
     var openModal = props.openModal;
+    var closeModal = props.closeModal;
     var isModalOepn = state.ui.isModalOpen;
     // const foundBookId = foundBook.id;
     // const foundBookTitle = foundBook.volumeInfo.title;
@@ -70406,7 +70421,7 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
     // const foundBookCategory = foundBook.volumeInfo.categories;
     // const foundBookPageCount = foundBook.volumeInfo.pageCount;
     // const toggleViewFormat = props.toggleViewFormat;
-    // console.log('imgClass:',imgClass);
+    console.log('searchResult', searchResult);
     // console.log('imgShadeStyle:',imgShadeStyle);
     // console.log('shadeId:',shadeId);
     function shortenTitle(title, length) {
@@ -70421,6 +70436,18 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
         result = name.split(' ');
         if (result.length > 2) return result[0] + ' ' + result[result.length - 1];else return name;
     }
+    var requestButtonHeight = 65;
+    var requestButtonStyles = {
+        borderTop: '1px solid rgb(242,242,242)',
+        height: requestButtonHeight + 'px',
+        background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)'
+    };
+    var textWrapperStyles = {
+        color: 'black',
+        textAlign: 'center',
+        lineHeight: requestButtonHeight + 'px',
+        fontSize: '1.4em'
+    };
 
     return _react2.default.createElement(
         'div',
@@ -70465,12 +70492,12 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
                         'div',
                         { className: 'author' },
                         'Author:\xA0',
-                        book.authors
+                        author
                     )
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'trade-button-container' },
+                    { className: 'request-button-container' },
                     isLoggedIn ? _react2.default.createElement(
                         'div',
                         { className: 'text-wrapper', onClick: function onClick() {
@@ -70495,6 +70522,8 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
             var imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
             var title = shortenTitle(book.title, 25);
             var authorName = book.authors ? book.authors[0] : 'Unknown';
+            // console.log('book.authors:',book.authors);
+            // console.log('book.authors[0]:',book.authors[0]);
             var author = removeMiddleName(authorName);
             // console.log('book.authors:', author);
 
@@ -70519,7 +70548,7 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'trade-button-container' },
+                    { className: 'request-button-container' },
                     isLoggedIn ? _react2.default.createElement(
                         'div',
                         { className: 'text-wrapper', onClick: function onClick() {
@@ -70540,7 +70569,7 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
         }) : '',
         foundBook ? _react2.default.createElement(
             _semanticUiReact.Modal,
-            { dimmer: 'blurring', open: isModalOepn },
+            { dimmer: 'blurring', open: isModalOepn, onClose: closeModal, closeIcon: true },
             _react2.default.createElement(
                 _semanticUiReact.Modal.Header,
                 null,
@@ -70548,8 +70577,8 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
             ),
             _react2.default.createElement(
                 _semanticUiReact.Modal.Content,
-                null,
-                _react2.default.createElement(_semanticUiReact.Image, { size: 'medium', src: imgRootUrl + foundBook.id + params }),
+                { image: true },
+                _react2.default.createElement(_semanticUiReact.Image, { wrapped: true, size: 'medium', src: imgRootUrl + foundBook.id + params }),
                 _react2.default.createElement(
                     _semanticUiReact.Modal.Description,
                     null,
@@ -70559,33 +70588,52 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
                         foundBook.volumeInfo.title
                     ),
                     _react2.default.createElement(
+                        'p',
+                        null,
+                        foundBook.volumeInfo.description
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        'Author:\xA0',
+                        foundBook.volumeInfo.authors
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        'Category:\xA0',
+                        foundBook.volumeInfo.categories
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        'Published date:\xA0',
+                        foundBook.volumeInfo.publishedDate
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        'Page count:\xA0',
+                        foundBook.volumeInfo.pageCount
+                    )
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'request-button-container', style: requestButtonStyles },
+                isLoggedIn ? _react2.default.createElement(
+                    'div',
+                    { className: 'text-wrapper', onClick: function onClick() {
+                            addBook(bookId);
+                        } },
+                    'I own this \uD83D\uDCD8'
+                ) : _react2.default.createElement(
+                    _reactRouterDom.Link,
+                    { to: '/login' },
+                    _react2.default.createElement(
                         'div',
-                        { className: 'book-info-container' },
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            foundBook.volumeInfo.description
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            foundBook.volumeInfo.authors
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            foundBook.volumeInfo.categories
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            foundBook.volumeInfo.publishedDate
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            foundBook.volumeInfo.pageCount
-                        )
+                        { className: 'text-wrapper', style: textWrapperStyles },
+                        'Log in & add \uD83D\uDCD8'
                     )
                 )
             )
@@ -71485,7 +71533,7 @@ var Books = exports.Books = function Books(props) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'trade-button-container' },
+                    { className: 'request-button-container' },
                     isLoggedIn ? _react2.default.createElement(
                         'div',
                         { className: 'text-wrapper', onClick: function onClick() {} },
@@ -71533,7 +71581,7 @@ var Books = exports.Books = function Books(props) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'trade-button-container' },
+                    { className: 'request-button-container' },
                     isLoggedIn ? _react2.default.createElement(
                         'div',
                         { className: 'text-wrapper', onClick: function onClick() {} },
