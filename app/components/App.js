@@ -19,14 +19,16 @@ class App extends React.Component {
             searchResult: null,
             searchValue: '',
             books: null,
+            foundBook: null,
             dev: true,
             ui: {
-                imgShade: {
+                selected: {
                     origin: null,
                     style: {},
                     class: ''
                 },
-                gridView: true
+                gridView: true,
+                isModalOpen: false
             }
         };
         this.retrieveUserSession = this.retrieveUserSession.bind(this);
@@ -36,10 +38,13 @@ class App extends React.Component {
         this.callGoogleApi = this.callGoogleApi.bind(this);
         this.handleInput = this.handleInput.bind(this);
         this.pushToBrowserHistory = this.pushToBrowserHistory.bind(this);
-        this.toggleImgShade = this.toggleImgShade.bind(this);
+        this.toggleImgShadeOn = this.toggleImgShadeOn.bind(this);
+        this.toggleImgShadeOff = this.toggleImgShadeOff.bind(this);
         this.toggleViewFormat = this.toggleViewFormat.bind(this);
         this.addBook = this.addBook.bind(this);
         this.getBooks = this.getBooks.bind(this);
+        this.findBookById = this.findBookById.bind(this);
+        this.openModal = this.openModal.bind(this);
     }
 
     retrieveUserSession() {
@@ -120,22 +125,50 @@ class App extends React.Component {
         this.props.history.push(route);
     }
 
-    toggleImgShade(evt) {
-        const shadeId = evt.target.id;
-        // console.log('shadeId:', shadeId);
-        this.setState({
-            ...this.state,
-            ui: {
-                ...this.state.ui,
-                imgShade: {
-                    ...this.state.ui.imgShade,
-                    origin: this.state.ui.imgShade.origin ? null : shadeId,
-                    style: this.state.ui.imgShade.style.hasOwnProperty('backgroundColor') ?
-                    {} : {backgroundColor: 'rgba(0,0,0,.4)'},
-                    class: this.state.ui.imgShade.class ? '' : ' zoom'
+    toggleImgShadeOn(evt) {
+        console.log('evt.target @ toggleImgShadeON:', evt.target);
+        // console.log('evt.target.classON:',evt.target.className);
+        const bookId = evt.target.id;
+        const books = this.state.searchResult.items;
+        // const className = evt.target.className;
+        console.log('evt.currentTarget:',evt.currentTarget);
+        if (evt.target === evt.currentTarget) {
+            this.setState({
+                ...this.state,
+                ui: {
+                    ...this.state.ui,
+                    selected: {
+                        ...this.state.ui.selected,
+                        origin: bookId,
+                        style: {backgroundColor: 'rgba(0,0,0,.4)'},
+                        class: ' zoom'
+                    }
                 }
-            }
-        })
+            });
+            this.findBookById(bookId, books);
+        }
+        evt.stopPropagation();
+    }
+
+    toggleImgShadeOff(evt) {
+        console.log('evt.target @ toggleImgShadeOFF:', evt.target);
+        // console.log('evt.target.classOFF:',evt.target.className);
+        // const className = evt.target.className;
+        // if (className !== 'view-detail-button') {
+            this.setState({
+                ...this.state,
+                ui: {
+                    ...this.state.ui,
+                    selected: {
+                        ...this.state.ui.selected,
+                        origin: null,
+                        style: {},
+                        class: ''
+                    }
+                }
+            });
+        // }
+        evt.stopPropagation();
     }
 
     toggleViewFormat(evt) {
@@ -151,24 +184,40 @@ class App extends React.Component {
         });
     }
 
+    findBookById(bookId, from) {
+        let found;
+        for (let i = 0; i < from.length; i++) {
+            const id = from[i].id;
+            // console.log('id @ findBook:', id);
+            // console.log('bookId @ findBookk:', bookId);
+            if (bookId === id) {
+                found = from[i];
+                break;
+            }
+        }
+        this.setState({ foundBook: found }/*, () => console.log('book found:', this.state.foundBook)*/);
+        return found;
+    }
+
     addBook(bookId) {
         console.log('adding book');
         const books = this.state.searchResult.items;
         console.log('books@ addBook:', books);
-        function findBook(bookId) {
-            let found;
-            for (let i = 0; i < books.length; i++) {
-                const id = books[i].id;
-                console.log('id @ findBook:', id);
-                console.log('bookId @ findBookk:', bookId);
-                if (bookId === id) {
-                    found = books[i];
-                    break;
-                }
-            }
-            return found;
-        }
-        console.log('foundbook:', findBook(bookId));
+        const foundBook = this.findBookById(bookId, books);
+        // function findBook(bookId) {
+        //     let found;
+        //     for (let i = 0; i < books.length; i++) {
+        //         const id = books[i].id;
+        //         console.log('id @ findBook:', id);
+        //         console.log('bookId @ findBookk:', bookId);
+        //         if (bookId === id) {
+        //             found = books[i];
+        //             break;
+        //         }
+        //     }
+        //     return found;
+        // }
+        console.log('foundbook:', foundBook);
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/addbook';
@@ -180,7 +229,7 @@ class App extends React.Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                book: findBook(bookId),
+                book: foundBook,
                 username: username
             })
         })
@@ -196,6 +245,18 @@ class App extends React.Component {
         .then(res => res.json())
         .then(resJson => resJson)
         .catch(err => console.error(err));
+    }
+
+    openModal() {
+        console.log('openModal()');
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                isModalOpen: !this.state.ui.isModalOpen
+            }
+        }, () => console.log('isModalOpen:', this.state));
+        // evt.stopPropagation();
     }
 
     componentWillMount() {
@@ -219,15 +280,17 @@ class App extends React.Component {
         const handleInput = this.handleInput;
         const searchForBook = this.searchForBook;
         const pushToBrowserHistory = this.pushToBrowserHistory;
-        const toggleImgShade = this.toggleImgShade;
+        const toggleImgShadeOn = this.toggleImgShadeOn;
+        const toggleImgShadeOff = this.toggleImgShadeOff;
         const toggleViewFormat = this.toggleViewFormat;
         const browsingLocation = this.props.history.location.pathname;
         const addBook = this.addBook;
+        const findBookById = this.findBookById;
+        const openModal = this.openModal;
         // console.log('history:', this.props.history.location.pathname);
 
-
         return (
-        <div className='app-container'>
+        <div className='app-container' onMouseOver={toggleImgShadeOff}>
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
             <Route path='/search' render={() => <div className='layout-buttons-container'>
@@ -249,9 +312,9 @@ class App extends React.Component {
                 <div className='content-container'>
                     <Switch>
                         <Route path='/books' render={() => <Books state={state}
-                            toggleImgShade={toggleImgShade}/>}/>
+                            toggleImgShadeOn={toggleImgShadeOn}/>}/>
                         <Route path='/search' render={() => <SearchResults state={state}
-                            toggleImgShade={toggleImgShade} addBook={addBook}/>}/>
+                            toggleImgShadeOn={toggleImgShadeOn} addBook={addBook} openModal={openModal}/*findBookById={findBookById}*//>}/>
                         <Route path='/profile' render={() => <Profile state={state}/>} />
                         <Route exact path='/login' render={() => <LoginForm />} />
                         <Route path='/signup' render={() => <SignupForm />} />

@@ -1,18 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Button, Header, Image, Modal } from 'semantic-ui-react'
 
 export const SearchResults = props => {
     const state = props.state;
     const searchResult = state.searchResult;
     const imgRootUrl = 'http://books.google.com/books/content?id=';
     const params = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
-    const toggleImgShade = props.toggleImgShade;
-    const imgShadeStyle = state.ui.imgShade.style;
-    const shadeId = state.ui.imgShade.origin;
-    const imgClass = state.ui.imgShade.class;
+    const toggleImgShadeOn = props.toggleImgShadeOn;
+    const imgShadeStyle = state.ui.selected.style;
+    const selectedId = state.ui.selected.origin;
+    const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
     const gridView = state.ui.gridView;
     const addBook = props.addBook;
+    // const findBookById = props.findBookById;
+    const foundBook = state.foundBook;
+    const openModal = props.openModal;
+    const isModalOepn = state.ui.isModalOpen;
+    // const foundBookId = foundBook.id;
+    // const foundBookTitle = foundBook.volumeInfo.title;
+    // const foundBookDescription = foundBook.volumeInfo.description;
+    // const foundBookAuthor = foundBook.volumeInfo.authors;
+    // const foundBookCategory = foundBook.volumeInfo.categories;
+    // const foundBookPageCount = foundBook.volumeInfo.pageCount;
     // const toggleViewFormat = props.toggleViewFormat;
     // console.log('imgClass:',imgClass);
     // console.log('imgShadeStyle:',imgShadeStyle);
@@ -49,13 +60,15 @@ export const SearchResults = props => {
 
                 return (
                     <div key={i} className='book'>
-                        <div className={'shade' + i === shadeId ? 'img' + imgClass : 'img'} style={imgStyle}></div>
+                        <div className={bookId === selectedId ? 'img' + imgClass : 'img'} style={imgStyle}></div>
 
-                         <div id={'shade' + i} className='img-shade'
-                             style={'shade' + i === shadeId ? imgShadeStyle : {}}
-                              onMouseEnter={toggleImgShade} onMouseLeave={toggleImgShade}>
+                         <div id={bookId} className='img-shade'
+                             style={bookId === selectedId ? imgShadeStyle : {}}
+                              onMouseOver={toggleImgShadeOn}/*onMouseEnter={toggleImgShade} onMouseLeave={toggleImgShade}*/>
 
-                            {'shade' + i === shadeId ? <div className='view-detail-button'>View Detail</div> : ''}
+                            {bookId === selectedId ?
+                                <div className='view-detail-button' onClick={openModal}>View Detail</div>
+                            : ''}
 
                         </div>
                         <div className='summary-container'>
@@ -103,6 +116,29 @@ export const SearchResults = props => {
                     </div>
                 );
             }) : ''}
+            {foundBook ?
+                <Modal dimmer={'blurring'} open={isModalOepn}>
+                    <Modal.Header>{foundBook.volumeInfo.title}</Modal.Header>
+                    <Modal.Content>
+                        <Image size='medium' src={imgRootUrl + foundBook.id + params}/>
+                        <Modal.Description>
+                            <Header>{foundBook.volumeInfo.title}</Header>
+                            {/* const foundBookAuthor = foundBook.volumeInfo.authors;
+                            const foundBookCategory = foundBook.volumeInfo.categories;
+                            const foundBookPageCount = foundBook.volumeInfo.pageCount;
+                            foundBook.volumeInfo.publishedDate; */}
+                            <div className='book-info-container'>
+                                <p>{foundBook.volumeInfo.description}</p>
+                                <p>{foundBook.volumeInfo.authors}</p>
+                                <p>{foundBook.volumeInfo.categories}</p>
+                                <p>{foundBook.volumeInfo.publishedDate}</p>
+                                <p>{foundBook.volumeInfo.pageCount}</p>
+                            </div>
+                        </Modal.Description>
+                    </Modal.Content>
+                </Modal>
+            : ''}
+
         </div>
     );
 }

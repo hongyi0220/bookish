@@ -6,7 +6,7 @@ export const Books = props => {
     const books = state.books;
     const imgRootUrl = 'http://books.google.com/books/content?id=';
     const params = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
-    const toggleImgShade = props.toggleImgShade;
+    const toggleImgShadeOn = props.toggleImgShadeOn;
     const imgShadeStyle = state.ui.imgShade.style;
     const shadeId = state.ui.imgShade.origin;
     const imgClass = state.ui.imgShade.class;
@@ -54,7 +54,7 @@ export const Books = props => {
 
                          <div id={'shade' + i} className='img-shade'
                              style={'shade' + i === shadeId ? imgShadeStyle : {}}
-                              onMouseEnter={toggleImgShade} onMouseLeave={toggleImgShade}>
+                              onMouseOver={toggleImgShadeOn}/*onMouseEnter={toggleImgShade} onMouseLeave={toggleImgShade}*/>
 
                             {'shade' + i === shadeId ? <div className='view-detail-button'>View Detail</div> : ''}
 
