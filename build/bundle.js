@@ -46575,6 +46575,7 @@ var App = function (_React$Component) {
             searchResult: null,
             searchValue: '',
             books: null,
+            myBooks: null,
             foundBook: null,
             dev: true,
             pathname: null,
@@ -46921,11 +46922,8 @@ var App = function (_React$Component) {
             });
         }
     }, {
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            // console.log('cmpWillMnt called');
-            // this.getUserFromSession();
-        }
+        key: 'doIOwn',
+        value: function doIOwn(book, from) {}
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
@@ -47023,9 +47021,9 @@ var App = function (_React$Component) {
                                         closeModal: closeModal, shortenTitle: shortenTitle, removeMiddleName: removeMiddleName });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/search', render: function render() {
-                                    return _react2.default.createElement(_SearchResults.SearchResults, { state: state,
-                                        toggleImgShadeOn: toggleImgShadeOn, addBook: addBook, openModal: openModal,
-                                        closeModal: closeModal, shortenTitle: shortenTitle, removeMiddleName: removeMiddleName });
+                                    return _react2.default.createElement(_SearchResults.SearchResults, { state: state, toggleImgShadeOn: toggleImgShadeOn,
+                                        addBook: addBook, openModal: openModal, closeModal: closeModal, shortenTitle: shortenTitle,
+                                        removeMiddleName: removeMiddleName, removeBook: removeBook });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/profile', render: function render() {
                                     return _react2.default.createElement(_Profile.Profile, { state: state });
@@ -70590,6 +70588,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var SearchResults = exports.SearchResults = function SearchResults(props) {
     var state = props.state;
+    var myBooks = state.myBooks;
     var searchResult = state.searchResult;
     var imgRootUrl = 'http://books.google.com/books/content?id=';
     var params = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
@@ -70598,6 +70597,7 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
     var selectedId = state.ui.selected.origin;
     var imgClass = state.ui.selected.class;
     var isLoggedIn = state.user;
+    var username = isLoggedIn ? isLoggedIn.username : '';
     var gridView = state.ui.gridView;
     var addBook = props.addBook;
     var foundBook = state.foundBook;
@@ -70605,6 +70605,16 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
     var closeModal = props.closeModal;
     var shortenTitle = props.shortenTitle;
     var removeMiddleName = props.removeMiddleName;
+    var removeBook = props.removeBook;
+
+    function doIOwn(bookId, from) {
+        // console.log('bookId, from:', bookId, from);
+        // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
+        var matched = from.filter(function (b) {
+            return b.bookId === bookId;
+        });
+        if (matched.length) return ~matched[0].ownedby.indexOf(username);else return false;
+    }
 
     return _react2.default.createElement(
         'div',
@@ -70653,21 +70663,34 @@ var SearchResults = exports.SearchResults = function SearchResults(props) {
                 _react2.default.createElement(
                     'div',
                     { className: 'request-button-container' },
-                    isLoggedIn ? _react2.default.createElement(
-                        'div',
-                        { className: 'text-wrapper', onClick: function onClick() {
-                                addBook(bookId);
-                            } },
-                        'I own this \uD83D\uDCD8'
-                    ) : _react2.default.createElement(
-                        _reactRouterDom.Link,
-                        { to: '/login' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'text-wrapper' },
-                            'Log in & add \uD83D\uDCD8'
-                        )
-                    )
+                    function () {
+                        if (isLoggedIn) {
+                            var button = doIOwn(bookId, myBooks) ? _react2.default.createElement(
+                                'div',
+                                { className: 'text-wrapper', onClick: function onClick() {
+                                        removeBook(bookId);
+                                    } },
+                                'Disown this \uD83D\uDCD8'
+                            ) : _react2.default.createElement(
+                                'div',
+                                { className: 'text-wrapper', onClick: function onClick() {
+                                        addBook(bookId);
+                                    } },
+                                'I own this \uD83D\uDCD8'
+                            );
+                            return button;
+                        } else {
+                            return _react2.default.createElement(
+                                _reactRouterDom.Link,
+                                { to: '/login' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'text-wrapper' },
+                                    'Log in & add \uD83D\uDCD8'
+                                )
+                            );
+                        }
+                    }()
                 )
             );
         }) : '',
@@ -72054,15 +72077,15 @@ var LogoutScreen = exports.LogoutScreen = function LogoutScreen(props) {
     var cancelLogout = props.cancelLogout;
     var state = props.state;
     var timer = state.ui.timer;
-    // let timerInterval = null;
-    // let timer = 5;
-    // timerInterval = setInterval(() => {
-    //     if (timer > 0) timer -= 1;
-    //     else clearInterval(timerInterval);
-    // });
+
     return _react2.default.createElement(
         'div',
         { className: 'logout-screen-container' },
+        _react2.default.createElement(
+            'div',
+            { className: 'emoji-wrapper' },
+            '\uD83D\uDC4B'
+        ),
         _react2.default.createElement(
             'div',
             { className: 'logout-msg-container' },

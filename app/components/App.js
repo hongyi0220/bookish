@@ -21,6 +21,7 @@ class App extends React.Component {
             searchResult: null,
             searchValue: '',
             books: null,
+            myBooks: null,
             foundBook: null,
             dev: true,
             pathname: null,
@@ -339,9 +340,8 @@ class App extends React.Component {
         .catch(err => console.error(err));
     }
 
-    componentWillMount() {
-        // console.log('cmpWillMnt called');
-        // this.getUserFromSession();
+    doIOwn(book, from) {
+
     }
 
     componentDidMount() {
@@ -411,9 +411,9 @@ class App extends React.Component {
                         <Route path='/books' render={() => <Books state={state}
                             toggleImgShadeOn={toggleImgShadeOn} openModal={openModal}
                             closeModal={closeModal} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
-                        <Route path='/search' render={() => <SearchResults state={state}
-                            toggleImgShadeOn={toggleImgShadeOn} addBook={addBook} openModal={openModal}
-                            closeModal={closeModal} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
+                        <Route path='/search' render={() => <SearchResults state={state} toggleImgShadeOn={toggleImgShadeOn}
+                            addBook={addBook} openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle}
+                            removeMiddleName={removeMiddleName} removeBook={removeBook}/>}/>
                         <Route path='/profile' render={() => <Profile state={state}/>} />
                         <Route exact path='/login' render={() => <LoginForm />} />
                         <Route path='/signup' render={() => <SignupForm />} />

@@ -4,6 +4,7 @@ import { Dialog } from './Dialog';
 
 export const SearchResults = props => {
     const state = props.state;
+    const myBooks = state.myBooks;
     const searchResult = state.searchResult;
     const imgRootUrl = 'http://books.google.com/books/content?id=';
     const params = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
@@ -12,6 +13,7 @@ export const SearchResults = props => {
     const selectedId = state.ui.selected.origin;
     const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
+    const username = isLoggedIn ? isLoggedIn.username : '';
     const gridView = state.ui.gridView;
     const addBook = props.addBook;
     const foundBook = state.foundBook;
@@ -19,6 +21,15 @@ export const SearchResults = props => {
     const closeModal = props.closeModal;
     const shortenTitle = props.shortenTitle;
     const removeMiddleName = props.removeMiddleName;
+    const removeBook = props.removeBook;
+
+    function doIOwn(bookId, from) {
+        // console.log('bookId, from:', bookId, from);
+        // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
+        const matched = from.filter(b => b.bookId === bookId);
+        if (matched.length) return ~matched[0].ownedby.indexOf(username);
+        else return false;
+    }
 
     return (
         <div className='results-container'>
@@ -55,9 +66,16 @@ export const SearchResults = props => {
                             </div>
                         </div>
                         <div className='request-button-container'>
-                            {isLoggedIn ?
-                                <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div> :
-                             <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>}
+                            {(() => {
+                                if (isLoggedIn) {
+                                    const button = doIOwn(bookId, myBooks) ?
+                                    <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
+                                    <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div>;
+                                    return button;
+                                } else {
+                                    return <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>
+                                }
+                            })()}
                         </div>
                     </div>
                 );
