@@ -13,42 +13,23 @@ export const Books = props => {
     const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
     const gridView = state.ui.gridView;
-    // const addBook = props.addBook;
-    // const toggleViewFormat = props.toggleViewFormat;
-    // console.log('imgClass:',imgClass);
-    // console.log('imgShadeStyle:',imgShadeStyle);
-    // console.log('shadeId:',shadeId);
-
     const foundBook = state.foundBook;
     const openModal = props.openModal;
     const closeModal = props.closeModal;
-    // const isModalOepn = state.ui.isModalOpen;
     const shortenTitle = props.shortenTitle;
     const removeMiddleName = props.removeMiddleName;
-    // const requestButtonHeight = 65;
-    // const requestButtonStyles = {
-    //     borderTop: '1px solid rgb(242,242,242)',
-    //     height: requestButtonHeight + 'px',
-    //     background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)'
-    // }
-    // const textWrapperStyles = {
-    //     color: 'black',
-    //     textAlign: 'center',
-    //     lineHeight: requestButtonHeight + 'px',
-    //     fontSize: '1.4em'
-    // }
 
     return (
         <div className='results-container'>
-            {(books && gridView) ? books.map((book, i) => {
-                book = book.book;
+            {(books && gridView) ? books.map((b, i) => {
+                const ownedby = b.ownedby.length;
+                const book = b.book;
                 const volumeInfo = book.volumeInfo;
                 const bookId = book.id;
                 const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
                 // console.log('book.authors:', author);
                 const author = removeMiddleName(authorName);
-                const title = shortenTitle(volumeInfo.title, 18);
-                // const imageSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
+                const title = shortenTitle(volumeInfo.title, 14);
                 const imgUrl = imgRootUrl + bookId + params;
                 let imgStyle = {
                     backgroundImage: 'url(' + imgUrl + ')',
@@ -72,6 +53,9 @@ export const Books = props => {
                             <div className='author'>
                                 Author:&nbsp;{author}
                             </div>
+                            <div className='owned-by'>
+                                Owners:&nbsp;{ownedby}
+                            </div>
                         </div>
                         <div className='request-button-container'>
                             {isLoggedIn ?
@@ -83,15 +67,14 @@ export const Books = props => {
                 );
             }) : ''}
             {(books && !gridView) ?
-            books.map((book, i) => {
-                book = book.book;
-                const volumeInfo = item.volumeInfo;
-                const bookId = book.id;
+            books.map((b, i) => {
+                const book = b.book;
+                const bookId = b.id;
+                const volumeInfo = book.volumeInfo;
                 const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
                 const title = shortenTitle(volumeInfo.title, 25);
                 const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
                 const author = removeMiddleName(authorName);
-                // console.log('book.authors:', author);
 
                 return (
                     <div key={i} className='book-list-view'>

@@ -1,18 +1,13 @@
 @import 'variables';
 .form-container {
-    // padding: 1em;
     text-align: center;
     h2, .link {
         text-align: center;
     }
     .form {
-        // display: flex;
-        // flex-direction: column;
         width: 25%;
         min-width: 300px;
         margin: 1em auto 1em auto;
-        // background-color: rgb(237,238,238);
-        // border-radius: 2px;
         .form-item-container.profile-item-container {
             input {
                 background: $bg-grey;
@@ -26,7 +21,6 @@
 
         }
         .form-item-container {
-            // flex-grow: 1;
             margin: 0.5em;
             position: relative;
             input {
@@ -49,9 +43,7 @@
                 margin-right: 1em;
             }
         }
-
         .button-wrapper {
-            // flex-grow: 1;
             margin: 0.5em;
             text-align: center;
             transition: all 1s ease;
@@ -66,7 +58,6 @@
                 transition: all .3s ease;
                 &:hover {
                     opacity: 1;
-                    // background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #19B5FE 100%);
                 }
             }
         }

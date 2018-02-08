@@ -4,7 +4,7 @@ const http = require('http').Server(app);
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
 require('dotenv').config();
-const dbURL = process.env.MONGOLAB_URI;
+const dbUrl = process.env.MONGOLAB_URI;
 const googleApiKey = process.env.GOOGLEAPIKEY;
 const port = process.env.PORT || 8080;
 const io = require('socket.io')(http);
@@ -17,7 +17,7 @@ const dbErrMsg = 'There was a problem connecting to database ';
 // Configure passportJs login strategy
 passport.use(new LocalStrategy(
     function(username, password, done) {
-        MongoClient.connect(dbURL, (err, db) => {
+        MongoClient.connect(dbUrl, (err, db) => {
             if (err) console.error(dbErrMsg, err);
             const Users = db.collection('users');
             Users.findOne({ username: username }, function(err, user) {
@@ -42,15 +42,13 @@ app.use(bodyParser.json());
 
 // This stores user in session after authentication
 passport.serializeUser(function(user, done) {
-    // console.log('serializing user:', user);
     done(null, user._id);
 });
 
 // This retrieves user info from database using user._id set in session
 //and store it in req.user because it is more secure not to store user info in session cookie
 passport.deserializeUser(function(id, done) {
-    // console.log('deserializing user; id:', id);
-    MongoClient.connect(dbURL, (err, db) => {
+    MongoClient.connect(dbUrl, (err, db) => {
         if (err) console.error(dbErrMsg, err);
         const Users = db.collection('users');
         Users.findOne({_id: mongo.ObjectId(id)}, function(err, user) {
@@ -63,8 +61,26 @@ passport.deserializeUser(function(id, done) {
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.post('/removebook', (req, res) => {
+    // console.log('removing book @ server');
+    const bookId = req.body.bookId;
+    const username = req.body.username;
+
+    MongoClient.connect(dbUrl, (err, db) => {
+        if (err) console.error(dbErrMsg, err);
+        const Books = db.collection('books');
+        Books.updateOne(
+            { bookId: bookId },
+            { $pull: { ownedby: username } }
+        );
+        Books.deleteMany({ ownedby: { $size: 0 } });
+        db.close();
+        res.redirect('/mybooks');
+    });
+});
+
 app.get('/getbooks', (req, res) => {
-    MongoClient.connect(dbURL, (err, db) => {
+    MongoClient.connect(dbUrl, (err, db) => {
         if (err) console.error(dbErrMsg, err);
         const Books = db.collection('books');
         Books.find({})
@@ -80,19 +96,14 @@ app.post('/addbook', (req, res) => {
     const book = req.body.book;
     // console.log('@/addbook; book:', book);
     const bookId = book.id;
-    // console.log('req.user @ /addbook:', req.user);
     const username = req.body.username;
 
-
-    MongoClient.connect(dbURL, (err, db) => {
+    MongoClient.connect(dbUrl, (err, db) => {
         if (err) console.error(dbErrMsg, err);
-        // console.log('DB connected');
         const Books = db.collection('books');
         Books.findOne({ bookId: bookId })
         .then(doc => {
-            // console.log('doc:', doc);
             if (!doc) {
-                // console.log('book not found, inserting book');
                 Books.insertOne({
                     bookId: bookId,
                     book: book,
@@ -101,7 +112,6 @@ app.post('/addbook', (req, res) => {
                 db.close();
                 res.end();
             } else {
-                // console.log('book found, updating its content');
                 Books.updateOne(
                     {bookId: bookId},
                     {$push: {
@@ -120,9 +130,8 @@ app.post('/profile', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const location = req.body.location;
-    console.log('updating porfile; req.user:', req.user);
-    MongoClient.connect(dbURL, (err, db) => {
-        // console.log('connected');
+    // console.log('updating porfile; req.user:', req.user);
+    MongoClient.connect(dbUrl, (err, db) => {
         if (err) console.error(dbErrMsg, err);
         // Check if the username is already taken
         const Users = db.collection('users');
@@ -141,13 +150,13 @@ app.post('/profile', (req, res) => {
 });
 
 app.get('/apikey', (req, res) => {
-    console.log('apiKey requested:', googleApiKey);
+    // console.log('apiKey requested:', googleApiKey);
     res.send({apiKey: googleApiKey});
 });
 
 app.get('/session', (req, res) => {
     // console.log('req.session:', req.session);
-    console.log('req.user:', req.user);
+    // console.log('req.user:', req.user);
     res.send(req.user);
 });
 
@@ -165,18 +174,17 @@ app.post('/login',
 });
 
 app.get('/logout', (req, res) => {
-    console.log('user logged out');
+    // console.log('user logged out');
     req.logout();
-    console.log('req.session:', req.session);
-    console.log('req.user:', req.user);
+    // console.log('req.session:', req.session);
+    // console.log('req.user:', req.user);
 });
 
 app.post('/signup', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-console.log('hi');
-    MongoClient.connect(dbURL, (err, db) => {
-        console.log('connected');
+    MongoClient.connect(dbUrl, (err, db) => {
+        // console.log('connected');
         if (err) console.error(dbErrMsg, err);
         // Check if the username is already taken
         const Users = db.collection('users');

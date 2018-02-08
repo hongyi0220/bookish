@@ -93,6 +93,9 @@
     position: absolute;
     right: 0; }
 
+.results-container h2 {
+  text-align: center; }
+
 .results-container .book {
   margin: .5em;
   display: inline-block;
@@ -138,6 +141,10 @@
       font-weight: 900;
       font-size: 1.35em; }
     .results-container .book .summary-container .author {
+      font-size: .75em;
+      color: grey; }
+    .results-container .book .summary-container .owned-by {
+      font-size: .75em;
       color: grey; }
   .results-container .book .request-button-container {
     border-top: 1px solid #f2f2f2;

@@ -10,6 +10,7 @@ import { Profile } from './Profile';
 import { SearchResults } from './SearchResults';
 import { sample } from './sampleData';
 import { Books } from './Books';
+import { MyBooks } from './MyBooks';
 
 class App extends React.Component {
     constructor() {
@@ -32,7 +33,7 @@ class App extends React.Component {
                 isModalOpen: false
             }
         };
-        this.retrieveUserSession = this.retrieveUserSession.bind(this);
+        this.getUserFromSession = this.getUserFromSession.bind(this);
         this.logout = this.logout.bind(this);
         this.searchForBook = this.searchForBook.bind(this);
         this.getApiKey = this.getApiKey.bind(this);
@@ -49,18 +50,19 @@ class App extends React.Component {
         this.closeModal = this.closeModal.bind(this);
         this.shortenTitle = this.shortenTitle.bind(this);
         this.removeMiddleName = this.removeMiddleName.bind(this);
+        this.getMyBooks = this.getMyBooks.bind(this);
+        this.removeBook = this.removeBook.bind(this);
     }
 
-    retrieveUserSession() {
-        console.log('retrieving user session');
+    getUserFromSession() {
+        // console.log('retrieving user session');
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/session';
-        fetch(apiRoot + route, {credentials: 'include'})
+        return fetch(apiRoot + route, {credentials: 'include'})
         .then(res => res.json())
         .then(resJson => {
-            // console.log('resJson:', resJson);
-            this.setState({ user: resJson });
+            return resJson
         })
         .catch(err => console.error(err));
     }
@@ -82,7 +84,6 @@ class App extends React.Component {
         return fetch(apiRoot + route)
         .then(res => res.json())
         .then(resJson => {
-            // console.log('apiKey???:', resJson);
             return resJson.apiKey;
         })
         .catch(err => console.error(err));
@@ -91,9 +92,6 @@ class App extends React.Component {
     callGoogleApi(keyword, apiKey) {
         const apiRoot = 'https://www.googleapis.com/books/v1/volumes?q='
         apiKey = '&key=' + apiKey;
-        // console.log('apiUrl:', apiRoot + keyword + apiKey);
-        // keyword += '+';
-        // if (!(term === 'intitle' || 'inauthor')) return console.error('Invalid term');
         return fetch(apiRoot + keyword + apiKey)
         .then(res => res.json())
         .then(resJson => resJson)
@@ -104,24 +102,18 @@ class App extends React.Component {
         const keyword = evt.target.value;
         const dev = this.state.dev;
 
-        // console.log('keyword @ searchForBook:', keyword);
-
-        // if (dev) this.setState({ searchResult: sample });
-        // else
         if (keyword.length) this.getApiKey()
         .then(apiKey => {
-            // console.log('apiKey:', apiKey);
             this.callGoogleApi(keyword, apiKey)
             .then(books => this.setState({ searchResult: books }))
             .catch(err => console.error(err));
         })
         .catch(err => console.error(err));
-        // this.navigateTo('/search');
     }
 
     handleInput(evt) {
         const searchValue = evt.target.value;
-        console.log('searchValue @ handleInput:', searchValue);
+        // console.log('searchValue @ handleInput:', searchValue);
         this.setState({ searchValue: searchValue });
     }
 
@@ -132,11 +124,9 @@ class App extends React.Component {
 
     toggleImgShadeOn(evt) {
         // console.log('evt.target @ toggleImgShadeON:', evt.target);
-        // console.log('evt.target.classON:',evt.target.className);
         const browsingLocation = this.props.history.location.pathname;
         const bookId = evt.target.id;
         const books = browsingLocation === '/search' ? this.state.searchResult.items : this.state.books.map(b => b.book);
-        // const className = evt.target.className;
         // console.log('evt.currentTarget:',evt.currentTarget);
 
         if (evt.target === evt.currentTarget) {
@@ -159,9 +149,6 @@ class App extends React.Component {
 
     toggleImgShadeOff(evt) {
         // console.log('evt.target @ toggleImgShadeOFF:', evt.target);
-        // console.log('evt.target.classOFF:',evt.target.className);
-        // const className = evt.target.className;
-        // if (className !== 'view-detail-button') {
         this.setState({
             ...this.state,
             ui: {
@@ -174,8 +161,6 @@ class App extends React.Component {
                 }
             }
         });
-        // }
-        // evt.stopPropagation();
     }
 
     toggleViewFormat(evt) {
@@ -202,7 +187,7 @@ class App extends React.Component {
                 break;
             }
         }
-        this.setState({ foundBook: found }/*, () => console.log('book found:', this.state.foundBook)*/);
+        this.setState({ foundBook: found });
         return found;
     }
 
@@ -211,20 +196,6 @@ class App extends React.Component {
         const books = this.state.searchResult.items;
         // console.log('books@ addBook:', books);
         const foundBook = this.findBookById(bookId, books);
-        // function findBook(bookId) {
-        //     let found;
-        //     for (let i = 0; i < books.length; i++) {
-        //         const id = books[i].id;
-        //         console.log('id @ findBook:', id);
-        //         console.log('bookId @ findBookk:', bookId);
-        //         if (bookId === id) {
-        //             found = books[i];
-        //             break;
-        //         }
-        //     }
-        //     return found;
-        // }
-        // console.log('foundbook:', foundBook);
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/addbook';
@@ -267,7 +238,7 @@ class App extends React.Component {
     }
 
     closeModal() {
-        console.log('closeModal()');
+        // console.log('closeModal()');
         this.setState({
             ...this.state,
             ui: {
@@ -275,7 +246,6 @@ class App extends React.Component {
                 isModalOpen: false
             }
         });
-        // evt.stopPropagation();
     }
 
     shortenTitle(title, length) {
@@ -294,19 +264,66 @@ class App extends React.Component {
         else return name;
     }
 
+    getMyBooks(username, from) {
+        // console.log('getting mybooks');
+        let myBooks;
+        myBooks = from.filter(b => {
+            // console.log('b.ownedby.indexOf(username):',b.ownedby.indexOf(username));
+            return ~b.ownedby.indexOf(username);
+        });
+        // console.log('myBooks:', myBooks);
+        return myBooks;
+    }
+
+    removeBook(bookId) {
+        // console.log('removing book');
+        const dev = this.state.dev;
+        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const route = '/removebook';
+        const username = this.state.user.username;
+
+        return fetch(apiRoot + route, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                bookId: bookId,
+                username: username
+            })
+        })
+        .catch(err => console.error(err));
+    }
+
     componentWillMount() {
         // console.log('cmpWillMnt called');
-        // this.retrieveUserSession();
+        // this.getUserFromSession();
     }
 
     componentDidMount() {
-        console.log('cmpDidMnt');
+        // console.log('cmpDidMnt');
         // const socket = socketIOClient();
-        this.retrieveUserSession();
+
         this.getBooks()
-        .then(books => this.setState({ books: books }, () => console.log('state after getBooks:', this.state)))
+        .then(books => {
+            this.getUserFromSession()
+            .then(user => {
+                if (user) {
+                    const username = user.username;
+                    this.setState({
+                        user: user,
+                        books: books,
+                        myBooks: this.getMyBooks(username, books)
+                    });
+                } else {
+                    this.setState({
+                        books: books
+                    });
+                }
+            })
+            .catch(err => console.error(err));
+        })
         .catch(err => console.error(err));
-        // console.log('history:', this.props.history.location.pathname);
     }
 
     render() {
@@ -325,30 +342,25 @@ class App extends React.Component {
         const closeModal = this.closeModal;
         const shortenTitle =this.shortenTitle;
         const removeMiddleName = this.removeMiddleName;
-        // console.log('history:', this.props.history.location.pathname);
+        const removeBook = this.removeBook;
 
         return (
         <div className='app-container' onMouseOver={toggleImgShadeOff}>
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
-            <Route path='/search' render={() => <div className='layout-buttons-container'>
+            <Route path='/(search|books|mybooks)' render={() => <div className='layout-buttons-container'>
                 <Icon id='list' className='icon' name='list layout' onClick={toggleViewFormat}></Icon>
                 <Icon id='grid' className='icon' name='grid layout' onClick={toggleViewFormat}></Icon>
             </div>}/>
-            <Route path='/books' render={() => <div className='layout-buttons-container'>
-                <Icon className='icon' name='list layout' onClick={toggleViewFormat}></Icon>
-                <Icon className='icon' name='grid layout' onClick={toggleViewFormat}></Icon>
-            </div>}/>
-            {/* {browsingLocation === ('/search' || '/books') ?
-            <div className='layout-buttons-container'>
-                <Icon className='icon' name='list layout' onClick={toggleViewFormat}></Icon>
-                <Icon className='icon' name='grid layout' onClick={toggleViewFormat}></Icon>
-            </div> : ''} */}
+
             <div className='flexbox-container'>
                 <Nav state={state} handleInput={handleInput} searchForBook={searchForBook}
                     navigateTo={navigateTo}/>
                 <div className='content-container'>
                     <Switch>
+                        <Route path='/mybooks' render={() => <MyBooks state={state}
+                            toggleImgShadeOn={toggleImgShadeOn} openModal={openModal} removeBook={removeBook}
+                            closeModal={closeModal} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
                         <Route path='/books' render={() => <Books state={state}
                             toggleImgShadeOn={toggleImgShadeOn} openModal={openModal}
                             closeModal={closeModal} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
@@ -359,8 +371,6 @@ class App extends React.Component {
                         <Route exact path='/login' render={() => <LoginForm />} />
                         <Route path='/signup' render={() => <SignupForm />} />
                     </Switch>
-                    {/* <LoginForm />
-                    <SignupForm /> */}
                 </div>
                 <UserNav state={state} logout={logout}/>
             </div>

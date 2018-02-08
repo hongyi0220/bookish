@@ -3,10 +3,10 @@ import { Switch, Route } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 import { AddButton } from './AddButton';
 import { RequestButton } from './RequestButton';
+import { RemoveButton } from './RemoveButton';
 
 export const ButtonsContainer = props => {
     const state = props.state;
-    // const isAtSearch = pathname === '/search';
     const requestButtonHeight = 65;
     const requestButtonStyles = {
         borderTop: '1px solid rgb(242,242,242)',
@@ -24,6 +24,8 @@ export const ButtonsContainer = props => {
     return (
         <div className='buttons-container'>
             <Switch>
+                <Route path='/mybooks' render={() => <RemoveButton state={state} requestButtonHeight={requestButtonHeight}
+                requestButtonStyles={requestButtonStyles} textWrapperStyles={textWrapperStyles}/>}/>
                 <Route path='/search' render={() => <AddButton state={state} requestButtonHeight={requestButtonHeight}
                 requestButtonStyles={requestButtonStyles} textWrapperStyles={textWrapperStyles}/>}/>
                 <Route path='/books' render={() => <RequestButton state={state} requestButtonHeight={requestButtonHeight}

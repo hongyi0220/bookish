@@ -1,14 +1,9 @@
 @import 'variables';
 
 .results-container {
-    // .book +.book {
-    //     margin-left: .5em;
-    // }
-    // border: 1px solid red;
-    // padding
-    // .book-info-container {
-    //     // display: inline-block;
-    // }
+    h2 {
+        text-align: center;
+    }
     .book {
         margin: .5em;
         display: inline-block;
@@ -18,15 +13,7 @@
         vertical-align: top;
         box-shadow: 0 1px 5px grey;
         border-radius: 5px;
-        // img {
-        //     // border: 1px solid green;
-        //     border-top-left-radius: 5px;
-        //     border-top-right-radius: 5px;
-        //     width: 150px;
-        //     height: 200px;
-        // }
         .img {
-            // border: 1px solid green;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
             width: $book-img-width;
@@ -38,9 +25,6 @@
             background-size: $book-img-width + 20;
         }
         .img-shade {
-            // height: 120px;
-            // width: 100px;
-            // border: 1px solid red;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
             position: absolute;
@@ -49,7 +33,6 @@
             bottom: $summary-height + $request-button-height + 5;
             left: 0;
             transition: all .3s ease;
-            // background: rgba(0,0,0,.4);
             .view-detail-button {
                 text-align: center;
                 color: white;
@@ -65,7 +48,6 @@
             }
         }
         .summary-container {
-            // border: 2px solid blue;
             width: $book-img-width;
             height: $summary-height;
             padding-left: .3em;
@@ -75,19 +57,22 @@
                 font-size: 1.35em;
             }
             .author {
+                font-size: .75em;
+                color: grey;
+            }
+            .owned-by {
+                font-size: .75em;
                 color: grey;
             }
         }
         .request-button-container {
             border-top: 1px solid $light-grey;
-            // padding: .25em 0 .25em 0;
             height: $request-button-height;
             transition: all .3s ease;
 
             &:hover {
                 cursor: pointer;
                 background: radial-gradient(circle at center, $picton-blue 0, $dodger-blue, $jordy-blue 100%);
-                // color: white;
             }
             .text-wrapper {
                 color: black;
@@ -100,75 +85,45 @@
             }
         }
     }
-    // .book-list-view + .book-list-view {
-    //     border: 1px solid $light-grey;
-    //     padding: .5em;
-    // }
     .book-list-view {
-        // border: 1px solid blue;
-        // position: relative;
         white-space: nowrap;
-        // border: 1px solid $light-grey;
-        // padding: .5em;
-        // display: flex;
-        // flex-direction: row;
-        // overflow: hidden;
         min-width: 600px;
         margin: .5em;
         height: $list-row-height;
-        // min-width: 700px;
         &:hover {
             border-radius: $bd-radius;
             background-color: white;
             box-shadow: 0 .2px 1px grey;
         }
         .img-wrapper {
-            // margin-left: 0em;
-            // border: 2px solid purple;
             img {
-                // border: 2px solid purple;
                 height: $list-row-height;
                 width: $list-row-height / 1.5;
                 border-radius: $bd-radius;
             }
         }
         .title {
-            // border: 1px solid red;
             padding-left: .5em;
             width: 200px;
-            // overflow:auto;
         }
         .author {
-            // border: 1px solid red;
             border-left: 1px solid $light-grey;
-            // border-radius: $bd-radius;
-            // min-width: 200px;
             vertical-align: top;
-            // line-height: $list-row-height;
             padding-left: .5em;
-            // overflow: auto;
-            // float: right;
-            // text-align: left;
-            // line-height: $list-row-height;
         }
         .request-button-container {
-            // border: 1px solid red;
             border-radius: $bd-radius;
-            // min-width: 140px;
             float: right;
             text-align: center;
-            // border-left: 1px solid $light-grey;
             transition: all .3s ease;
             padding: 0 .5em 0 .5em;
             &:hover {
                 cursor: pointer;
                 background: radial-gradient(circle at center, $picton-blue 0, $dodger-blue, $jordy-blue 100%);
-                // color: white;
             }
             .text-wrapper {
                 color: black;
                 text-align: center;
-                // line-height: $list-row-height;
                 transition: all .3s ease;
                 &:hover {
                     color: white;
@@ -176,9 +131,6 @@
             }
         }
         .img-wrapper, .title, .author, .request-button-container {
-            // flex-shrink: 0
-            // flex-grow: 1;
-            // white-space: nowrap;
             vertical-align: top;
             line-height: $list-row-height;
             display: inline-block;
