@@ -11,6 +11,7 @@ import { SearchResults } from './SearchResults';
 import { sample } from './sampleData';
 import { Books } from './Books';
 import { MyBooks } from './MyBooks';
+import { LogoutScreen } from './LogoutScreen';
 
 class App extends React.Component {
     constructor() {
@@ -30,7 +31,8 @@ class App extends React.Component {
                     class: ''
                 },
                 gridView: true,
-                isModalOpen: false
+                isModalOpen: false,
+                timer: 5
             }
         };
         this.getUserFromSession = this.getUserFromSession.bind(this);
@@ -52,6 +54,10 @@ class App extends React.Component {
         this.removeMiddleName = this.removeMiddleName.bind(this);
         this.getMyBooks = this.getMyBooks.bind(this);
         this.removeBook = this.removeBook.bind(this);
+        this.logoutTimeout = null;
+        this.cancelLogout = this.cancelLogout.bind(this);
+        this.logoutTimer = null;
+        this.setTimer = this.setTimer.bind(this);
     }
 
     getUserFromSession() {
@@ -67,14 +73,52 @@ class App extends React.Component {
         .catch(err => console.error(err));
     }
 
+    setTimer() {
+        this.logoutTimer = setInterval(deduct1000.bind(this), 1000);
+        function deduct1000() {
+            if (this.state.ui.timer) {
+                this.setState(prevState => ({
+                    ...prevState,
+                    ui: {
+                        ...prevState.ui,
+                        timer: prevState.ui.timer - 1
+                    }
+                }));
+            } else clearInterval(this.logoutTimer);
+        }
+    }
+
+
     logout() {
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/logout';
-        fetch(apiRoot + route)
-        .catch(err => console.error(err));
-        this.setState({ user: null });
+
+        this.logoutTimeout = setTimeout(callServer.bind(this), 5000);
+        this.props.history.push('/logout');
+        function callServer() {
+            console.log('server called');
+            fetch(apiRoot + route)
+            .then(res => {
+                if (res) this.setState({ user: null });
+                console.log('user set to: null');
+                this.props.history.push('/');
+            })
+            .catch(err => console.error(err));
+        }
+    }
+
+    cancelLogout() {
+        clearTimeout(this.logoutTimeout);
+        clearInterval(this.logoutTimer);
         this.props.history.push('/');
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                timer: 5
+            }
+        })
     }
 
     getApiKey() {
@@ -343,6 +387,8 @@ class App extends React.Component {
         const shortenTitle =this.shortenTitle;
         const removeMiddleName = this.removeMiddleName;
         const removeBook = this.removeBook;
+        const cancelLogout = this.cancelLogout;
+        const setTimer = this.setTimer;
 
         return (
         <div className='app-container' onMouseOver={toggleImgShadeOff}>
@@ -358,6 +404,7 @@ class App extends React.Component {
                     navigateTo={navigateTo}/>
                 <div className='content-container'>
                     <Switch>
+                        <Route path='/logout' render={() => <LogoutScreen state={state} cancelLogout={cancelLogout}/>}/>
                         <Route path='/mybooks' render={() => <MyBooks state={state}
                             toggleImgShadeOn={toggleImgShadeOn} openModal={openModal} removeBook={removeBook}
                             closeModal={closeModal} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
@@ -372,7 +419,7 @@ class App extends React.Component {
                         <Route path='/signup' render={() => <SignupForm />} />
                     </Switch>
                 </div>
-                <UserNav state={state} logout={logout}/>
+                <UserNav state={state} logout={logout} setTimer={setTimer}/>
             </div>
         </div>);
     }

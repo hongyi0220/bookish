@@ -6,6 +6,7 @@ export const UserNav = props => {
     const isLoggedIn = state.user;
     const username = isLoggedIn ? isLoggedIn.username : '';
     const logout = props.logout;
+    const setTimer = props.setTimer;
 
     return (
         <div className='user-nav-container'>
@@ -30,10 +31,12 @@ export const UserNav = props => {
                                 <div className='emoji-wrapper'>📖</div>
                             </div>
                         </Link>
-                        <div className='nav-item-container' onClick={logout}>
-                            <div className='text-wrapper'>Log Out</div>
-                            <div className='emoji-wrapper'>⏏️</div>
-                        </div>
+                        <Link to='/logout'>
+                            <div className='nav-item-container' onClick={() => {logout(); setTimer()}}>
+                                <div className='text-wrapper'>Log Out</div>
+                                <div className='emoji-wrapper'>⏏️</div>
+                            </div>
+                        </Link>
                     </div>
                 </div>
                  :

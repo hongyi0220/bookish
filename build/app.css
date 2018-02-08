@@ -46,14 +46,15 @@
         transition: all .3s ease; }
         .form-container .form .button-wrapper button:hover {
           opacity: 1; }
+    .form-container .form .profile-update-msg {
+      color: grey;
+      text-align: center; }
 
 .user-nav-container {
   flex-grow: 1; }
   .user-nav-container .user-window .greeting-wrapper .username-wrapper {
     display: inline-block;
     color: #22A7F0; }
-    .user-nav-container .user-window .greeting-wrapper .username-wrapper:hover {
-      cursor: pointer; }
 
 .nav-item-container.greeting-wrapper {
   border-radius: 4px;
@@ -201,10 +202,24 @@
     line-height: 60px;
     display: inline-block; }
 
+.logout-screen-container {
+  position: relative;
+  top: 50%;
+  transform: translateY(-8px); }
+  .logout-screen-container .logout-msg-container {
+    text-align: center;
+    color: grey; }
+    .logout-screen-container .logout-msg-container .cancel-button {
+      color: #22A7F0; }
+      .logout-screen-container .logout-msg-container .cancel-button:hover {
+        text-decoration: underline;
+        cursor: pointer; }
+
 * {
   box-sizing: border-box; }
 
 .app-container {
+  height: 100vh;
   background-color: #fafafa; }
   .app-container .title-wrapper, .app-container .subtitle-wrapper {
     text-align: center; }

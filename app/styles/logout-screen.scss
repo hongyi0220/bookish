@@ -1,0 +1,18 @@
+@import 'variables';
+
+.logout-screen-container {
+    position: relative;
+    top: 50%;
+    transform: translateY(-8px);
+    .logout-msg-container {
+        text-align: center;
+        color: grey;
+        .cancel-button {
+            color: $picton-blue;
+            &:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
+    }
+}

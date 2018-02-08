@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 
 export const Profile = props => {
     const state = props.state;
@@ -17,7 +18,7 @@ export const Profile = props => {
         <div className='profile-container'>
             <div className='form-container'>
                 <h2>My profile</h2>
-                <form autocomplete='off' className='form' action='/profile' method='post'>
+                <form autoComplete='off' className='form' action='/profile' method='post'>
                     <div className='form-item-container profile-item-container'>
                         <input type='text' name='username' placeholder={username}/>
                         <div className='emoji-wrapper'>👤</div>
@@ -33,6 +34,7 @@ export const Profile = props => {
                     <div className='button-wrapper'>
                         <button type='submit'>SAVE</button>
                     </div>
+                    <Route path='/profile/updated' render={() => <div className='profile-update-msg'>Keeping us up to date? 👍</div>}/>
                 </form>
             </div>
         </div>

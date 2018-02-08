@@ -127,9 +127,9 @@ app.post('/addbook', (req, res) => {
 });
 
 app.post('/profile', (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    const location = req.body.location;
+    const username = req.body.username || req.user.username;
+    const password = req.body.password || req.user.password;
+    const location = req.body.location || req.user.location;
     // console.log('updating porfile; req.user:', req.user);
     MongoClient.connect(dbUrl, (err, db) => {
         if (err) console.error(dbErrMsg, err);
@@ -145,7 +145,7 @@ app.post('/profile', (req, res) => {
             }}
         );
         db.close();
-        res.redirect('/profile');
+        res.redirect('/profile/updated');
     });
 });
 
@@ -176,6 +176,7 @@ app.post('/login',
 app.get('/logout', (req, res) => {
     // console.log('user logged out');
     req.logout();
+    res.sendStatus(200);
     // console.log('req.session:', req.session);
     // console.log('req.user:', req.user);
 });
