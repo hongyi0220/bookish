@@ -5,6 +5,7 @@ import { Dialog } from './Dialog';
 export const Books = props => {
     const state = props.state;
     const books = state.books;
+    const myBooks = state.myBooks;
     const imgRootUrl = 'http://books.google.com/books/content?id=';
     const params = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
     const toggleImgShadeOn = props.toggleImgShadeOn;
@@ -12,12 +13,14 @@ export const Books = props => {
     const selectedId = state.ui.selected.origin;
     const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
+    // const username = isLoggedIn ? isLoggedIn.username : '';
     const gridView = state.ui.gridView;
     const foundBook = state.foundBook;
     const openModal = props.openModal;
     const closeModal = props.closeModal;
     const shortenTitle = props.shortenTitle;
     const removeMiddleName = props.removeMiddleName;
+    const doIOwn = props.doIOwn;
 
     return (
         <div className='results-container'>
@@ -58,10 +61,16 @@ export const Books = props => {
                             </div>
                         </div>
                         <div className='request-button-container'>
-                            {isLoggedIn ?
-                                <div className='text-wrapper' onClick={() => {}}>Request 📘</div> :
-                             <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
-                            }
+                            {(() => {
+                                if (isLoggedIn) {
+                                    const button = doIOwn(bookId, myBooks) ?
+                                    <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
+                                    <div className='text-wrapper' onClick={() => {/*requestBook(bookId)*/}}>Request this 📘</div>;
+                                    return button;
+                                } else {
+                                    return <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>
+                                }
+                            })()}
                         </div>
                     </div>
                 );
@@ -69,7 +78,7 @@ export const Books = props => {
             {(books && !gridView) ?
             books.map((b, i) => {
                 const book = b.book;
-                const bookId = b.id;
+                const bookId = book.id;
                 const volumeInfo = book.volumeInfo;
                 const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
                 const title = shortenTitle(volumeInfo.title, 25);
@@ -84,10 +93,16 @@ export const Books = props => {
                             Author:&nbsp;{author}
                         </div>
                         <div className='request-button-container'>
-                            {isLoggedIn ?
-                                <div className='text-wrapper' onClick={() => {}}>Request 📘</div> :
-                             <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
-                            }
+                            {(() => {
+                                if (isLoggedIn) {
+                                    const button = doIOwn(bookId, myBooks) ?
+                                    <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
+                                    <div className='text-wrapper' onClick={() => {/*requestBook(bookId)*/}}>Request this 📘</div>;
+                                    return button;
+                                } else {
+                                    return <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>
+                                }
+                            })()}
                         </div>
                     </div>
                 );

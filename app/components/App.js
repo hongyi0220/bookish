@@ -59,6 +59,7 @@ class App extends React.Component {
         this.cancelLogout = this.cancelLogout.bind(this);
         this.logoutTimer = null;
         this.setTimer = this.setTimer.bind(this);
+        this.doIOwn = this.doIOwn.bind(this);
     }
 
     getUserFromSession() {
@@ -211,7 +212,7 @@ class App extends React.Component {
     toggleViewFormat(evt) {
         const id = evt.target.id;
         const isGridView = id === 'grid';
-        // console.log('viewFormat toggled:', this.state.ui.gridView);
+        console.log('viewFormat toggled; gridView:', this.state.ui.gridView);
         this.setState({
             ...this.state,
             ui: {
@@ -340,8 +341,14 @@ class App extends React.Component {
         .catch(err => console.error(err));
     }
 
-    doIOwn(book, from) {
-
+    doIOwn(bookId, from) {
+        const user = this.state.user;
+        const username = user ? user.username : '';
+        console.log('bookId, from:', bookId, from);
+        console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
+        const matched = from.filter(b => b.bookId === bookId);
+        if (matched.length) return ~matched[0].ownedby.indexOf(username);
+        else return false;
     }
 
     componentDidMount() {
@@ -389,6 +396,7 @@ class App extends React.Component {
         const removeBook = this.removeBook;
         const cancelLogout = this.cancelLogout;
         const setTimer = this.setTimer;
+        const doIOwn = this.doIOwn;
 
         return (
         <div className='app-container' onMouseOver={toggleImgShadeOff}>
@@ -405,15 +413,19 @@ class App extends React.Component {
                 <div className='content-container'>
                     <Switch>
                         <Route path='/logout' render={() => <LogoutScreen state={state} cancelLogout={cancelLogout}/>}/>
-                        <Route path='/mybooks' render={() => <MyBooks state={state}
-                            toggleImgShadeOn={toggleImgShadeOn} openModal={openModal} removeBook={removeBook}
-                            closeModal={closeModal} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
-                        <Route path='/books' render={() => <Books state={state}
-                            toggleImgShadeOn={toggleImgShadeOn} openModal={openModal}
-                            closeModal={closeModal} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
+
+                        <Route path='/mybooks' render={() => <MyBooks state={state} toggleImgShadeOn={toggleImgShadeOn}
+                            openModal={openModal} removeBook={removeBook} closeModal={closeModal}
+                            shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
+
+                        <Route path='/books' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
+                            openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle}
+                            removeMiddleName={removeMiddleName} doIOwn={doIOwn}/>}/>
+
                         <Route path='/search' render={() => <SearchResults state={state} toggleImgShadeOn={toggleImgShadeOn}
                             addBook={addBook} openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle}
-                            removeMiddleName={removeMiddleName} removeBook={removeBook}/>}/>
+                            removeMiddleName={removeMiddleName} removeBook={removeBook} doIOwn={doIOwn}/>}/>
+
                         <Route path='/profile' render={() => <Profile state={state}/>} />
                         <Route exact path='/login' render={() => <LoginForm />} />
                         <Route path='/signup' render={() => <SignupForm />} />

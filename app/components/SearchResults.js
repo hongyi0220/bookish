@@ -13,7 +13,7 @@ export const SearchResults = props => {
     const selectedId = state.ui.selected.origin;
     const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
-    const username = isLoggedIn ? isLoggedIn.username : '';
+    // const username = isLoggedIn ? isLoggedIn.username : '';
     const gridView = state.ui.gridView;
     const addBook = props.addBook;
     const foundBook = state.foundBook;
@@ -22,14 +22,15 @@ export const SearchResults = props => {
     const shortenTitle = props.shortenTitle;
     const removeMiddleName = props.removeMiddleName;
     const removeBook = props.removeBook;
+    const doIOwn = props.doIOwn;
 
-    function doIOwn(bookId, from) {
-        // console.log('bookId, from:', bookId, from);
-        // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
-        const matched = from.filter(b => b.bookId === bookId);
-        if (matched.length) return ~matched[0].ownedby.indexOf(username);
-        else return false;
-    }
+    // function doIOwn(bookId, from) {
+    //     // console.log('bookId, from:', bookId, from);
+    //     // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
+    //     const matched = from.filter(b => b.bookId === bookId);
+    //     if (matched.length) return ~matched[0].ownedby.indexOf(username);
+    //     else return false;
+    // }
 
     return (
         <div className='results-container'>
@@ -97,9 +98,16 @@ export const SearchResults = props => {
                             Author:&nbsp;{author}
                         </div>
                         <div className='request-button-container'>
-                            {isLoggedIn ?
-                                <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div> :
-                             <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>}
+                            {(() => {
+                                if (isLoggedIn) {
+                                    const button = doIOwn(bookId, myBooks) ?
+                                    <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
+                                    <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div>;
+                                    return button;
+                                } else {
+                                    return <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>
+                                }
+                            })()}
                         </div>
                     </div>
                 );
