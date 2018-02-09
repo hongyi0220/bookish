@@ -46614,6 +46614,7 @@ var App = function (_React$Component) {
         _this.logoutTimer = null;
         _this.setTimer = _this.setTimer.bind(_this);
         _this.doIOwn = _this.doIOwn.bind(_this);
+        _this.requestBook = _this.requestBook.bind(_this);
         return _this;
     }
 
@@ -46833,6 +46834,29 @@ var App = function (_React$Component) {
             });
         }
     }, {
+        key: 'requestBook',
+        value: function requestBook(bookId) {
+            console.log('requesting book');
+
+            var dev = this.state.dev;
+            var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+            var route = '/requestbook';
+            var username = this.state.user.username;
+
+            return fetch(apiRoot + route, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    bookId: bookId,
+                    username: username
+                })
+            }).catch(function (err) {
+                return console.error(err);
+            });
+        }
+    }, {
         key: 'getBooks',
         value: function getBooks() {
             var dev = this.state.dev;
@@ -46987,6 +47011,7 @@ var App = function (_React$Component) {
             var cancelLogout = this.cancelLogout;
             var setTimer = this.setTimer;
             var doIOwn = this.doIOwn;
+            var requestBook = this.requestBook;
 
             return _react2.default.createElement(
                 'div',
@@ -47031,7 +47056,7 @@ var App = function (_React$Component) {
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/books', render: function render() {
                                     return _react2.default.createElement(_Books.Books, { state: state, toggleImgShadeOn: toggleImgShadeOn,
                                         openModal: openModal, closeModal: closeModal, shortenTitle: shortenTitle,
-                                        removeMiddleName: removeMiddleName, doIOwn: doIOwn });
+                                        removeMiddleName: removeMiddleName, doIOwn: doIOwn, requestBook: requestBook });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/search', render: function render() {
                                     return _react2.default.createElement(_SearchResults.SearchResults, { state: state, toggleImgShadeOn: toggleImgShadeOn,
@@ -71804,6 +71829,7 @@ var Books = exports.Books = function Books(props) {
     var shortenTitle = props.shortenTitle;
     var removeMiddleName = props.removeMiddleName;
     var doIOwn = props.doIOwn;
+    var requestBook = props.requestBook;
 
     return _react2.default.createElement(
         'div',
@@ -71871,7 +71897,9 @@ var Books = exports.Books = function Books(props) {
                                 'Disown this \uD83D\uDCD8'
                             ) : _react2.default.createElement(
                                 'div',
-                                { className: 'text-wrapper', onClick: function onClick() {/*requestBook(bookId)*/} },
+                                { className: 'text-wrapper', onClick: function onClick() {
+                                        requestBook(bookId);
+                                    } },
                                 'Request this \uD83D\uDCD8'
                             );
                             return button;
@@ -71931,7 +71959,9 @@ var Books = exports.Books = function Books(props) {
                                 'Disown this \uD83D\uDCD8'
                             ) : _react2.default.createElement(
                                 'div',
-                                { className: 'text-wrapper', onClick: function onClick() {/*requestBook(bookId)*/} },
+                                { className: 'text-wrapper', onClick: function onClick() {
+                                        requestBook(bookId);
+                                    } },
                                 'Request this \uD83D\uDCD8'
                             );
                             return button;

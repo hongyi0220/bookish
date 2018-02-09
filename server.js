@@ -92,6 +92,25 @@ app.get('/getbooks', (req, res) => {
     });
 });
 
+app.post('/requestbook', (req, res) => {
+    const bookId = req.body.bookId;
+    const username = req.body.username;
+
+    MongoClient.connect(dbUrl, (err, db) => {
+        if (err) console.error(dbErrMsg, err);
+        const Books = db.collection('books');
+
+        Books.updateOne(
+            {bookId: bookId},
+            {$push: {
+                wishlist: username
+            }}
+        );
+        db.close();
+        res.end();
+    });
+});
+
 app.post('/addbook', (req, res) => {
     const book = req.body.book;
     // console.log('@/addbook; book:', book);
@@ -107,7 +126,8 @@ app.post('/addbook', (req, res) => {
                 Books.insertOne({
                     bookId: bookId,
                     book: book,
-                    ownedby: [username]
+                    ownedby: [username],
+                    wishlist: []
                 });
                 db.close();
                 res.end();

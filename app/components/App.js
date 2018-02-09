@@ -60,6 +60,7 @@ class App extends React.Component {
         this.logoutTimer = null;
         this.setTimer = this.setTimer.bind(this);
         this.doIOwn = this.doIOwn.bind(this);
+        this.requestBook = this.requestBook.bind(this);
     }
 
     getUserFromSession() {
@@ -260,6 +261,27 @@ class App extends React.Component {
         .catch(err => console.error(err));
     }
 
+    requestBook(bookId) {
+        console.log('requesting book');
+
+        const dev = this.state.dev;
+        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const route = '/requestbook';
+        const username = this.state.user.username;
+
+        return fetch(apiRoot + route, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                bookId: bookId,
+                username: username
+            })
+        })
+        .catch(err => console.error(err));
+    }
+
     getBooks() {
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
@@ -397,6 +419,7 @@ class App extends React.Component {
         const cancelLogout = this.cancelLogout;
         const setTimer = this.setTimer;
         const doIOwn = this.doIOwn;
+        const requestBook = this.requestBook;
 
         return (
         <div className='app-container' onMouseOver={toggleImgShadeOff}>
@@ -420,7 +443,7 @@ class App extends React.Component {
 
                         <Route path='/books' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
                             openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle}
-                            removeMiddleName={removeMiddleName} doIOwn={doIOwn}/>}/>
+                            removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook}/>}/>
 
                         <Route path='/search' render={() => <SearchResults state={state} toggleImgShadeOn={toggleImgShadeOn}
                             addBook={addBook} openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle}

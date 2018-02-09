@@ -21,6 +21,7 @@ export const Books = props => {
     const shortenTitle = props.shortenTitle;
     const removeMiddleName = props.removeMiddleName;
     const doIOwn = props.doIOwn;
+    const requestBook = props.requestBook;
 
     return (
         <div className='results-container'>
@@ -65,7 +66,7 @@ export const Books = props => {
                                 if (isLoggedIn) {
                                     const button = doIOwn(bookId, myBooks) ?
                                     <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
-                                    <div className='text-wrapper' onClick={() => {/*requestBook(bookId)*/}}>Request this 📘</div>;
+                                    <div className='text-wrapper' onClick={() => {requestBook(bookId)}}>Request this 📘</div>;
                                     return button;
                                 } else {
                                     return <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>
@@ -97,7 +98,7 @@ export const Books = props => {
                                 if (isLoggedIn) {
                                     const button = doIOwn(bookId, myBooks) ?
                                     <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
-                                    <div className='text-wrapper' onClick={() => {/*requestBook(bookId)*/}}>Request this 📘</div>;
+                                    <div className='text-wrapper' onClick={() => {requestBook(bookId)}}>Request this 📘</div>;
                                     return button;
                                 } else {
                                     return <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>
