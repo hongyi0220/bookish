@@ -61,7 +61,29 @@ passport.deserializeUser(function(id, done) {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.post('/removebook', (req, res) => {
+app.post('/approve-request', (req, res) => {
+    MongoClient.connect(dbUrl, (err, db) => {
+        if (err) console.error(dbErrMsg, err);
+        const Books = db.collection('books');
+        Books.updateOne(
+            { bookId: bookId },
+            {
+                $pull: { ownedby: username },
+                $pop: { wishlist: -1 }
+            }
+        );
+        Books.deleteMany(
+            {
+                ownedby: { $size: 0 },
+                wishlist: { $size: 0 }
+            }
+        );
+        db.close();
+        res.end();
+    });
+});
+
+app.post('/remove-book', (req, res) => {
     // console.log('removing book @ server');
     const bookId = req.body.bookId;
     const username = req.body.username;
@@ -79,7 +101,7 @@ app.post('/removebook', (req, res) => {
     });
 });
 
-app.get('/getbooks', (req, res) => {
+app.get('/get-books', (req, res) => {
     MongoClient.connect(dbUrl, (err, db) => {
         if (err) console.error(dbErrMsg, err);
         const Books = db.collection('books');
@@ -92,7 +114,7 @@ app.get('/getbooks', (req, res) => {
     });
 });
 
-app.post('/requestbook', (req, res) => {
+app.post('/request-book', (req, res) => {
     const bookId = req.body.bookId;
     const username = req.body.username;
 
@@ -111,7 +133,7 @@ app.post('/requestbook', (req, res) => {
     });
 });
 
-app.post('/addbook', (req, res) => {
+app.post('/add-book', (req, res) => {
     const book = req.body.book;
     // console.log('@/addbook; book:', book);
     const bookId = book.id;

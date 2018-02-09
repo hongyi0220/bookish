@@ -46817,7 +46817,7 @@ var App = function (_React$Component) {
             var foundBook = this.findBookById(bookId, books);
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-            var route = '/addbook';
+            var route = '/add-book';
             var username = this.state.user.username;
 
             return fetch(apiRoot + route, {
@@ -46840,7 +46840,30 @@ var App = function (_React$Component) {
 
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-            var route = '/requestbook';
+            var route = '/request-book';
+            var username = this.state.user.username;
+
+            return fetch(apiRoot + route, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    bookId: bookId,
+                    username: username
+                })
+            }).catch(function (err) {
+                return console.error(err);
+            });
+        }
+    }, {
+        key: 'approveRequest',
+        value: function approveRequest(bookId) {
+            console.log('approving request');
+
+            var dev = this.state.dev;
+            var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+            var route = '/approve-request';
             var username = this.state.user.username;
 
             return fetch(apiRoot + route, {
@@ -46861,7 +46884,7 @@ var App = function (_React$Component) {
         value: function getBooks() {
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-            var route = '/getbooks';
+            var route = '/get-books';
 
             return fetch(apiRoot + route).then(function (res) {
                 return res.json();
@@ -46930,7 +46953,7 @@ var App = function (_React$Component) {
             // console.log('removing book');
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-            var route = '/removebook';
+            var route = '/remove-book';
             var username = this.state.user.username;
 
             return fetch(apiRoot + route, {
@@ -72031,6 +72054,25 @@ var MyBooks = exports.MyBooks = function MyBooks(props) {
             'h2',
             null,
             'My Books'
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'my-books-nav' },
+            _react2.default.createElement(
+                'div',
+                { className: 'my-book-nav-item' },
+                'Own'
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'my-book-nav-item' },
+                'Wish List'
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'my-book-nav-item' },
+                'Incoming Requests'
+            )
         ),
         books && gridView ? books.map(function (b, i) {
             var ownedby = b.ownedby.length;

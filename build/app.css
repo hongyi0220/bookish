@@ -97,6 +97,22 @@
 .results-container h2 {
   text-align: center; }
 
+.results-container .my-books-nav {
+  border-bottom: 1px solid #dedede;
+  height: 2.19em;
+  white-space: nowrap;
+  margin-bottom: .5em; }
+  .results-container .my-books-nav .my-book-nav-item {
+    display: inline-block;
+    font-size: 1.8em;
+    height: 1.5em;
+    margin-left: 1em;
+    transition: all .3s ease, border-bottom 1ms; }
+    .results-container .my-books-nav .my-book-nav-item:hover {
+      cursor: pointer;
+      border-bottom: 3px solid #22A7F0;
+      color: #22A7F0; }
+
 .results-container .book {
   margin: .5em;
   display: inline-block;

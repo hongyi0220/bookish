@@ -245,7 +245,7 @@ class App extends React.Component {
         const foundBook = this.findBookById(bookId, books);
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/addbook';
+        const route = '/add-book';
         const username = this.state.user.username;
 
         return fetch(apiRoot + route, {
@@ -266,7 +266,28 @@ class App extends React.Component {
 
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/requestbook';
+        const route = '/request-book';
+        const username = this.state.user.username;
+
+        return fetch(apiRoot + route, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                bookId: bookId,
+                username: username
+            })
+        })
+        .catch(err => console.error(err));
+    }
+
+    approveRequest(bookId) {
+        console.log('approving request');
+
+        const dev = this.state.dev;
+        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const route = '/approve-request';
         const username = this.state.user.username;
 
         return fetch(apiRoot + route, {
@@ -285,7 +306,7 @@ class App extends React.Component {
     getBooks() {
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/getbooks';
+        const route = '/get-books';
 
         return fetch(apiRoot + route)
         .then(res => res.json())
@@ -347,7 +368,7 @@ class App extends React.Component {
         // console.log('removing book');
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/removebook';
+        const route = '/remove-book';
         const username = this.state.user.username;
 
         return fetch(apiRoot + route, {

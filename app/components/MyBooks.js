@@ -22,6 +22,11 @@ export const MyBooks = props => {
     return (
         <div className='results-container'>
             <h2>My Books</h2>
+            <div className='my-books-nav'>
+                <div className='my-book-nav-item'>Own</div>
+                <div className='my-book-nav-item'>Wish List</div>
+                <div className='my-book-nav-item'>Incoming Requests</div>
+            </div>
             {(books && gridView) ? books.map((b, i) => {
                 const ownedby = b.ownedby.length;
                 const book = b.book;
@@ -46,7 +51,6 @@ export const MyBooks = props => {
                             {bookId === selectedId ?
                                 <div className='view-detail-button' onClick={openModal}>View Detail</div>
                             : ''}
-
                         </div>
                         <div className='summary-container'>
                             <div className='title'>{title}</div>
