@@ -46621,13 +46621,15 @@ var App = function (_React$Component) {
     _createClass(App, [{
         key: 'getUserFromSession',
         value: function getUserFromSession() {
-            // console.log('retrieving user session');
+            console.log('retrieving user session');
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/session';
             return fetch(apiRoot + route, { credentials: 'include' }).then(function (res) {
+                console.log(res);
                 return res.json();
             }).then(function (resJson) {
+                console.log(resJson);
                 return resJson;
             }).catch(function (err) {
                 return console.error(err);
