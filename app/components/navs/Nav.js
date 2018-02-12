@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const Nav = props => {
+ const Nav = props => {
     const state = props.state;
     const searchValue = state.searchValue;
     const handleInput = props.handleInput;
@@ -38,3 +38,4 @@ export const Nav = props => {
         </div>
     );
 }
+export default Nav;

@@ -1,48 +1,43 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Dialog } from './Dialog';
+import Dialog from './Dialog';
 
-export const SearchResults = props => {
+ const Books = props => {
     const state = props.state;
+    const books = state.books;
     const myBooks = state.myBooks;
-    const searchResult = state.searchResult;
     const imgRootUrl = 'http://books.google.com/books/content?id=';
-    const params = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
+    const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
     const toggleImgShadeOn = props.toggleImgShadeOn;
     const imgShadeStyle = state.ui.selected.style;
     const selectedId = state.ui.selected.origin;
     const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
-    // const username = isLoggedIn ? isLoggedIn.username : '';
-    const gridView = state.ui.gridView;
+    const removeBook = props.removeBook;
     const addBook = props.addBook;
+    const gridView = state.ui.gridView;
     const foundBook = state.foundBook;
     const openModal = props.openModal;
     const closeModal = props.closeModal;
     const shortenTitle = props.shortenTitle;
     const removeMiddleName = props.removeMiddleName;
-    const removeBook = props.removeBook;
     const doIOwn = props.doIOwn;
-
-    // function doIOwn(bookId, from) {
-    //     // console.log('bookId, from:', bookId, from);
-    //     // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
-    //     const matched = from.filter(b => b.bookId === bookId);
-    //     if (matched.length) return ~matched[0].ownedby.indexOf(username);
-    //     else return false;
-    // }
+    const requestBook = props.requestBook;
 
     return (
         <div className='results-container'>
-            {(searchResult && gridView) ? searchResult.items.map((item, i) => {
-                const book = item.volumeInfo;
-                const bookId = item.id;
-                const authorName = book.authors ? book.authors[0] : 'Unknown';
+            {(books && gridView) ? books.map((b, i) => {
+                const ownedby = b.ownedby.length;
+                const book = b.book;
+                const volumeInfo = book.volumeInfo;
+                const bookId = book.id;
+                const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
+                // console.log('book.authors:', author);
                 const author = removeMiddleName(authorName);
-                const title = shortenTitle(book.title, 18);
-                const imgUrl = imgRootUrl + item.id + params;
+                const title = shortenTitle(volumeInfo.title, 14);
+                const imgUrl = imgRootUrl + bookId + imgSrcParams;
                 let imgStyle = {
-                    backgroundImage: 'url(' + imgUrl + ')',
+                    backgroundImage: 'url(' + imgUrl + ')'
                 };
 
                 return (
@@ -51,7 +46,7 @@ export const SearchResults = props => {
 
                          <div id={bookId} className='img-shade'
                              style={bookId === selectedId ? imgShadeStyle : {}}
-                              onMouseOver={toggleImgShadeOn}>
+                              onMouseOver={toggleImgShadeOn}/*onMouseEnter={toggleImgShade} onMouseLeave={toggleImgShade}*/>
 
                             {bookId === selectedId ?
                                 <div className='view-detail-button' onClick={openModal}>View Detail</div>
@@ -59,35 +54,37 @@ export const SearchResults = props => {
 
                         </div>
                         <div className='summary-container'>
-                            <div className='title'>
-                                {title}
-                            </div>
+                            <div className='title'>{title}</div>
                             <div className='author'>
                                 Author:&nbsp;{author}
                             </div>
+                            <div className='owned-by'>
+                                Owners:&nbsp;{ownedby}
+                            </div>
                         </div>
-                        <div className='request-button-container'>
+                        <div className='button-container'>
                             {(() => {
                                 if (isLoggedIn) {
                                     const button = doIOwn(bookId, myBooks) ?
                                     <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
-                                    <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div>;
+                                    <div className='text-wrapper' onClick={() => {requestBook(bookId)}}>Request this 📘</div>;
                                     return button;
                                 } else {
-                                    return <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>
+                                    return <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
                                 }
                             })()}
                         </div>
                     </div>
                 );
             }) : ''}
-            {(searchResult && !gridView) ?
-            searchResult.items.map((b, i) => {
-                const book = b.volumeInfo;
-                const bookId = b.id;
-                const imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
-                const title = shortenTitle(book.title, 25);
-                const authorName = book.authors ? book.authors[0] : 'Unknown';
+            {(books && !gridView) ?
+            books.map((b, i) => {
+                const book = b.book;
+                const bookId = book.id;
+                const volumeInfo = book.volumeInfo;
+                const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
+                const title = shortenTitle(volumeInfo.title, 25);
+                const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
                 const author = removeMiddleName(authorName);
 
                 return (
@@ -97,15 +94,15 @@ export const SearchResults = props => {
                         <div className='author'>
                             Author:&nbsp;{author}
                         </div>
-                        <div className='request-button-container'>
+                        <div className='button-container'>
                             {(() => {
                                 if (isLoggedIn) {
                                     const button = doIOwn(bookId, myBooks) ?
                                     <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
-                                    <div className='text-wrapper' onClick={() => {addBook(bookId)}}>I own this 📘</div>;
+                                    <div className='text-wrapper' onClick={() => {requestBook(bookId)}}>Request this 📘</div>;
                                     return button;
                                 } else {
-                                    return <Link to='/login'><div className='text-wrapper'>Log in & add 📘</div></Link>
+                                    return <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
                                 }
                             })()}
                         </div>
@@ -113,8 +110,10 @@ export const SearchResults = props => {
                 );
             }) : ''}
             {foundBook ? <Dialog state={state} openModal={openModal} closeModal={closeModal}
-                imgRootUrl={imgRootUrl} params={params}/>
+                imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams} requestBook={requestBook} removeBook={removeBook}
+                addBook={addBook} bookId={foundBook.id}/>
             : ''}
         </div>
     );
 }
+export default Books;

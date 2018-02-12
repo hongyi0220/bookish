@@ -163,19 +163,19 @@
     .results-container .book .summary-container .owned-by {
       font-size: .75em;
       color: grey; }
-  .results-container .book .request-button-container {
+  .results-container .book .button-container {
     border-top: 1px solid #f2f2f2;
     height: 40px;
     transition: all .3s ease; }
-    .results-container .book .request-button-container:hover {
+    .results-container .book .button-container:hover {
       cursor: pointer;
       background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%); }
-    .results-container .book .request-button-container .text-wrapper {
+    .results-container .book .button-container .text-wrapper {
       color: black;
       text-align: center;
       line-height: 40px;
       transition: all .3s ease; }
-      .results-container .book .request-button-container .text-wrapper:hover {
+      .results-container .book .button-container .text-wrapper:hover {
         color: white; }
 
 .results-container .book-list-view {
@@ -198,22 +198,22 @@
     border-left: 1px solid #f2f2f2;
     vertical-align: top;
     padding-left: .5em; }
-  .results-container .book-list-view .request-button-container {
+  .results-container .book-list-view .button-container {
     border-radius: 4px;
     float: right;
     text-align: center;
     transition: all .3s ease;
     padding: 0 .5em 0 .5em; }
-    .results-container .book-list-view .request-button-container:hover {
+    .results-container .book-list-view .button-container:hover {
       cursor: pointer;
       background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%); }
-    .results-container .book-list-view .request-button-container .text-wrapper {
+    .results-container .book-list-view .button-container .text-wrapper {
       color: black;
       text-align: center;
       transition: all .3s ease; }
-      .results-container .book-list-view .request-button-container .text-wrapper:hover {
+      .results-container .book-list-view .button-container .text-wrapper:hover {
         color: white; }
-  .results-container .book-list-view .img-wrapper, .results-container .book-list-view .title, .results-container .book-list-view .author, .results-container .book-list-view .request-button-container {
+  .results-container .book-list-view .img-wrapper, .results-container .book-list-view .title, .results-container .book-list-view .author, .results-container .book-list-view .button-container {
     vertical-align: top;
     line-height: 60px;
     display: inline-block; }

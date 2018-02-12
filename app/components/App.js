@@ -1,17 +1,16 @@
 import React from 'react';
 import { withRouter, Switch, Route } from 'react-router-dom';
-import socketIOClient from 'socket.io-client';
-import { Transition, Icon, Sidebar } from 'semantic-ui-react';
-import { Nav } from './Nav';
-import { UserNav } from './UserNav';
-import { SignupForm } from './forms/SignupForm';
-import { LoginForm } from './forms/LoginForm';
-import { Profile } from './Profile';
-import { SearchResults } from './SearchResults';
-import { sample } from './sampleData';
-import { Books } from './Books';
-import { MyBooks } from './MyBooks';
-import { LogoutScreen } from './LogoutScreen';
+import { Transition, Icon } from 'semantic-ui-react';
+import Nav from './navs/Nav';
+import UserNav from './navs/UserNav';
+import SignupForm from './forms/SignupForm';
+import LoginForm from './forms/LoginForm';
+import Profile from './content/Profile';
+import SearchResults from './content/SearchResults';
+import sample from './sampleData';
+import Books from './content/Books';
+import MyBooks from './content/MyBooks';
+import LogoutScreen from './content/LogoutScreen';
 
 class App extends React.Component {
     constructor() {
@@ -70,11 +69,11 @@ class App extends React.Component {
         const route = '/session';
         return fetch(apiRoot + route, {credentials: 'include'})
         .then(res => {
-            console.log(res);
+            // console.log(res);
             return res.json()
         })
         .then(resJson => {
-            console.log(resJson);
+            // console.log(resJson);
             return resJson
         })
         .catch(err => console.error(err));
@@ -174,11 +173,11 @@ class App extends React.Component {
     }
 
     toggleImgShadeOn(evt) {
-        // console.log('evt.target @ toggleImgShadeON:', evt.target);
+        console.log('toggleImgShadeOn');
         const browsingLocation = this.props.history.location.pathname;
         const bookId = evt.target.id;
         const books = browsingLocation === '/search' ? this.state.searchResult.items : this.state.books.map(b => b.book);
-        // console.log('evt.currentTarget:',evt.currentTarget);
+        console.log(bookId);
 
         if (evt.target === evt.currentTarget) {
             this.setState({
@@ -217,7 +216,7 @@ class App extends React.Component {
     toggleViewFormat(evt) {
         const id = evt.target.id;
         const isGridView = id === 'grid';
-        console.log('viewFormat toggled; gridView:', this.state.ui.gridView);
+        // console.log('viewFormat toggled; gridView:', this.state.ui.gridView);
         this.setState({
             ...this.state,
             ui: {
@@ -238,22 +237,24 @@ class App extends React.Component {
                 break;
             }
         }
-        this.setState({ foundBook: found });
+        this.setState({ foundBook: found }, ()=> console.log('foundbook:', this.state.foundBook));
+
         return found;
     }
 
     addBook(bookId) {
-        // console.log('adding book');
+        console.log('adding book');
         const books = this.state.searchResult.items;
-        // console.log('books@ addBook:', books);
+        console.log(bookId);
         const foundBook = this.findBookById(bookId, books);
+        console.log('foundBook:', foundBook);
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/add-book';
+        const route = '/book/:id/:username';
         const username = this.state.user.username;
 
         return fetch(apiRoot + route, {
-            method: 'post',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -265,16 +266,36 @@ class App extends React.Component {
         .catch(err => console.error(err));
     }
 
+    removeBook(bookId) {
+        // console.log('removing book');
+        const dev = this.state.dev;
+        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const username = this.state.user.username;
+        const route = '/book/' + bookId + '/' + username;
+
+        return fetch(apiRoot + route, {
+            method: 'DELETE',
+            // headers: {
+            //     'Content-Type': 'application/json'
+            // },
+            // body: JSON.stringify({
+            //     bookId: bookId,
+            //     username: username
+            // })
+        })
+        .catch(err => console.error(err));
+    }
+
     requestBook(bookId) {
         console.log('requesting book');
 
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/request-book';
+        const route = '/request/' + bookId + '/' + username;
         const username = this.state.user.username;
 
         return fetch(apiRoot + route, {
-            method: 'post',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -291,18 +312,18 @@ class App extends React.Component {
 
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/approve-request';
         const username = this.state.user.username;
+        const route = '/request/' + bookId + '/' + username;
 
         return fetch(apiRoot + route, {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                bookId: bookId,
-                username: username
-            })
+            method: 'PUT',
+            // headers: {
+            //     'Content-Type': 'application/json'
+            // },
+            // body: JSON.stringify({
+            //     bookId: bookId,
+            //     username: username
+            // })
         })
         .catch(err => console.error(err));
     }
@@ -310,7 +331,7 @@ class App extends React.Component {
     getBooks() {
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/get-books';
+        const route = '/all-books';
 
         return fetch(apiRoot + route)
         .then(res => res.json())
@@ -326,7 +347,7 @@ class App extends React.Component {
                 ...this.state.ui,
                 isModalOpen: true
             }
-        }, () => console.log('isModalOpen:', this.state));
+        });
         evt.stopPropagation();
     }
 
@@ -368,31 +389,11 @@ class App extends React.Component {
         return myBooks;
     }
 
-    removeBook(bookId) {
-        // console.log('removing book');
-        const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/remove-book';
-        const username = this.state.user.username;
-
-        return fetch(apiRoot + route, {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                bookId: bookId,
-                username: username
-            })
-        })
-        .catch(err => console.error(err));
-    }
-
     doIOwn(bookId, from) {
         const user = this.state.user;
         const username = user ? user.username : '';
-        console.log('bookId, from:', bookId, from);
-        console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
+        // console.log('bookId, from:', bookId, from);
+        // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
         const matched = from.filter(b => b.bookId === bookId);
         if (matched.length) return ~matched[0].ownedby.indexOf(username);
         else return false;
@@ -464,11 +465,11 @@ class App extends React.Component {
 
                         <Route path='/mybooks' render={() => <MyBooks state={state} toggleImgShadeOn={toggleImgShadeOn}
                             openModal={openModal} removeBook={removeBook} closeModal={closeModal}
-                            shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}/>}/>
+                            shortenTitle={shortenTitle} removeMiddleName={removeMiddleName} addBook={addBook}/>}/>
 
                         <Route path='/books' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
-                            openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle}
-                            removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook}/>}/>
+                            openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle} addBook={addBook}
+                            removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook} removeBook/>}/>
 
                         <Route path='/search' render={() => <SearchResults state={state} toggleImgShadeOn={toggleImgShadeOn}
                             addBook={addBook} openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const UserNav = props => {
+const UserNav = props => {
     const state = props.state;
     const isLoggedIn = state.user;
     const username = isLoggedIn ? isLoggedIn.username : '';
@@ -57,3 +57,4 @@ export const UserNav = props => {
         </div>
     );
 }
+export default UserNav;

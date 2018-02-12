@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const LogoutScreen = props => {
+const LogoutScreen = props => {
     const cancelLogout = props.cancelLogout;
     const state = props.state;
     const timer = state.ui.timer;
@@ -16,3 +16,4 @@ export const LogoutScreen = props => {
         </div>
     );
 }
+export default LogoutScreen;

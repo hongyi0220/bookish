@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-export const Profile = props => {
+const Profile = props => {
     const state = props.state;
     const user = state.user;
     const username = user ? user.username : '';
@@ -40,3 +40,4 @@ export const Profile = props => {
         </div>
     );
 }
+export default Profile;

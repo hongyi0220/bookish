@@ -1,4 +1,4 @@
-export const sample = {
+const sample = {
 "kind": "books#volumes",
 "totalItems": 2694,
 "items": [
@@ -873,3 +873,4 @@ export const sample = {
 }
 ]
 }
+export default sample;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const LoginForm = props => {
+const LoginForm = props => {
     return (
         <div className='form-container'>
             <h2>Log into your account</h2>
@@ -24,3 +24,4 @@ export const LoginForm = props => {
         </div>
     );
 }
+export default LoginForm;

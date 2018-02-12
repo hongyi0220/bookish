@@ -83,7 +83,7 @@
                 color: grey;
             }
         }
-        .request-button-container {
+        .button-container {
             border-top: 1px solid $light-grey;
             height: $request-button-height;
             transition: all .3s ease;
@@ -129,7 +129,7 @@
             vertical-align: top;
             padding-left: .5em;
         }
-        .request-button-container {
+        .button-container {
             border-radius: $bd-radius;
             float: right;
             text-align: center;
@@ -148,7 +148,7 @@
                 }
             }
         }
-        .img-wrapper, .title, .author, .request-button-container {
+        .img-wrapper, .title, .author, .button-container {
             vertical-align: top;
             line-height: $list-row-height;
             display: inline-block;
