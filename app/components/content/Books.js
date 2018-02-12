@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Dialog from './Dialog';
 
- const Books = props => {
+const Books = props => {
     const state = props.state;
     const books = state.books;
     const myBooks = state.myBooks;

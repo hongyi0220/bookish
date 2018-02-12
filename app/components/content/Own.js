@@ -3,20 +3,22 @@ import ButtonsContainer from '../buttons/ButtonsContainer';
 
 const Own = props => {
     const state = props.state;
-    const username = state.user.username;
+    const user = state.user;
+    const username = user ? state.user.username : '';
     const imgSrc = props.imgSrc;
     const requestBook = props.requestBook;
     const removeBook = props.removeBook;
     const addBook = props.addBook;
-    const bookId = props.bookId;
+    // const bookId = props.bookId;
     const doIOwn = props.doIOwn;
     const shortenTitle = props.shortenTitle;
     const removeMiddleName = props.removeMiddleName;
-    const books = state.books.filter(book => book.ownedby.includes(username));
+    const books = state.books;
+    const own = books ? books.filter(book => book.ownedby.includes(username)) : [];
     return (
-        books.map((b, i) => {
+        own.map((b, i) => {
             const book = b.book;
-            const bookId = b.id;
+            const bookId = book.id;
             const volumeInfo = book.volumeInfo;
             const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
             const title = shortenTitle(volumeInfo.title, 25);

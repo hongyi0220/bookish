@@ -97,22 +97,6 @@
 .results-container h2 {
   text-align: center; }
 
-.results-container .my-books-nav {
-  border-bottom: 1px solid #dedede;
-  height: 2.19em;
-  white-space: nowrap;
-  margin-bottom: .5em; }
-  .results-container .my-books-nav .my-book-nav-item {
-    display: inline-block;
-    font-size: 1.8em;
-    height: 1.5em;
-    margin-left: 1em;
-    transition: all .3s ease, border-bottom 1ms; }
-    .results-container .my-books-nav .my-book-nav-item:hover {
-      cursor: pointer;
-      border-bottom: 3px solid #22A7F0;
-      color: #22A7F0; }
-
 .results-container .book {
   margin: .5em;
   display: inline-block;
@@ -232,6 +216,61 @@
       .logout-screen-container .logout-msg-container .cancel-button:hover {
         text-decoration: underline;
         cursor: pointer; }
+
+.results-container .my-books-nav {
+  border-bottom: 1px solid #dedede;
+  height: 2.19em;
+  white-space: nowrap;
+  margin-bottom: .5em; }
+  .results-container .my-books-nav .my-book-nav-item {
+    display: inline-block;
+    font-size: 1.8em;
+    height: 1.5em;
+    margin-left: 1em;
+    transition: all .3s ease, border-bottom 1ms;
+    color: black; }
+    .results-container .my-books-nav .my-book-nav-item:hover {
+      cursor: pointer;
+      border-bottom: 3px solid #22A7F0;
+      color: #22A7F0; }
+
+.results-container .book-list-view .buttons-container {
+  position: relative;
+  top: -85px; }
+  .results-container .book-list-view .buttons-container .button-container {
+    border-radius: 4px;
+    float: right;
+    text-align: center;
+    transition: all .3s ease;
+    padding: 0 .5em 0 .5em; }
+    .results-container .book-list-view .buttons-container .button-container:hover {
+      cursor: pointer;
+      background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%); }
+    .results-container .book-list-view .buttons-container .button-container .text-wrapper {
+      color: black;
+      text-align: center;
+      transition: all .3s ease; }
+      .results-container .book-list-view .buttons-container .button-container .text-wrapper:hover {
+        color: white; }
+
+.ui.modal .button-container {
+  height: 65px;
+  border-radius: 4px;
+  border-top: 1px solid #f2f2f2;
+  text-align: center;
+  transition: all .3s ease;
+  padding: 0 .5em 0 .5em; }
+  .ui.modal .button-container:hover {
+    cursor: pointer;
+    background: radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%); }
+  .ui.modal .button-container .text-wrapper {
+    color: black;
+    text-align: center;
+    transition: all .3s ease;
+    font-size: 1.4em;
+    line-height: 65px; }
+    .ui.modal .button-container .text-wrapper:hover {
+      color: white; }
 
 * {
   box-sizing: border-box; }

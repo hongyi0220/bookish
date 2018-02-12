@@ -1,0 +1,25 @@
+.ui.modal {
+    .button-container {
+        // border: 1px solid red;
+        height: 65px;
+        border-radius: $bd-radius;
+        border-top: 1px solid rgb(242,242,242);
+        text-align: center;
+        transition: all .3s ease;
+        padding: 0 .5em 0 .5em;
+        &:hover {
+            cursor: pointer;
+            background: radial-gradient(circle at center, $picton-blue 0, $dodger-blue, $jordy-blue 100%);
+        }
+        .text-wrapper {
+            color: black;
+            text-align: center;
+            transition: all .3s ease;
+            font-size: 1.4em;
+            line-height: 65px;
+            &:hover {
+                color: white;
+            }
+        }
+    }
+}

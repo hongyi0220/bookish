@@ -917,6 +917,29 @@ module.exports = warning;
 
 /***/ }),
 /* 19 */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.5.3' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var freeGlobal = __webpack_require__(238);
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+
+/***/ }),
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -972,29 +995,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-var core = module.exports = { version: '2.5.3' };
-if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var freeGlobal = __webpack_require__(238);
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-module.exports = root;
 
 
 /***/ }),
@@ -1769,7 +1769,7 @@ module.exports = emptyFunction;
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(40);
-var core = __webpack_require__(20);
+var core = __webpack_require__(19);
 var ctx = __webpack_require__(139);
 var hide = __webpack_require__(54);
 var PROTOTYPE = 'prototype';
@@ -2221,7 +2221,7 @@ module.exports = {};
 /* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(21);
+var root = __webpack_require__(20);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -2754,7 +2754,7 @@ module.exports = isIndex;
 /* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(21),
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(20),
     stubFalse = __webpack_require__(520);
 
 /** Detect free variable `exports`. */
@@ -5029,7 +5029,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 var _AddButton = __webpack_require__(788);
 
@@ -5043,6 +5043,14 @@ var _RemoveButton = __webpack_require__(790);
 
 var _RemoveButton2 = _interopRequireDefault(_RemoveButton);
 
+var _CancelRequestButton = __webpack_require__(791);
+
+var _CancelRequestButton2 = _interopRequireDefault(_CancelRequestButton);
+
+var _ApproveButton = __webpack_require__(792);
+
+var _ApproveButton2 = _interopRequireDefault(_ApproveButton);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ButtonsContainer = function ButtonsContainer(props) {
@@ -5053,19 +5061,21 @@ var ButtonsContainer = function ButtonsContainer(props) {
     var requestBook = props.requestBook;
     var bookId = props.bookId;
     var doIOwn = props.doIOwn;
-    var requestButtonHeight = 65;
-    var requestButtonStyles = {
-        borderTop: '1px solid rgb(242,242,242)',
-        height: requestButtonHeight + 'px',
-        background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)',
-        cursor: 'pointer'
-    };
-    var textWrapperStyles = {
-        color: 'white',
-        textAlign: 'center',
-        lineHeight: requestButtonHeight + 'px',
-        fontSize: '1.4em'
-    };
+    var approveRequest = props.approveRequest;
+    var cancelRequest = props.cancelRequest;
+    // const requestButtonHeight = 65;
+    // const requestButtonStyles = {
+    //     borderTop: '1px solid rgb(242,242,242)',
+    //     height: requestButtonHeight + 'px',
+    //     background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)',
+    //     cursor: 'pointer'
+    // };
+    // const textWrapperStyles = {
+    //     color: 'white',
+    //     textAlign: 'center',
+    //     lineHeight: requestButtonHeight + 'px',
+    //     fontSize: '1.4em'
+    // };
 
     return _react2.default.createElement(
         'div',
@@ -5073,21 +5083,25 @@ var ButtonsContainer = function ButtonsContainer(props) {
         _react2.default.createElement(
             _reactRouterDom.Switch,
             null,
-            _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks', render: function render() {
-                    return _react2.default.createElement(_RemoveButton2.default, { state: state, requestButtonHeight: requestButtonHeight,
-                        requestButtonStyles: requestButtonStyles, textWrapperStyles: textWrapperStyles, addBook: addBook,
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/incoming-requests', render: function render() {
+                    return _react2.default.createElement(_ApproveButton2.default, { state: state, addBook: addBook,
+                        removeBook: removeBook, requestBook: requestBook, bookId: bookId, approveRequest: approveRequest });
+                } }),
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/wishlist', render: function render() {
+                    return _react2.default.createElement(_CancelRequestButton2.default, { state: state, addBook: addBook,
+                        removeBook: removeBook, requestBook: requestBook, bookId: bookId, cancelRequest: cancelRequest });
+                } }),
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/own', render: function render() {
+                    return _react2.default.createElement(_RemoveButton2.default, { state: state, addBook: addBook,
                         removeBook: removeBook, requestBook: requestBook, bookId: bookId });
                 } }),
             _react2.default.createElement(_reactRouterDom.Route, { path: '/search', render: function render() {
-                    return doIOwn(bookId, myBooks) ? _react2.default.createElement(_RemoveButton2.default, { state: state, requestButtonHeight: requestButtonHeight,
-                        requestButtonStyles: requestButtonStyles, textWrapperStyles: textWrapperStyles, addBook: addBook,
-                        removeBook: removeBook, requestBook: requestBook, bookId: bookId }) : _react2.default.createElement(_AddButton2.default, { state: state, requestButtonHeight: requestButtonHeight,
-                        requestButtonStyles: requestButtonStyles, textWrapperStyles: textWrapperStyles, addBook: addBook,
+                    return doIOwn(bookId, myBooks) ? _react2.default.createElement(_RemoveButton2.default, { state: state, addBook: addBook,
+                        removeBook: removeBook, requestBook: requestBook, bookId: bookId }) : _react2.default.createElement(_AddButton2.default, { state: state, addBook: addBook,
                         removeBook: removeBook, requestBook: requestBook, bookId: bookId });
                 } }),
             _react2.default.createElement(_reactRouterDom.Route, { path: '/books', render: function render() {
-                    return _react2.default.createElement(_RequestButton2.default, { state: state, requestButtonHeight: requestButtonHeight,
-                        requestButtonStyles: requestButtonStyles, textWrapperStyles: textWrapperStyles, addBook: addBook,
+                    return _react2.default.createElement(_RequestButton2.default, { state: state, addBook: addBook,
                         removeBook: removeBook, requestBook: requestBook, bookId: bookId });
                 } })
         )
@@ -5988,7 +6002,7 @@ exports.f = __webpack_require__(27);
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(40);
-var core = __webpack_require__(20);
+var core = __webpack_require__(19);
 var LIBRARY = __webpack_require__(148);
 var wksExt = __webpack_require__(152);
 var defineProperty = __webpack_require__(41).f;
@@ -6098,7 +6112,7 @@ module.exports = MapCache;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(50),
-    root = __webpack_require__(21);
+    root = __webpack_require__(20);
 
 /* Built-in method references that are verified to be native. */
 var Map = getNative(root, 'Map');
@@ -11892,7 +11906,7 @@ module.exports = arraySome;
 /* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(21);
+var root = __webpack_require__(20);
 
 /** Built-in value references. */
 var Uint8Array = root.Uint8Array;
@@ -12006,7 +12020,7 @@ module.exports = stubArray;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(50),
-    root = __webpack_require__(21);
+    root = __webpack_require__(20);
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -12019,7 +12033,7 @@ module.exports = Set;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(50),
-    root = __webpack_require__(21);
+    root = __webpack_require__(20);
 
 /* Built-in method references that are verified to be native. */
 var WeakMap = getNative(root, 'WeakMap');
@@ -12190,7 +12204,7 @@ module.exports = function (it) {
 var classof = __webpack_require__(269);
 var ITERATOR = __webpack_require__(27)('iterator');
 var Iterators = __webpack_require__(58);
-module.exports = __webpack_require__(20).getIteratorMethod = function (it) {
+module.exports = __webpack_require__(19).getIteratorMethod = function (it) {
   if (it != undefined) return it[ITERATOR]
     || it['@@iterator']
     || Iterators[classof(it)];
@@ -12353,7 +12367,7 @@ var composeArgs = __webpack_require__(276),
     getHolder = __webpack_require__(176),
     reorder = __webpack_require__(582),
     replaceHolders = __webpack_require__(115),
-    root = __webpack_require__(21);
+    root = __webpack_require__(20);
 
 /** Used to compose bitmasks for function metadata. */
 var WRAP_BIND_FLAG = 1,
@@ -15728,7 +15742,7 @@ exports.default = function get(object, property, receiver) {
 
 // most Object methods by ES6 should accept primitives
 var $export = __webpack_require__(39);
-var core = __webpack_require__(20);
+var core = __webpack_require__(19);
 var fails = __webpack_require__(56);
 module.exports = function (KEY, exec) {
   var fn = (core.Object || {})[KEY] || Object[KEY];
@@ -22410,7 +22424,7 @@ StatisticValue.create = Object(__WEBPACK_IMPORTED_MODULE_4__lib__["m" /* createS
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(403);
-module.exports = __webpack_require__(798);
+module.exports = __webpack_require__(800);
 
 
 /***/ }),
@@ -22428,7 +22442,7 @@ var _reactDom = __webpack_require__(131);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 var _App = __webpack_require__(442);
 
@@ -43350,7 +43364,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 var _semanticUiReact = __webpack_require__(226);
 
@@ -43378,19 +43392,19 @@ var _SearchResults = __webpack_require__(787);
 
 var _SearchResults2 = _interopRequireDefault(_SearchResults);
 
-var _sampleData = __webpack_require__(791);
+var _sampleData = __webpack_require__(793);
 
 var _sampleData2 = _interopRequireDefault(_sampleData);
 
-var _Books = __webpack_require__(792);
+var _Books = __webpack_require__(794);
 
 var _Books2 = _interopRequireDefault(_Books);
 
-var _MyBooks = __webpack_require__(793);
+var _MyBooks = __webpack_require__(795);
 
 var _MyBooks2 = _interopRequireDefault(_MyBooks);
 
-var _LogoutScreen = __webpack_require__(797);
+var _LogoutScreen = __webpack_require__(799);
 
 var _LogoutScreen2 = _interopRequireDefault(_LogoutScreen);
 
@@ -43455,6 +43469,8 @@ var App = function (_React$Component) {
         _this.setTimer = _this.setTimer.bind(_this);
         _this.doIOwn = _this.doIOwn.bind(_this);
         _this.requestBook = _this.requestBook.bind(_this);
+        _this.cancelRequest = _this.cancelRequest.bind(_this);
+        _this.approveRequest = _this.approveRequest.bind(_this);
         return _this;
     }
 
@@ -43727,6 +43743,22 @@ var App = function (_React$Component) {
             });
         }
     }, {
+        key: 'cancelRequest',
+        value: function cancelRequest(bookId) {
+            console.log('cancelling request');
+
+            var dev = this.state.dev;
+            var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+            var username = this.state.user.username;
+            var route = '/request/' + bookId + '/' + username;
+
+            fetch(apiRoot + route, {
+                method: 'DELETE'
+            }).catch(function (err) {
+                return console.error(err);
+            });
+        }
+    }, {
         key: 'approveRequest',
         value: function approveRequest(bookId) {
             console.log('approving request');
@@ -43820,10 +43852,12 @@ var App = function (_React$Component) {
             var username = user ? user.username : '';
             // console.log('bookId, from:', bookId, from);
             // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
-            var matched = from.filter(function (b) {
-                return b.bookId === bookId;
-            });
-            if (matched.length) return ~matched[0].ownedby.indexOf(username);else return false;
+            if (from) {
+                var matched = from.filter(function (b) {
+                    return b.bookId === bookId;
+                });
+                if (matched.length) return ~matched[0].ownedby.indexOf(username);
+            } else return false;
         }
     }, {
         key: 'componentDidMount',
@@ -43877,6 +43911,8 @@ var App = function (_React$Component) {
             var setTimer = this.setTimer;
             var doIOwn = this.doIOwn;
             var requestBook = this.requestBook;
+            var cancelRequest = this.cancelRequest;
+            var approveRequest = this.approveRequest;
 
             return _react2.default.createElement(
                 'div',
@@ -43891,7 +43927,7 @@ var App = function (_React$Component) {
                     { className: 'subtitle-wrapper' },
                     'Book trading made easy'
                 ),
-                _react2.default.createElement(_reactRouterDom.Route, { path: '/(search|books|mybooks)', render: function render() {
+                _react2.default.createElement(_reactRouterDom.Route, { path: '/(search|books)', render: function render() {
                         return _react2.default.createElement(
                             'div',
                             { className: 'layout-buttons-container' },
@@ -43915,8 +43951,9 @@ var App = function (_React$Component) {
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks', render: function render() {
                                     return _react2.default.createElement(_MyBooks2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
-                                        openModal: openModal, removeBook: removeBook, closeModal: closeModal,
-                                        shortenTitle: shortenTitle, removeMiddleName: removeMiddleName, addBook: addBook });
+                                        openModal: openModal, removeBook: removeBook, closeModal: closeModal, shortenTitle: shortenTitle,
+                                        removeMiddleName: removeMiddleName, addBook: addBook, cancelRequest: cancelRequest,
+                                        approveRequest: approveRequest });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/books', render: function render() {
                                     return _react2.default.createElement(_Books2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
@@ -44141,7 +44178,7 @@ module.exports = { "default": __webpack_require__(446), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(447);
-module.exports = __webpack_require__(20).Object.assign;
+module.exports = __webpack_require__(19).Object.assign;
 
 
 /***/ }),
@@ -44252,7 +44289,7 @@ module.exports = function (index, length) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(453);
-var $Object = __webpack_require__(20).Object;
+var $Object = __webpack_require__(19).Object;
 module.exports = function defineProperty(it, key, desc) {
   return $Object.defineProperty(it, key, desc);
 };
@@ -44423,7 +44460,7 @@ __webpack_require__(465);
 __webpack_require__(470);
 __webpack_require__(471);
 __webpack_require__(472);
-module.exports = __webpack_require__(20).Symbol;
+module.exports = __webpack_require__(19).Symbol;
 
 
 /***/ }),
@@ -44814,7 +44851,7 @@ module.exports = { "default": __webpack_require__(474), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(475);
-module.exports = __webpack_require__(20).Object.setPrototypeOf;
+module.exports = __webpack_require__(19).Object.setPrototypeOf;
 
 
 /***/ }),
@@ -44868,7 +44905,7 @@ module.exports = { "default": __webpack_require__(478), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(479);
-var $Object = __webpack_require__(20).Object;
+var $Object = __webpack_require__(19).Object;
 module.exports = function create(P, D) {
   return $Object.create(P, D);
 };
@@ -45216,7 +45253,7 @@ module.exports = isMasked;
 /* 490 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(21);
+var root = __webpack_require__(20);
 
 /** Used to detect overreaching core-js shims. */
 var coreJsData = root['__core-js_shared__'];
@@ -46940,7 +46977,7 @@ module.exports = equalObjects;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(50),
-    root = __webpack_require__(21);
+    root = __webpack_require__(20);
 
 /* Built-in method references that are verified to be native. */
 var DataView = getNative(root, 'DataView');
@@ -46953,7 +46990,7 @@ module.exports = DataView;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(50),
-    root = __webpack_require__(21);
+    root = __webpack_require__(20);
 
 /* Built-in method references that are verified to be native. */
 var Promise = getNative(root, 'Promise');
@@ -47367,7 +47404,7 @@ module.exports = __webpack_require__(548);
 var classof = __webpack_require__(269);
 var ITERATOR = __webpack_require__(27)('iterator');
 var Iterators = __webpack_require__(58);
-module.exports = __webpack_require__(20).isIterable = function (it) {
+module.exports = __webpack_require__(19).isIterable = function (it) {
   var O = Object(it);
   return O[ITERATOR] !== undefined
     || '@@iterator' in O
@@ -47397,7 +47434,7 @@ module.exports = __webpack_require__(551);
 
 var anObject = __webpack_require__(45);
 var get = __webpack_require__(270);
-module.exports = __webpack_require__(20).getIterator = function (it) {
+module.exports = __webpack_require__(19).getIterator = function (it) {
   var iterFn = get(it);
   if (typeof iterFn != 'function') throw TypeError(it + ' is not iterable!');
   return anObject(iterFn.call(it));
@@ -48208,7 +48245,7 @@ module.exports = { "default": __webpack_require__(562), __esModule: true };
 
 __webpack_require__(87);
 __webpack_require__(563);
-module.exports = __webpack_require__(20).Array.from;
+module.exports = __webpack_require__(19).Array.from;
 
 
 /***/ }),
@@ -49349,7 +49386,7 @@ module.exports = ary;
 /***/ (function(module, exports, __webpack_require__) {
 
 var createCtor = __webpack_require__(113),
-    root = __webpack_require__(21);
+    root = __webpack_require__(20);
 
 /** Used to compose bitmasks for function metadata. */
 var WRAP_BIND_FLAG = 1;
@@ -49388,7 +49425,7 @@ var apply = __webpack_require__(93),
     createRecurry = __webpack_require__(278),
     getHolder = __webpack_require__(176),
     replaceHolders = __webpack_require__(115),
-    root = __webpack_require__(21);
+    root = __webpack_require__(20);
 
 /**
  * Creates a function that wraps `func` to enable currying.
@@ -49794,7 +49831,7 @@ module.exports = reorder;
 
 var apply = __webpack_require__(93),
     createCtor = __webpack_require__(113),
-    root = __webpack_require__(21);
+    root = __webpack_require__(20);
 
 /** Used to compose bitmasks for function metadata. */
 var WRAP_BIND_FLAG = 1;
@@ -50067,7 +50104,7 @@ module.exports = nativeKeysIn;
 /* 589 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(21);
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(20);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -57099,7 +57136,7 @@ module.exports = { "default": __webpack_require__(703), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(704);
-module.exports = __webpack_require__(20).Object.getPrototypeOf;
+module.exports = __webpack_require__(19).Object.getPrototypeOf;
 
 
 /***/ }),
@@ -57128,7 +57165,7 @@ module.exports = { "default": __webpack_require__(706), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(707);
-var $Object = __webpack_require__(20).Object;
+var $Object = __webpack_require__(19).Object;
 module.exports = function getOwnPropertyDescriptor(it, key) {
   return $Object.getOwnPropertyDescriptor(it, key);
 };
@@ -63890,7 +63927,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64000,7 +64037,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64156,7 +64193,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64231,7 +64268,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64306,7 +64343,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64404,7 +64441,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 var _Dialog = __webpack_require__(213);
 
@@ -64596,25 +64633,22 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var AddButton = function AddButton(props) {
     var state = props.state;
     var isLoggedIn = state.user;
-    var requestButtonHeight = props.requestButtonHeight;
-    var requestButtonStyles = props.requestButtonStyles;
-    var textWrapperStyles = props.textWrapperStyles;
     var addBook = props.addBook;
     var bookId = props.bookId;
 
     return _react2.default.createElement(
         'div',
-        { className: 'button-container', style: requestButtonStyles },
+        { className: 'button-container' },
         isLoggedIn ? _react2.default.createElement(
             'div',
-            { className: 'text-wrapper', style: textWrapperStyles, onClick: function onClick() {
+            { className: 'text-wrapper', onClick: function onClick() {
                     addBook(bookId);
                 } },
             'I own this \uD83D\uDCD8'
@@ -64623,7 +64657,7 @@ var AddButton = function AddButton(props) {
             { to: '/login' },
             _react2.default.createElement(
                 'div',
-                { className: 'text-wrapper', style: textWrapperStyles },
+                { className: 'text-wrapper' },
                 'Log in & add \uD83D\uDCD8'
             )
         )
@@ -64646,25 +64680,22 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var RequestButton = function RequestButton(props) {
     var state = props.state;
     var isLoggedIn = state.user;
-    var requestButtonHeight = props.requestButtonHeight;
-    var requestButtonStyles = props.requestButtonStyles;
-    var textWrapperStyles = props.textWrapperStyles;
     var requestBook = props.requestBook;
     var bookId = props.bookId;
 
     return _react2.default.createElement(
         'div',
-        { className: 'button-container', style: requestButtonStyles },
+        { className: 'button-container' },
         isLoggedIn ? _react2.default.createElement(
             'div',
-            { className: 'text-wrapper', style: textWrapperStyles, onClick: function onClick() {
+            { className: 'text-wrapper', onClick: function onClick() {
                     requestBook(bookId);
                 } },
             'Request this \uD83D\uDCD8'
@@ -64673,7 +64704,7 @@ var RequestButton = function RequestButton(props) {
             { to: '/login' },
             _react2.default.createElement(
                 'div',
-                { className: 'text-wrapper', style: textWrapperStyles },
+                { className: 'text-wrapper' },
                 'Log in & request \uD83D\uDCD8'
             )
         )
@@ -64696,27 +64727,22 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var RemoveButton = function RemoveButton(props) {
     var state = props.state;
-    var requestButtonHeight = props.requestButtonHeight;
-    var requestButtonStyles = props.requestButtonStyles;
-    var textWrapperStyles = props.textWrapperStyles;
     var removeBook = props.removeBook;
     var bookId = props.bookId;
 
     return _react2.default.createElement(
         'div',
-        { className: 'button-container', style: requestButtonStyles },
+        { className: 'button-container' },
         _react2.default.createElement(
             'div',
-            { className: 'text-wrapper', style: textWrapperStyles, onClick: function onClick() {
+            { className: 'text-wrapper', onClick: function onClick() {
                     removeBook(bookId);
                 } },
-            'Remove this \uD83D\uDCD8'
+            'Disown this \uD83D\uDCD8'
         )
     );
 };
@@ -64724,6 +64750,80 @@ exports.default = RemoveButton;
 
 /***/ }),
 /* 791 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CancelRequestButton = function CancelRequestButton(props) {
+    var state = props.state;
+    var requestBook = props.requestBook;
+    var bookId = props.bookId;
+    var cancelRequest = props.cancelRequest;
+
+    return _react2.default.createElement(
+        'div',
+        { className: 'button-container' },
+        _react2.default.createElement(
+            'div',
+            { className: 'text-wrapper', onClick: function onClick() {
+                    cancelRequest(bookId);
+                } },
+            'Cancel Request'
+        )
+    );
+};
+exports.default = CancelRequestButton;
+
+/***/ }),
+/* 792 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ApproveButton = function ApproveButton(props) {
+    var state = props.state;
+    var addBook = props.addBook;
+    var bookId = props.bookId;
+    var approveRequest = props.approveRequest;
+
+    return _react2.default.createElement(
+        'div',
+        { className: 'button-container' },
+        _react2.default.createElement(
+            'div',
+            { className: 'text-wrapper', onClick: function onClick() {
+                    approveRequest(bookId);
+                } },
+            'Accept this request'
+        )
+    );
+};
+exports.default = ApproveButton;
+
+/***/ }),
+/* 793 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65518,7 +65618,7 @@ var sample = {
 exports.default = sample;
 
 /***/ }),
-/* 792 */
+/* 794 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65532,7 +65632,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 var _Dialog = __webpack_require__(213);
 
@@ -65719,7 +65819,7 @@ var Books = function Books(props) {
 exports.default = Books;
 
 /***/ }),
-/* 793 */
+/* 795 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65733,21 +65833,21 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
+var _reactRouterDom = __webpack_require__(21);
 
 var _Dialog = __webpack_require__(213);
 
 var _Dialog2 = _interopRequireDefault(_Dialog);
 
-var _Own = __webpack_require__(794);
+var _Own = __webpack_require__(796);
 
 var _Own2 = _interopRequireDefault(_Own);
 
-var _Wishlist = __webpack_require__(795);
+var _Wishlist = __webpack_require__(797);
 
 var _Wishlist2 = _interopRequireDefault(_Wishlist);
 
-var _IncomingRequests = __webpack_require__(796);
+var _IncomingRequests = __webpack_require__(798);
 
 var _IncomingRequests2 = _interopRequireDefault(_IncomingRequests);
 
@@ -65771,6 +65871,8 @@ var MyBooks = function MyBooks(props) {
     var shortenTitle = props.shortenTitle;
     var removeMiddleName = props.removeMiddleName;
     var requestBook = props.requestBook;
+    var cancelRequest = props.cancelRequest;
+    var approveRequest = props.approveRequest;
 
     return _react2.default.createElement(
         'div',
@@ -65822,12 +65924,12 @@ var MyBooks = function MyBooks(props) {
             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/wishlist', render: function render() {
                     return _react2.default.createElement(_Wishlist2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
                         addBook: addBook, removeBook: removeBook, shortenTitle: shortenTitle, removeMiddleName: removeMiddleName,
-                        requestBook: requestBook });
+                        requestBook: requestBook, cancelRequest: cancelRequest });
                 } }),
             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/incoming-requests', render: function render() {
                     return _react2.default.createElement(_IncomingRequests2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
                         addBook: addBook, removeBook: removeBook, shortenTitle: shortenTitle, removeMiddleName: removeMiddleName,
-                        requestBook: requestBook });
+                        requestBook: requestBook, approveRequest: approveRequest });
                 } })
         )
     );
@@ -65835,7 +65937,7 @@ var MyBooks = function MyBooks(props) {
 exports.default = MyBooks;
 
 /***/ }),
-/* 794 */
+/* 796 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65857,21 +65959,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Own = function Own(props) {
     var state = props.state;
-    var username = state.user.username;
+    var user = state.user;
+    var username = user ? state.user.username : '';
     var imgSrc = props.imgSrc;
     var requestBook = props.requestBook;
     var removeBook = props.removeBook;
     var addBook = props.addBook;
-    var bookId = props.bookId;
+    // const bookId = props.bookId;
     var doIOwn = props.doIOwn;
     var shortenTitle = props.shortenTitle;
     var removeMiddleName = props.removeMiddleName;
-    var books = state.books.filter(function (book) {
+    var books = state.books;
+    var own = books ? books.filter(function (book) {
         return book.ownedby.includes(username);
-    });
-    return books.map(function (b, i) {
+    }) : [];
+    return own.map(function (b, i) {
         var book = b.book;
-        var bookId = b.id;
+        var bookId = book.id;
         var volumeInfo = book.volumeInfo;
         var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
         var title = shortenTitle(volumeInfo.title, 25);
@@ -65905,7 +66009,7 @@ var Own = function Own(props) {
 exports.default = Own;
 
 /***/ }),
-/* 795 */
+/* 797 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65927,21 +66031,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Wishlist = function Wishlist(props) {
     var state = props.state;
-    var username = state.user.username;
+    var user = state.user;
+    var username = user ? state.user.username : '';
     var shortenTitle = props.shortenTitle;
     var removeMiddleName = props.removeMiddleName;
     var imgSrc = props.imgSrc;
     var requestBook = props.requestBook;
     var removeBook = props.removeBook;
     var addBook = props.addBook;
-    var bookId = props.bookId;
+    // const bookId = props.bookId;
     var doIOwn = props.doIOwn;
-    var books = state.books.filter(function (book) {
+    var cancelRequest = props.cancelRequest;
+    var books = state.books;
+    var wishlist = books ? books.filter(function (book) {
         return book.wishlist.includes(username);
-    });
-    return books.map(function (b, i) {
+    }) : [];
+    return wishlist.map(function (b, i) {
         var book = b.book;
-        var bookId = b.id;
+        var bookId = book.id;
         var volumeInfo = book.volumeInfo;
         var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
         var title = shortenTitle(volumeInfo.title, 25);
@@ -65968,14 +66075,14 @@ var Wishlist = function Wishlist(props) {
                 author
             ),
             _react2.default.createElement(_ButtonsContainer2.default, { state: state, requestBook: requestBook, removeBook: removeBook, addBook: addBook,
-                bookId: bookId, doIOwn: doIOwn })
+                bookId: bookId, doIOwn: doIOwn, cancelRequest: cancelRequest })
         );
     });
 };
 exports.default = Wishlist;
 
 /***/ }),
-/* 796 */
+/* 798 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65997,21 +66104,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var IncomingRequests = function IncomingRequests(props) {
     var state = props.state;
-    var username = state.user.username;
+    var user = state.user;
+    var username = user ? state.user.username : '';
     var imgSrc = props.imgSrc;
     var requestBook = props.requestBook;
     var removeBook = props.removeBook;
     var addBook = props.addBook;
-    var bookId = props.bookId;
+    // const bookId = props.bookId;
     var doIOwn = props.doIOwn;
     var shortenTitle = props.shortenTitle;
     var removeMiddleName = props.removeMiddleName;
-    var books = state.books.filter(function (book) {
-        return book.wishlist.includes(username) && book.ownedby.includes(username);
+    var approveRequest = props.approveRequest;
+    var books = state.books;
+    var incomingRequests = books.filter(function (book) {
+        return book.wishlist.length && book.ownedby.includes(username);
     });
-    return books.map(function (b, i) {
+    return incomingRequests.map(function (b, i) {
         var book = b.book;
-        var bookId = b.id;
+        var bookId = book.id;
         var volumeInfo = book.volumeInfo;
         var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
         var title = shortenTitle(volumeInfo.title, 25);
@@ -66038,14 +66148,14 @@ var IncomingRequests = function IncomingRequests(props) {
                 author
             ),
             _react2.default.createElement(_ButtonsContainer2.default, { state: state, requestBook: requestBook, removeBook: removeBook, addBook: addBook,
-                bookId: bookId, doIOwn: doIOwn })
+                bookId: bookId, doIOwn: doIOwn, approveRequest: approveRequest })
         );
     });
 };
 exports.default = IncomingRequests;
 
 /***/ }),
-/* 797 */
+/* 799 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66091,7 +66201,7 @@ var LogoutScreen = function LogoutScreen(props) {
 exports.default = LogoutScreen;
 
 /***/ }),
-/* 798 */
+/* 800 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

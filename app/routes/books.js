@@ -74,7 +74,7 @@ module.exports = function(app, db) {
             const bookId = req.params.id;
             const username = req.params.username;
             // const username = req.user.username;
-            console.log('canceling request');
+            console.log('approving request');
             console.log(username);
             console.log(bookId);
             Books.updateOne(
@@ -88,6 +88,21 @@ module.exports = function(app, db) {
                 {
                     ownedby: { $size: 0 },
                     wishlist: { $size: 0 }
+                }
+            );
+            res.end();
+        })
+        .delete((req, res) => {
+            const bookId = req.params.id;
+            const username = req.params.username;
+            // const username = req.user.username;
+            console.log('cancel request');
+            console.log(username);
+            console.log(bookId);
+            Books.updateOne(
+                { bookId: bookId },
+                {
+                    $pull: { wishlist: username },
                 }
             );
             res.end();

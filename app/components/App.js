@@ -60,6 +60,8 @@ class App extends React.Component {
         this.setTimer = this.setTimer.bind(this);
         this.doIOwn = this.doIOwn.bind(this);
         this.requestBook = this.requestBook.bind(this);
+        this.cancelRequest = this.cancelRequest.bind(this);
+        this.approveRequest = this.approveRequest.bind(this);
     }
 
     getUserFromSession() {
@@ -307,6 +309,20 @@ class App extends React.Component {
         .catch(err => console.error(err));
     }
 
+    cancelRequest(bookId) {
+        console.log('cancelling request');
+
+        const dev = this.state.dev;
+        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const username = this.state.user.username;
+        const route = '/request/' + bookId + '/' + username;
+
+        fetch(apiRoot + route, {
+            method: 'DELETE'
+        })
+        .catch(err => console.error(err));
+    }
+
     approveRequest(bookId) {
         console.log('approving request');
 
@@ -394,8 +410,10 @@ class App extends React.Component {
         const username = user ? user.username : '';
         // console.log('bookId, from:', bookId, from);
         // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
-        const matched = from.filter(b => b.bookId === bookId);
-        if (matched.length) return ~matched[0].ownedby.indexOf(username);
+        if (from) {
+            const matched = from.filter(b => b.bookId === bookId);
+            if (matched.length) return ~matched[0].ownedby.indexOf(username);
+        }
         else return false;
     }
 
@@ -446,12 +464,14 @@ class App extends React.Component {
         const setTimer = this.setTimer;
         const doIOwn = this.doIOwn;
         const requestBook = this.requestBook;
+        const cancelRequest = this.cancelRequest;
+        const approveRequest = this.approveRequest;
 
         return (
         <div className='app-container' onMouseOver={toggleImgShadeOff}>
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
-            <Route path='/(search|books|mybooks)' render={() => <div className='layout-buttons-container'>
+            <Route path='/(search|books)' render={() => <div className='layout-buttons-container'>
                 <Icon id='list' className='icon' name='list layout' onClick={toggleViewFormat}></Icon>
                 <Icon id='grid' className='icon' name='grid layout' onClick={toggleViewFormat}></Icon>
             </div>}/>
@@ -464,8 +484,9 @@ class App extends React.Component {
                         <Route path='/logout' render={() => <LogoutScreen state={state} cancelLogout={cancelLogout}/>}/>
 
                         <Route path='/mybooks' render={() => <MyBooks state={state} toggleImgShadeOn={toggleImgShadeOn}
-                            openModal={openModal} removeBook={removeBook} closeModal={closeModal}
-                            shortenTitle={shortenTitle} removeMiddleName={removeMiddleName} addBook={addBook}/>}/>
+                            openModal={openModal} removeBook={removeBook} closeModal={closeModal} shortenTitle={shortenTitle}
+                            removeMiddleName={removeMiddleName} addBook={addBook} cancelRequest={cancelRequest}
+                            approveRequest={approveRequest}/>}/>
 
                         <Route path='/books' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
                             openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle} addBook={addBook}
