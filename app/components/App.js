@@ -35,7 +35,7 @@ class App extends React.Component {
                 timer: 5
             }
         };
-        this.getUserFromSession = this.getUserFromSession.bind(this);
+        this.setSession = this.setSession.bind(this);
         this.logout = this.logout.bind(this);
         this.searchForBook = this.searchForBook.bind(this);
         this.getApiKey = this.getApiKey.bind(this);
@@ -64,11 +64,11 @@ class App extends React.Component {
         this.approveRequest = this.approveRequest.bind(this);
     }
 
-    getUserFromSession() {
+    setSession() {
         console.log('retrieving user session');
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-        const route = '/session';
+        const route = '/user';
         return fetch(apiRoot + route, {credentials: 'include'})
         .then(res => {
             // console.log(res);
@@ -101,17 +101,14 @@ class App extends React.Component {
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/logout';
-
-        this.logoutTimeout = setTimeout(callServer.bind(this), 5000);
-        this.props.history.push('/logout');
+        callServer.call(this);
+        location.reload();
+        // this.logoutTimeout = setTimeout(() => this.props.history.push('/logout'), 5000);
         function callServer() {
+            this.setState({ user: null });
+            console.log('user set to: null');
             console.log('server called');
             fetch(apiRoot + route)
-            .then(res => {
-                if (res) this.setState({ user: null });
-                console.log('user set to: null');
-                this.props.history.push('/');
-            })
             .catch(err => console.error(err));
         }
     }
@@ -423,7 +420,7 @@ class App extends React.Component {
 
         this.getBooks()
         .then(books => {
-            this.getUserFromSession()
+            this.setSession()
             .then(user => {
                 if (user) {
                     const username = user.username;

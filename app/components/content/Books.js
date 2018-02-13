@@ -4,7 +4,8 @@ import Dialog from './Dialog';
 
 const Books = props => {
     const state = props.state;
-    const books = state.books;
+    const username = state.user ? state.user.username : '';
+    const books = state.books ? state.books.filter(b => !b.ownedby.includes(username) && !b.wishlist.includes(username)) : [];
     const myBooks = state.myBooks;
     const imgRootUrl = 'http://books.google.com/books/content?id=';
     const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';

@@ -43444,7 +43444,7 @@ var App = function (_React$Component) {
                 timer: 5
             }
         };
-        _this.getUserFromSession = _this.getUserFromSession.bind(_this);
+        _this.setSession = _this.setSession.bind(_this);
         _this.logout = _this.logout.bind(_this);
         _this.searchForBook = _this.searchForBook.bind(_this);
         _this.getApiKey = _this.getApiKey.bind(_this);
@@ -43475,12 +43475,12 @@ var App = function (_React$Component) {
     }
 
     _createClass(App, [{
-        key: 'getUserFromSession',
-        value: function getUserFromSession() {
+        key: 'setSession',
+        value: function setSession() {
             console.log('retrieving user session');
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
-            var route = '/session';
+            var route = '/user';
             return fetch(apiRoot + route, { credentials: 'include' }).then(function (res) {
                 // console.log(res);
                 return res.json();
@@ -43513,18 +43513,14 @@ var App = function (_React$Component) {
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/logout';
-
-            this.logoutTimeout = setTimeout(callServer.bind(this), 5000);
-            this.props.history.push('/logout');
+            callServer.call(this);
+            location.reload();
+            // this.logoutTimeout = setTimeout(() => this.props.history.push('/logout'), 5000);
             function callServer() {
-                var _this2 = this;
-
+                this.setState({ user: null });
+                console.log('user set to: null');
                 console.log('server called');
-                fetch(apiRoot + route).then(function (res) {
-                    if (res) _this2.setState({ user: null });
-                    console.log('user set to: null');
-                    _this2.props.history.push('/');
-                }).catch(function (err) {
+                fetch(apiRoot + route).catch(function (err) {
                     return console.error(err);
                 });
             }
@@ -43571,14 +43567,14 @@ var App = function (_React$Component) {
     }, {
         key: 'searchForBook',
         value: function searchForBook(evt) {
-            var _this3 = this;
+            var _this2 = this;
 
             var keyword = evt.target.value;
             var dev = this.state.dev;
 
             if (keyword.length) this.getApiKey().then(function (apiKey) {
-                _this3.callGoogleApi(keyword, apiKey).then(function (books) {
-                    return _this3.setState({ searchResult: books });
+                _this2.callGoogleApi(keyword, apiKey).then(function (books) {
+                    return _this2.setState({ searchResult: books });
                 }).catch(function (err) {
                     return console.error(err);
                 });
@@ -43653,7 +43649,7 @@ var App = function (_React$Component) {
     }, {
         key: 'findBookById',
         value: function findBookById(bookId, from) {
-            var _this4 = this;
+            var _this3 = this;
 
             var found = void 0;
             for (var i = 0; i < from.length; i++) {
@@ -43666,7 +43662,7 @@ var App = function (_React$Component) {
                 }
             }
             this.setState({ foundBook: found }, function () {
-                return console.log('foundbook:', _this4.state.foundBook);
+                return console.log('foundbook:', _this3.state.foundBook);
             });
 
             return found;
@@ -43862,22 +43858,22 @@ var App = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this5 = this;
+            var _this4 = this;
 
             // console.log('cmpDidMnt');
             // const socket = socketIOClient();
 
             this.getBooks().then(function (books) {
-                _this5.getUserFromSession().then(function (user) {
+                _this4.setSession().then(function (user) {
                     if (user) {
                         var username = user.username;
-                        _this5.setState({
+                        _this4.setState({
                             user: user,
                             books: books,
-                            myBooks: _this5.getMyBooks(username, books)
+                            myBooks: _this4.getMyBooks(username, books)
                         });
                     } else {
-                        _this5.setState({
+                        _this4.setState({
                             books: books
                         });
                     }
@@ -65642,7 +65638,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Books = function Books(props) {
     var state = props.state;
-    var books = state.books;
+    var username = state.user ? state.user.username : '';
+    var books = state.books ? state.books.filter(function (b) {
+        return !b.ownedby.includes(username) && !b.wishlist.includes(username);
+    }) : [];
     var myBooks = state.myBooks;
     var imgRootUrl = 'http://books.google.com/books/content?id=';
     var imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
@@ -66189,12 +66188,7 @@ var LogoutScreen = function LogoutScreen(props) {
             { className: 'logout-msg-container' },
             'Successfully logged out.\xA0 Redirecting to home page in...\xA0',
             timer,
-            '\xA0',
-            _react2.default.createElement(
-                'div',
-                { className: 'cancel-button', onClick: cancelLogout },
-                'Cancel Logout'
-            )
+            '\xA0'
         )
     );
 };

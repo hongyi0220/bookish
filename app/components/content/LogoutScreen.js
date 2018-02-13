@@ -11,7 +11,7 @@ const LogoutScreen = props => {
             <div className='logout-msg-container'>
                 Successfully logged out.&nbsp;
                 Redirecting to home page in...&nbsp;{timer}&nbsp;
-                <div className='cancel-button' onClick={cancelLogout}>Cancel Logout</div>
+                {/* <div className='cancel-button' onClick={cancelLogout}>Cancel Logout</div> */}
             </div>
         </div>
     );

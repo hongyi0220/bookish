@@ -207,7 +207,9 @@
   top: 50%;
   transform: translateY(-8px); }
   .logout-screen-container .emoji-wrapper {
-    font-size: 3em; }
+    font-size: 3em;
+    display: block;
+    text-align: center; }
   .logout-screen-container .logout-msg-container {
     text-align: center;
     color: grey; }
@@ -236,7 +238,7 @@
 
 .results-container .book-list-view .buttons-container {
   position: relative;
-  top: -85px; }
+  top: -84px; }
   .results-container .book-list-view .buttons-container .button-container {
     border-radius: 4px;
     float: right;
@@ -306,4 +308,5 @@
     .app-container .flexbox-container .nav-container {
       flex-grow: 1; }
     .app-container .flexbox-container .content-container {
-      flex-grow: 8; }
+      flex-grow: 8;
+      text-align: center; }

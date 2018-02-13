@@ -3,8 +3,6 @@ module.exports = function(app, db) {
     const Books = db.collection('books');
 
     app.get('/all-books', (req, res) => {
-        console.log('/books reached');
-
         Books.find({})
         .toArray((err, docs) => {
             if (err) console.error(err);
@@ -15,10 +13,8 @@ module.exports = function(app, db) {
     app.route('/book/:id/:username')
         .post((req, res) => {
             const book = req.body.book;
-            console.log('adding book:', book);
             const bookId = book.id;
             const username = req.body.username;
-            console.log(username);
             Books.findOne({ bookId: bookId })
             .then(doc => {
                 if (!doc) {
@@ -42,11 +38,8 @@ module.exports = function(app, db) {
             .catch(err => console.error(err));
         })
         .delete((req, res) => {
-            console.log('removing book @ server');
             const bookId = req.params.id;
-            console.log(bookId);
             const username = req.params.username;
-            console.log(username);
 
             Books.updateOne(
                 { bookId: bookId },
@@ -58,10 +51,8 @@ module.exports = function(app, db) {
 
     app.route('/request/:id/:username')
         .post((req, res) => {
-            console.log('requesting book');
             const bookId = req.body.bookId;
             const username = req.body.username;
-            // const username = req.body.username;
             Books.updateOne(
                 {bookId: bookId},
                 {$push: {
@@ -73,10 +64,6 @@ module.exports = function(app, db) {
         .put((req, res) => {
             const bookId = req.params.id;
             const username = req.params.username;
-            // const username = req.user.username;
-            console.log('approving request');
-            console.log(username);
-            console.log(bookId);
             Books.updateOne(
                 { bookId: bookId },
                 {
@@ -95,10 +82,7 @@ module.exports = function(app, db) {
         .delete((req, res) => {
             const bookId = req.params.id;
             const username = req.params.username;
-            // const username = req.user.username;
-            console.log('cancel request');
-            console.log(username);
-            console.log(bookId);
+
             Books.updateOne(
                 { bookId: bookId },
                 {

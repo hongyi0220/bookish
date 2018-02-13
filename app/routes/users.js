@@ -17,16 +17,17 @@ module.exports = function(app, db) {
         }
     ));
 
-
-
     // This stores user in session after authentication
     passport.serializeUser(function(user, done) {
+        console.log('serializing user');
+        console.log(user);
         done(null, user._id);
     });
 
     // This retrieves user info from database using user._id set in session
-    //and store it in req.user because it is more secure not to store user info in session cookie
+    //and store it in req.user because it is more secure
     passport.deserializeUser(function(id, done) {
+        console.log('deserializing user');
         Users.findOne({_id: new ObjectId(id)}, function(err, user) {
             done(err, user);
         });
@@ -48,30 +49,33 @@ module.exports = function(app, db) {
             })(req, res);
     });
 
-    app.get('/logout', (req, res) => {
-        // console.log('user logged out');
-        req.logout();
-        res.sendStatus(200);
-        // console.log('req.session:', req.session);
-        // console.log('req.user:', req.user);
-    });
-
     app.post('/signup', (req, res) => {
         const username = req.body.username;
         const password = req.body.password;
         // Check if the username is already taken
         Users.findOne({ username: username }, function(err, user) {
             if (err) console.error(err);
-            if (user) res.redirect('/signup/invalid_username');
+            if (user) res.redirect('/signup/invalid-username');
             else {
                 const schema = {
                     username: username,
                     password: password
                 };
                 Users.insert(schema);
-                res.redirect('/');
+                res.redirect('/signup/success');
             }
         });
+    });
+
+    app.get('/logout', (req, res) => {
+        console.log('user logged out');
+        req.logout();
+        req.session.destroy(function() {
+            res.redirect('/')
+        });
+        // res.sendStatus(200);
+        console.log('req.session:', req.session);
+        console.log('req.user:', req.user);
     });
 
     app.post('/profile', (req, res) => {
