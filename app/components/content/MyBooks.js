@@ -35,7 +35,7 @@ const MyBooks = props => {
                 <Link to='/mybooks/incoming-requests'><div className='my-book-nav-item'>Incoming Requests</div></Link>
             </div>
             <Switch>
-                <Route path='/mybooks/own' render={() => <Own state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}
+                <Route path='/mybooks' render={() => <Own state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}
                     addBook={addBook} removeBook={removeBook} shortenString={shortenString} removeMiddleName={removeMiddleName}
                     requestBook={requestBook}/>}/>
                 <Route path='/mybooks/wishlist' render={() => <Wishlist state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}

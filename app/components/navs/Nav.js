@@ -19,21 +19,26 @@ import { Link } from 'react-router-dom';
                 <div className='emoji-wrapper'>🔍</div>
             </div>
             <Link to='/'>
-                <div className={evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container'} id='home'>
-                    <div className='text-wrapper'>Home</div>
-                    <div className='emoji-wrapper'>🏠</div>
+                <div className={evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container'}
+                    id='home'>
+                    <div className='text-wrapper' id='home'>Home</div>
+                    <div className='emoji-wrapper' id='home'>🏠</div>
                 </div>
             </Link>
             <Link to='/books'>
-                <div className={evtOrigin === 'books' ? 'nav-item-container' + clicked : 'nav-item-container'} id='books'>
-                    <div className='text-wrapper'>Books</div>
-                    <div className='emoji-wrapper'>📚</div>
+                <div className={evtOrigin === 'books' ? 'nav-item-container' + clicked : 'nav-item-container'}
+                    id='books'>
+                    <div className='text-wrapper' id='books'>Books</div>
+                    <div className='emoji-wrapper' id='books'>📚</div>
                 </div>
             </Link>
-            <div className={evtOrigin === 'about' ? 'nav-item-container' + clicked : 'nav-item-container'} id='about'>
-                <div className='text-wrapper'>About</div>
-                <div className='emoji-wrapper'>📱</div>
+            <Link to='/about'>
+            <div className={evtOrigin === 'about' ? 'nav-item-container' + clicked : 'nav-item-container'}
+                id='about'>
+                <div className='text-wrapper' id='about'>About</div>
+                <div className='emoji-wrapper' id='about'>📱</div>
             </div>
+            </Link>
         </div>
     );
 }

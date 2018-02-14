@@ -22424,7 +22424,7 @@ StatisticValue.create = Object(__WEBPACK_IMPORTED_MODULE_4__lib__["m" /* createS
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(403);
-module.exports = __webpack_require__(800);
+module.exports = __webpack_require__(802);
 
 
 /***/ }),
@@ -43408,6 +43408,14 @@ var _SignupSuccess = __webpack_require__(799);
 
 var _SignupSuccess2 = _interopRequireDefault(_SignupSuccess);
 
+var _About = __webpack_require__(800);
+
+var _About2 = _interopRequireDefault(_About);
+
+var _Footer = __webpack_require__(801);
+
+var _Footer2 = _interopRequireDefault(_Footer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43632,20 +43640,15 @@ var App = function (_React$Component) {
     }, {
         key: 'toggleViewFormat',
         value: function toggleViewFormat(evt) {
-            var _this3 = this;
-
             var id = evt.target.id;
             var isGridView = id === 'grid';
-            console.log('evt.target.id:', id);
-            console.log('isGridView:', isGridView);
 
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     gridView: isGridView
                 })
-            }), function () {
-                return console.log('viewFormat toggled; gridView:', _this3.state.ui.gridView);
-            });
+            }));
+            evt.stopPropagation();
         }
     }, {
         key: 'findBookById',
@@ -43659,7 +43662,6 @@ var App = function (_React$Component) {
                 }
             }
             this.setState({ foundBook: found });
-
             return found;
         }
     }, {
@@ -43828,9 +43830,8 @@ var App = function (_React$Component) {
     }, {
         key: 'borderNavItem',
         value: function borderNavItem(evt) {
-            var _this4 = this;
-
             var id = evt.target.id;
+            console.log(evt.target);
             console.log(id);
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
@@ -43839,16 +43840,12 @@ var App = function (_React$Component) {
                         class: ' clicked'
                     })
                 })
-            }), function () {
-                return console.log('ui after clicking navItem:', _this4.state.ui);
-            });
+            }));
             evt.stopPropagation();
         }
     }, {
         key: 'changeEmojiToShadow',
         value: function changeEmojiToShadow(evt) {
-            console.log('change emoji to shadow');
-            console.log(evt.target);
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     loginClicked: false
@@ -43858,8 +43855,6 @@ var App = function (_React$Component) {
     }, {
         key: 'changeEmojiToPerson',
         value: function changeEmojiToPerson(evt) {
-            console.log('change emoji to person');
-            console.log(evt.target);
             var emoji = ['🧙', '🧛', '🧝', '🧟'][Math.floor(Math.random() * 4)];
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
@@ -43872,19 +43867,19 @@ var App = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this5 = this;
+            var _this3 = this;
 
             this.getBooks().then(function (books) {
-                _this5.setSession().then(function (user) {
+                _this3.setSession().then(function (user) {
                     if (user) {
                         var username = user.username;
-                        _this5.setState({
+                        _this3.setState({
                             user: user,
                             books: books,
-                            myBooks: _this5.getMyBooks(username, books)
+                            myBooks: _this3.getMyBooks(username, books)
                         });
                     } else {
-                        _this5.setState({
+                        _this3.setState({
                             books: books
                         });
                     }
@@ -43898,7 +43893,7 @@ var App = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this6 = this;
+            var _this4 = this;
 
             var state = this.state;
             var logout = this.logout;
@@ -43927,6 +43922,7 @@ var App = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'app-container', onMouseOver: toggleImgShadeOff, onClick: this.changeEmojiToShadow },
+                _react2.default.createElement(_Footer2.default, null),
                 _react2.default.createElement(
                     'div',
                     { className: 'title-wrapper' },
@@ -43956,6 +43952,7 @@ var App = function (_React$Component) {
                         _react2.default.createElement(
                             _reactRouterDom.Switch,
                             null,
+                            _react2.default.createElement(_reactRouterDom.Route, { path: '/about', component: _About2.default }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/signup/success', render: function render() {
                                     return _react2.default.createElement(_SignupSuccess2.default, { state: state, setTimer: setTimer });
                                 } }),
@@ -43980,11 +43977,11 @@ var App = function (_React$Component) {
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/login', render: function render() {
                                     return _react2.default.createElement(_LoginForm2.default, { state: state,
-                                        changeEmojiToPerson: _this6.changeEmojiToPerson });
+                                        changeEmojiToPerson: _this4.changeEmojiToPerson });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/signup', render: function render() {
                                     return _react2.default.createElement(_SignupForm2.default, { state: state,
-                                        changeEmojiToPerson: _this6.changeEmojiToPerson });
+                                        changeEmojiToPerson: _this4.changeEmojiToPerson });
                                 } })
                         ),
                         _react2.default.createElement(_reactRouterDom.Route, { path: '/signup/invalid-username', render: function render() {
@@ -63988,15 +63985,16 @@ var Nav = function Nav(props) {
             { to: '/' },
             _react2.default.createElement(
                 'div',
-                { className: evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container', id: 'home' },
+                { className: evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container',
+                    id: 'home' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'text-wrapper' },
+                    { className: 'text-wrapper', id: 'home' },
                     'Home'
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'emoji-wrapper' },
+                    { className: 'emoji-wrapper', id: 'home' },
                     '\uD83C\uDFE0'
                 )
             )
@@ -64006,31 +64004,37 @@ var Nav = function Nav(props) {
             { to: '/books' },
             _react2.default.createElement(
                 'div',
-                { className: evtOrigin === 'books' ? 'nav-item-container' + clicked : 'nav-item-container', id: 'books' },
+                { className: evtOrigin === 'books' ? 'nav-item-container' + clicked : 'nav-item-container',
+                    id: 'books' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'text-wrapper' },
+                    { className: 'text-wrapper', id: 'books' },
                     'Books'
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'emoji-wrapper' },
+                    { className: 'emoji-wrapper', id: 'books' },
                     '\uD83D\uDCDA'
                 )
             )
         ),
         _react2.default.createElement(
-            'div',
-            { className: 'nav-item-container' },
+            _reactRouterDom.Link,
+            { to: '/about' },
             _react2.default.createElement(
                 'div',
-                { className: 'text-wrapper' },
-                'About'
-            ),
-            _react2.default.createElement(
-                'div',
-                { className: 'emoji-wrapper' },
-                '\uD83D\uDCF1'
+                { className: evtOrigin === 'about' ? 'nav-item-container' + clicked : 'nav-item-container',
+                    id: 'about' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'text-wrapper', id: 'about' },
+                    'About'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'emoji-wrapper', id: 'about' },
+                    '\uD83D\uDCF1'
+                )
             )
         )
     );
@@ -64062,9 +64066,13 @@ var UserNav = function UserNav(props) {
     var username = isLoggedIn ? isLoggedIn.username : '';
     var logout = props.logout;
     username = props.shortenString(username, 12);
+    var borderNavItem = props.borderNavItem;
+    var clicked = state.ui.navItemClicked.class;
+    var evtOrigin = state.ui.navItemClicked.evtOrigin;
+
     return _react2.default.createElement(
         'div',
-        { className: 'user-nav-container' },
+        { className: 'user-nav-container', onClick: borderNavItem },
         isLoggedIn ? _react2.default.createElement(
             'div',
             { className: 'user-window' },
@@ -64096,15 +64104,16 @@ var UserNav = function UserNav(props) {
                     { to: '/profile' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'nav-item-container' },
+                        { className: evtOrigin === 'profile' ? 'nav-item-container' + clicked : 'nav-item-container',
+                            id: 'profile' },
                         _react2.default.createElement(
                             'div',
-                            { className: 'text-wrapper' },
+                            { className: 'text-wrapper', id: 'profile' },
                             'Profile'
                         ),
                         _react2.default.createElement(
                             'div',
-                            { className: 'emoji-wrapper' },
+                            { className: 'emoji-wrapper', id: 'profile' },
                             '\u2699\uFE0F'
                         )
                     )
@@ -64114,15 +64123,16 @@ var UserNav = function UserNav(props) {
                     { to: '/mybooks' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'nav-item-container' },
+                        { className: evtOrigin === 'my-books' ? 'nav-item-container' + clicked : 'nav-item-container',
+                            id: 'my-books' },
                         _react2.default.createElement(
                             'div',
-                            { className: 'text-wrapper' },
+                            { className: 'text-wrapper', id: 'my-books' },
                             'My Books'
                         ),
                         _react2.default.createElement(
                             'div',
-                            { className: 'emoji-wrapper' },
+                            { className: 'emoji-wrapper', id: 'my-books' },
                             '\uD83D\uDCD6'
                         )
                     )
@@ -64154,15 +64164,16 @@ var UserNav = function UserNav(props) {
                 { className: 'auth-link', to: '/login' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'nav-item-container' },
+                    { className: evtOrigin === 'login' ? 'nav-item-container' + clicked : 'nav-item-container',
+                        id: 'login' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'text-wrapper' },
+                        { className: 'text-wrapper', id: 'login' },
                         'Log In'
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'emoji-wrapper' },
+                        { className: 'emoji-wrapper', id: 'login' },
                         '\uD83D\uDD11'
                     )
                 )
@@ -64172,15 +64183,16 @@ var UserNav = function UserNav(props) {
                 { className: 'auth-link', to: '/signup' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'nav-item-container' },
+                    { className: evtOrigin === 'signup' ? 'nav-item-container' + clicked : 'nav-item-container',
+                        id: 'signup' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'text-wrapper' },
+                        { className: 'text-wrapper', id: 'signup' },
                         'Sign Up'
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'emoji-wrapper' },
+                        { className: 'emoji-wrapper', id: 'signup' },
                         '\uD83D\uDD8B\uFE0F'
                     )
                 )
@@ -65952,7 +65964,7 @@ var MyBooks = function MyBooks(props) {
         _react2.default.createElement(
             _reactRouterDom.Switch,
             null,
-            _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/own', render: function render() {
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks', render: function render() {
                     return _react2.default.createElement(_Own2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
                         addBook: addBook, removeBook: removeBook, shortenString: shortenString, removeMiddleName: removeMiddleName,
                         requestBook: requestBook });
@@ -66233,6 +66245,187 @@ exports.default = SignupSuccess;
 
 /***/ }),
 /* 800 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var About = function About(props) {
+    return _react2.default.createElement(
+        'div',
+        { className: 'about-container' },
+        _react2.default.createElement(
+            'div',
+            { className: 'about-text-wrapper' },
+            'About This App'
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'tech-text-wrapper' },
+            'Front-end tech stack'
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'front-end-logos-container logos-container' },
+            _react2.default.createElement(
+                'div',
+                { className: 'react-logo-wrapper logo-wrapper' },
+                _react2.default.createElement('img', { src: '/images/logos/react-logo.png' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'logo-text-wrapper' },
+                    'React'
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'semantic-ui-logo-wrapper logo-wrapper' },
+                _react2.default.createElement('img', { src: '/images/logos/semantic-ui-logo.png' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'logo-text-wrapper' },
+                    'Semantic-UI-React'
+                )
+            )
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'tech-text-wrapper' },
+            'Back-end tech stack'
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'back-end-logos-container logos-container' },
+            _react2.default.createElement(
+                'div',
+                { className: 'nodejs-logo-wrapper logo-wrapper' },
+                _react2.default.createElement('img', { src: '/images/logos/nodejs-logo2.png' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'logo-text-wrapper' },
+                    'Node.js'
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'logo-wrapper' },
+                _react2.default.createElement('img', { src: '/images/logos/expressjs-logo.png' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'logo-text-wrapper' },
+                    'Express.js'
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'mongodb-logo-wrapper logo-wrapper' },
+                _react2.default.createElement('img', { src: '/images/logos/mongodb-logo.png' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'logo-text-wrapper' },
+                    'MongoDB'
+                )
+            )
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'tech-text-wrapper' },
+            'API'
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'api-logos-container logos-container' },
+            _react2.default.createElement(
+                'div',
+                { className: 'logo-wrapper' },
+                _react2.default.createElement('img', { src: '/images/logos/google-logo.png' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'logo-text-wrapper' },
+                    'Google Books API'
+                )
+            )
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'tech-text-wrapper' },
+            'Key module'
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'modules-logos-container logos-container' },
+            _react2.default.createElement(
+                'div',
+                { className: 'socketio-logo-wrapper logo-wrapper' },
+                _react2.default.createElement('img', { src: '/images/logos/passportjs-logo.png' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'logo-text-wrapper' },
+                    'Passport.js'
+                )
+            )
+        )
+    );
+};
+
+exports.default = About;
+
+/***/ }),
+/* 801 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Footer = function Footer() {
+    return _react2.default.createElement(
+        'div',
+        { className: 'footer' },
+        _react2.default.createElement(
+            'div',
+            { className: 'name-wrapper' },
+            _react2.default.createElement(
+                'a',
+                { target: '_blank', href: 'http://yungilhong.com' },
+                'yungil'
+            )
+        ),
+        _react2.default.createElement('hr', null),
+        _react2.default.createElement(
+            'div',
+            { className: 'github-wrapper' },
+            _react2.default.createElement(
+                'a',
+                { target: '_blank', href: 'https://github.com/hongyi0220/bookish' },
+                'project repo'
+            )
+        )
+    );
+};
+exports.default = Footer;
+
+/***/ }),
+/* 802 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

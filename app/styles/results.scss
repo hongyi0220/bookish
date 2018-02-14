@@ -1,0 +1,139 @@
+@import 'variables';
+
+.results-container {
+    h2 {
+        text-align: center;
+    }
+    .books-container {
+        text-align: center;
+    }
+    .book {
+        margin: .5em;
+        display: inline-block;
+        position: relative;
+        vertical-align: top;
+        box-shadow: 0 1px 5px grey;
+        border-radius: 5px;
+        .img {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            width: $book-img-width;
+            height: 200px;
+            background-position: center;
+            background-size: 150px;
+        }
+        .img.zoom {
+            background-size: $book-img-width + 20;
+        }
+        .img-shade {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: $summary-height + $button-height + 5;
+            left: 0;
+            transition: all .3s ease;
+            .view-detail-button {
+                text-align: center;
+                color: white;
+                border: 1px solid white;
+                position: relative;
+                top: 50%;
+                transform: translateY(-15px);
+                width: 75px;
+                margin: auto;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+        .summary-container {
+            width: $book-img-width;
+            height: $summary-height;
+            padding-left: .3em;
+            .title {
+                margin-top: .3em;
+                font-weight: 900;
+                font-size: 1.35em;
+            }
+            .author {
+                font-size: .75em;
+                color: grey;
+            }
+            .owned-by {
+                font-size: .75em;
+                color: grey;
+            }
+        }
+        .button-container {
+            border-top: 1px solid $light-grey;
+            height: $button-height;
+            transition: all .3s ease;
+            &:hover {
+                cursor: pointer;
+                background: radial-gradient(circle at center, $picton-blue 0, $dodger-blue, $jordy-blue 100%);
+            }
+            .text-wrapper {
+                color: black;
+                text-align: center;
+                line-height: $button-height;
+                transition: all .3s ease;
+                &:hover {
+                    color: white;
+                }
+            }
+        }
+    }
+    .book-list-view {
+        white-space: nowrap;
+        min-width: 600px;
+        margin: .5em;
+        height: $list-row-height;
+        &:hover {
+            border-radius: $bd-radius;
+            background-color: white;
+            box-shadow: 0 .2px 1px grey;
+        }
+        .img-wrapper {
+            img {
+                height: $list-row-height;
+                width: $list-row-height / 1.5;
+                border-radius: $bd-radius;
+            }
+        }
+        .title {
+            padding-left: .5em;
+            width: 200px;
+        }
+        .author {
+            border-left: 1px solid $light-grey;
+            vertical-align: top;
+            padding-left: .5em;
+        }
+        .button-container {
+            border-radius: $bd-radius;
+            float: right;
+            text-align: center;
+            transition: all .3s ease;
+            padding: 0 .5em 0 .5em;
+            &:hover {
+                cursor: pointer;
+                background: radial-gradient(circle at center, $picton-blue 0, $dodger-blue, $jordy-blue 100%);
+            }
+            .text-wrapper {
+                color: black;
+                text-align: center;
+                transition: all .3s ease;
+                &:hover {
+                    color: white;
+                }
+            }
+        }
+        .img-wrapper, .title, .author, .button-container {
+            vertical-align: top;
+            line-height: $list-row-height;
+            display: inline-block;
+        }
+    }
+}

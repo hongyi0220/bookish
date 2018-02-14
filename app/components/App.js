@@ -11,6 +11,8 @@ import sample from './sampleData';
 import Books from './content/Books';
 import MyBooks from './content/MyBooks';
 import SignupSuccess from './content/SignupSuccess';
+import About from './content/About';
+import Footer from './content/Footer';
 
 class App extends React.Component {
     constructor() {
@@ -383,6 +385,7 @@ class App extends React.Component {
 
     borderNavItem(evt) {
         const id = evt.target.id;
+        console.log(evt.target);
         console.log(id);
         this.setState({
             ...this.state,
@@ -394,13 +397,11 @@ class App extends React.Component {
                     class: ' clicked'
                 }
             }
-        }, () => console.log('ui after clicking navItem:', this.state.ui));
+        });
         evt.stopPropagation();
     }
 
     changeEmojiToShadow(evt) {
-        console.log('change emoji to shadow');
-        console.log(evt.target);
         this.setState({
             ...this.state,
             ui: {
@@ -411,8 +412,6 @@ class App extends React.Component {
     }
 
     changeEmojiToPerson(evt) {
-        console.log('change emoji to person');
-        console.log(evt.target);
         const emoji = ['🧙','🧛','🧝','🧟'][Math.floor(Math.random() * 4)];
         this.setState({
             ...this.state,
@@ -475,6 +474,7 @@ class App extends React.Component {
 
         return (
         <div className='app-container' onMouseOver={toggleImgShadeOff} onClick={this.changeEmojiToShadow}>
+            <Footer />
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
             <Route path='/(search|books)' render={() => <div className='layout-buttons-container'>
@@ -488,6 +488,7 @@ class App extends React.Component {
 
                 <div className='content-container'>
                     <Switch>
+                        <Route path='/about' component={About} />
                         <Route path='/signup/success' render={() => <SignupSuccess state={state} setTimer={setTimer}/>}/>
 
                         <Route path='/mybooks' render={() => <MyBooks state={state} toggleImgShadeOn={toggleImgShadeOn}

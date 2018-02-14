@@ -2,11 +2,13 @@
 @import 'form';
 @import 'user-nav';
 @import 'nav';
-@import 'search-results';
+@import 'results';
 @import 'signup-success-screen';
 @import 'my-books';
 @import 'modal-button';
 @import 'error-msg';
+@import 'about';
+@import 'footer';
 * {
     box-sizing: border-box;
 }
@@ -20,10 +22,12 @@
         font-size: 4em;
         font-weight: 900;
         line-height: 1em;
+        padding-top: 1em;
     }
     .subtitle-wrapper {
         color: grey;
-        margin-bottom: 1em;
+        margin-bottom: 2em;
+        margin-top: .3em;
     }
     .layout-buttons-container {
         text-align: center;

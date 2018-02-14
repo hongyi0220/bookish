@@ -1,7 +1,10 @@
 {
   "name": "bookish",
   "version": "1.0.0",
-  "description": "A facilitator of online second-hand book trading transactions",
+  "engines": {
+   "node": "8.9.1"
+ },
+  "description": "A facilitator of online second-hand book trade transactions",
   "main": "server.js",
   "scripts": {
     "build": "webpack",
@@ -13,8 +16,6 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "connect-mongo": "^2.0.1",
-    "connect-redis": "^3.3.3",
-    "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "mongodb": "^2.2.33",
@@ -23,10 +24,7 @@
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-router-dom": "^4.2.2",
-    "redis": "^2.8.0",
-    "semantic-ui-react": "^0.77.2",
-    "socket.io": "^2.0.4",
-    "socket.io-client": "^2.0.4"
+    "semantic-ui-react": "^0.77.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

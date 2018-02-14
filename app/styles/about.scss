@@ -1,0 +1,50 @@
+@import 'variables';
+.about-container {
+    position: relative;
+    text-align: center;
+    height: 390px;
+    top: 50%;
+    transform: translateY(-200px);
+    .about-text-wrapper {
+        margin-bottom: 1.5em;
+        font-size: 1.9em;
+    }
+    .tech-text-wrapper {
+        font-size: 1.3em;
+    }
+    .logos-container {
+        font-size: 1em;
+        .logo-wrapper {
+            border-radius: $bd-radius;
+            box-shadow: 0 .2px 1px grey;
+            margin: .3em;
+            padding: 0 .5em 0 .5em;
+            display: inline-block;
+            .logo-text-wrapper {
+                display: inline-block;
+                height: 50px;
+                line-height: 50px;
+            }
+            img {
+                height: 50px;
+            }
+        }
+        .react-logo-wrapper {
+            padding: 0 1em 0 0em;
+        }
+        .semantic-ui-logo-wrapper {
+            img {
+                margin-right: .5em;
+            }
+        }
+        .nodejs-logo-wrapper {
+            padding: 0 .8em 0 0em;
+        }
+        .mongodb-logo-wrapper {
+            padding: 0 .9em 0 0em;
+        }
+        .logo-wrapper > * {
+            vertical-align: top;
+        }
+    }
+}

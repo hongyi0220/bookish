@@ -74,7 +74,7 @@
     cursor: pointer; }
   .nav-item-container .text-wrapper {
     display: inline-block;
-    color: grey;
+    color: #969696;
     line-height: 3em;
     margin-left: 1em; }
   .nav-item-container input {
@@ -99,6 +99,8 @@
   background-color: white;
   box-shadow: 0 .2px 1px grey;
   cursor: pointer; }
+  .nav-item-container.clicked .text-wrapper {
+    color: black; }
 
 .results-container h2 {
   text-align: center; }
@@ -285,6 +287,63 @@
 .error-msg {
   margin-top: -10px; }
 
+.about-container {
+  position: relative;
+  text-align: center;
+  height: 390px;
+  top: 50%;
+  transform: translateY(-200px); }
+  .about-container .about-text-wrapper {
+    margin-bottom: 1.5em;
+    font-size: 1.9em; }
+  .about-container .tech-text-wrapper {
+    font-size: 1.3em; }
+  .about-container .logos-container {
+    font-size: 1em; }
+    .about-container .logos-container .logo-wrapper {
+      border-radius: 4px;
+      box-shadow: 0 .2px 1px grey;
+      margin: .3em;
+      padding: 0 .5em 0 .5em;
+      display: inline-block; }
+      .about-container .logos-container .logo-wrapper .logo-text-wrapper {
+        display: inline-block;
+        height: 50px;
+        line-height: 50px; }
+      .about-container .logos-container .logo-wrapper img {
+        height: 50px; }
+    .about-container .logos-container .react-logo-wrapper {
+      padding: 0 1em 0 0em; }
+    .about-container .logos-container .semantic-ui-logo-wrapper img {
+      margin-right: .5em; }
+    .about-container .logos-container .nodejs-logo-wrapper {
+      padding: 0 .8em 0 0em; }
+    .about-container .logos-container .mongodb-logo-wrapper {
+      padding: 0 .9em 0 0em; }
+    .about-container .logos-container .logo-wrapper > * {
+      vertical-align: top; }
+
+.footer {
+  text-align: center;
+  padding-top: .6em; }
+  .footer a {
+    color: #969696;
+    transition: all .3s ease;
+    display: inline-block; }
+    .footer a:hover {
+      color: #22A7F0; }
+  .footer .github-wrapper {
+    display: inline-block; }
+  .footer .name-wrapper {
+    display: inline-block;
+    position: relative;
+    top: 1px; }
+  .footer hr {
+    transform: rotate(90deg);
+    width: 12px;
+    display: inline-block;
+    vertical-align: bottom; }
+
 * {
   box-sizing: border-box; }
 
@@ -296,10 +355,12 @@
   .app-container .title-wrapper {
     font-size: 4em;
     font-weight: 900;
-    line-height: 1em; }
+    line-height: 1em;
+    padding-top: 1em; }
   .app-container .subtitle-wrapper {
     color: grey;
-    margin-bottom: 1em; }
+    margin-bottom: 2em;
+    margin-top: .3em; }
   .app-container .layout-buttons-container {
     text-align: center; }
     .app-container .layout-buttons-container .icon {
