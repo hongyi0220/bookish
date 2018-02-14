@@ -18,7 +18,7 @@ const SearchResults = props => {
     const foundBook = state.foundBook;
     const openModal = props.openModal;
     const closeModal = props.closeModal;
-    const shortenTitle = props.shortenTitle;
+    const shortenString = props.shortenString;
     const removeMiddleName = props.removeMiddleName;
     const removeBook = props.removeBook;
     const doIOwn = props.doIOwn;
@@ -32,7 +32,7 @@ const SearchResults = props => {
                     const bookId = item.id;
                     const authorName = book.authors ? book.authors[0] : 'Unknown';
                     const author = removeMiddleName(authorName);
-                    const title = shortenTitle(book.title, 18);
+                    const title = shortenString(book.title, 18);
                     const imgUrl = imgRootUrl + item.id + imgSrcParams;
                     let imgStyle = {
                         backgroundImage: 'url(' + imgUrl + ')',
@@ -80,7 +80,7 @@ const SearchResults = props => {
                     const book = b.volumeInfo;
                     const bookId = b.id;
                     const imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
-                    const title = shortenTitle(book.title, 25);
+                    const title = shortenString(book.title, 25);
                     const authorName = book.authors ? book.authors[0] : 'Unknown';
                     const author = removeMiddleName(authorName);
 

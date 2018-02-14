@@ -5,7 +5,7 @@ const Wishlist = props => {
     const state = props.state;
     const user = state.user;
     const username = user ? state.user.username : '';
-    const shortenTitle = props.shortenTitle;
+    const shortenString = props.shortenString;
     const removeMiddleName = props.removeMiddleName;
     const imgSrc = props.imgSrc;
     const requestBook = props.requestBook;
@@ -22,7 +22,7 @@ const Wishlist = props => {
             const bookId = book.id;
             const volumeInfo = book.volumeInfo;
             const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-            const title = shortenTitle(volumeInfo.title, 25);
+            const title = shortenString(volumeInfo.title, 25);
             const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
             const author = removeMiddleName(authorName);
 

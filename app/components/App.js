@@ -55,7 +55,7 @@ class App extends React.Component {
         this.findBookById = this.findBookById.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
-        this.shortenTitle = this.shortenTitle.bind(this);
+        this.shortenString = this.shortenString.bind(this);
         this.removeMiddleName = this.removeMiddleName.bind(this);
         this.getMyBooks = this.getMyBooks.bind(this);
         this.removeBook = this.removeBook.bind(this);
@@ -73,24 +73,20 @@ class App extends React.Component {
     }
 
     setSession() {
-        console.log('retrieving user session');
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/user';
         return fetch(apiRoot + route, {credentials: 'include'})
         .then(res => {
-            // console.log(res);
             return res.json()
         })
         .then(resJson => {
-            // console.log(resJson);
             return resJson
         })
         .catch(err => console.error(err));
     }
 
     setTimer() {
-        console.log('setting timer');
         this.timerInterval = setInterval(deduct1000.bind(this), 1000);
         function deduct1000() {
             if (this.state.ui.timer) {
@@ -110,8 +106,6 @@ class App extends React.Component {
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/logout';
         this.setState({ user: null });
-        console.log('user set to: null');
-        console.log('server called');
         fetch(apiRoot + route, {credentials: 'include'})
         .catch(err => console.error(err));
         location.reload();
@@ -166,7 +160,6 @@ class App extends React.Component {
 
     handleInput(evt) {
         const searchValue = evt.target.value;
-        // console.log('searchValue @ handleInput:', searchValue);
         this.setState({ searchValue: searchValue });
     }
 
@@ -176,11 +169,9 @@ class App extends React.Component {
     }
 
     toggleImgShadeOn(evt) {
-        console.log('toggleImgShadeOn');
         const browsingLocation = this.props.history.location.pathname;
         const bookId = evt.target.id;
         const books = browsingLocation === '/search' ? this.state.searchResult.items : this.state.books.map(b => b.book);
-        console.log(bookId);
 
         if (evt.target === evt.currentTarget) {
             this.setState({
@@ -200,8 +191,7 @@ class App extends React.Component {
         evt.stopPropagation();
     }
 
-    toggleImgShadeOff(evt) {
-        // console.log('evt.target @ toggleImgShadeOFF:', evt.target);
+    toggleImgShadeOff() {
         this.setState({
             ...this.state,
             ui: {
@@ -235,8 +225,6 @@ class App extends React.Component {
         let found;
         for (let i = 0; i < from.length; i++) {
             const id = from[i].id;
-            // console.log('id @ findBook:', id);
-            // console.log('bookId @ findBookk:', bookId);
             if (bookId === id) {
                 found = from[i];
                 break;
@@ -248,11 +236,8 @@ class App extends React.Component {
     }
 
     addBook(bookId) {
-        console.log('adding book');
         const books = this.state.searchResult.items;
-        console.log(bookId);
         const foundBook = this.findBookById(bookId, books);
-        console.log('foundBook:', foundBook);
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/book/:id/:username';
@@ -272,7 +257,6 @@ class App extends React.Component {
     }
 
     removeBook(bookId) {
-        // console.log('removing book');
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const username = this.state.user.username;
@@ -345,7 +329,6 @@ class App extends React.Component {
     }
 
     openModal(evt) {
-        // console.log('openModal()');
         this.setState({
             ...this.state,
             ui: {
@@ -357,7 +340,6 @@ class App extends React.Component {
     }
 
     closeModal() {
-        // console.log('closeModal()');
         this.setState({
             ...this.state,
             ui: {
@@ -367,7 +349,7 @@ class App extends React.Component {
         });
     }
 
-    shortenTitle(title, length) {
+    shortenString(title, length) {
         let result;
         if(title.length > length) {
             result = title.slice(0, length) + '...';
@@ -384,21 +366,16 @@ class App extends React.Component {
     }
 
     getMyBooks(username, from) {
-        // console.log('getting mybooks');
         let myBooks;
         myBooks = from.filter(b => {
-            // console.log('b.ownedby.indexOf(username):',b.ownedby.indexOf(username));
             return ~b.ownedby.indexOf(username);
         });
-        // console.log('myBooks:', myBooks);
         return myBooks;
     }
 
     doIOwn(bookId, from) {
         const user = this.state.user;
         const username = user ? user.username : '';
-        // console.log('bookId, from:', bookId, from);
-        // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
         if (from) {
             const matched = from.filter(b => b.bookId === bookId);
             if (matched.length) return ~matched[0].ownedby.indexOf(username);
@@ -423,7 +400,6 @@ class App extends React.Component {
     }
 
     changeEmojiToShadow() {
-        // console.log('changeEmojiToShadow');
         this.setState({
             ...this.state,
             ui: {
@@ -434,7 +410,6 @@ class App extends React.Component {
     }
 
     changeEmojiToPerson(evt) {
-        // console.log('changeEmojiToPerson');
         const emoji = ['🧙','🧛','🧝','🧟'][Math.floor(Math.random() * 4)];
         this.setState({
             ...this.state,
@@ -448,9 +423,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        // console.log('cmpDidMnt');
-        // const socket = socketIOClient();
-
         this.getBooks()
         .then(books => {
             this.setSession()
@@ -487,7 +459,7 @@ class App extends React.Component {
         const findBookById = this.findBookById;
         const openModal = this.openModal;
         const closeModal = this.closeModal;
-        const shortenTitle =this.shortenTitle;
+        const shortenString =this.shortenString;
         const removeMiddleName = this.removeMiddleName;
         const removeBook = this.removeBook;
         const cancelLogout = this.cancelLogout;
@@ -516,16 +488,16 @@ class App extends React.Component {
                         <Route path='/signup/success' render={() => <SignupSuccess state={state} setTimer={setTimer}/>}/>
 
                         <Route path='/mybooks' render={() => <MyBooks state={state} toggleImgShadeOn={toggleImgShadeOn}
-                            openModal={openModal} removeBook={removeBook} closeModal={closeModal} shortenTitle={shortenTitle}
+                            openModal={openModal} removeBook={removeBook} closeModal={closeModal} shortenString={shortenString}
                             removeMiddleName={removeMiddleName} addBook={addBook} cancelRequest={cancelRequest}
                             approveRequest={approveRequest}/>}/>
 
                         <Route path='/books' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
-                            openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle} addBook={addBook}
+                            openModal={openModal} closeModal={closeModal} shortenString={shortenString} addBook={addBook}
                             removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook} removeBook/>}/>
 
                         <Route path='/search' render={() => <SearchResults state={state} toggleImgShadeOn={toggleImgShadeOn}
-                            addBook={addBook} openModal={openModal} closeModal={closeModal} shortenTitle={shortenTitle}
+                            addBook={addBook} openModal={openModal} closeModal={closeModal} shortenString={shortenString}
                             removeMiddleName={removeMiddleName} removeBook={removeBook} doIOwn={doIOwn}/>}/>
 
                         <Route path='/profile' render={() => <Profile state={state}/>} />
@@ -537,7 +509,7 @@ class App extends React.Component {
                     <Route path='/signup/invalid-username' render={() => <div className='error-msg'>It seems the username is taken.. boo!</div>} />
                     <Route path='/login/error' render={() => <div className='error-msg'>Wrong username and or password..?</div>} />
                 </div>
-                <UserNav state={state} logout={logout} shortenTitle={shortenTitle} borderNavItem={borderNavItem}/>
+                <UserNav state={state} logout={logout} shortenString={shortenString} borderNavItem={borderNavItem}/>
             </div>
         </div>);
     }

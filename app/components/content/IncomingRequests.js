@@ -11,7 +11,7 @@ const IncomingRequests = props => {
     const addBook = props.addBook;
     // const bookId = props.bookId;
     const doIOwn = props.doIOwn;
-    const shortenTitle = props.shortenTitle;
+    const shortenString = props.shortenString;
     const removeMiddleName = props.removeMiddleName;
     const approveRequest = props.approveRequest;
     const books = state.books;
@@ -22,7 +22,7 @@ const IncomingRequests = props => {
             const bookId = book.id;
             const volumeInfo = book.volumeInfo;
             const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-            const title = shortenTitle(volumeInfo.title, 25);
+            const title = shortenString(volumeInfo.title, 25);
             const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
             const author = removeMiddleName(authorName);
 

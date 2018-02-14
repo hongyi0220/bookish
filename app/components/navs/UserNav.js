@@ -6,7 +6,7 @@ const UserNav = props => {
     const isLoggedIn = state.user;
     let username = isLoggedIn ? isLoggedIn.username : '';
     const logout = props.logout;
-    username = props.shortenTitle(username, 12);
+    username = props.shortenString(username, 12);
     return (
         <div className='user-nav-container'>
             {isLoggedIn ?

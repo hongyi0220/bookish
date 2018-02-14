@@ -20,7 +20,7 @@ const MyBooks = props => {
     const foundBook = state.foundBook;
     const openModal = props.openModal;
     const closeModal = props.closeModal;
-    const shortenTitle = props.shortenTitle;
+    const shortenString = props.shortenString;
     const removeMiddleName = props.removeMiddleName;
     const requestBook = props.requestBook;
     const cancelRequest = props.cancelRequest;
@@ -36,13 +36,13 @@ const MyBooks = props => {
             </div>
             <Switch>
                 <Route path='/mybooks/own' render={() => <Own state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}
-                    addBook={addBook} removeBook={removeBook} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}
+                    addBook={addBook} removeBook={removeBook} shortenString={shortenString} removeMiddleName={removeMiddleName}
                     requestBook={requestBook}/>}/>
                 <Route path='/mybooks/wishlist' render={() => <Wishlist state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}
-                    addBook={addBook} removeBook={removeBook} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}
+                    addBook={addBook} removeBook={removeBook} shortenString={shortenString} removeMiddleName={removeMiddleName}
                     requestBook={requestBook} cancelRequest={cancelRequest}/>}/>
                 <Route path='/mybooks/incoming-requests' render={() => <IncomingRequests state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}
-                    addBook={addBook} removeBook={removeBook} shortenTitle={shortenTitle} removeMiddleName={removeMiddleName}
+                    addBook={addBook} removeBook={removeBook} shortenString={shortenString} removeMiddleName={removeMiddleName}
                     requestBook={requestBook} approveRequest={approveRequest}/>}/>
             </Switch>
         </div>

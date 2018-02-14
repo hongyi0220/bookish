@@ -43464,7 +43464,7 @@ var App = function (_React$Component) {
         _this.findBookById = _this.findBookById.bind(_this);
         _this.openModal = _this.openModal.bind(_this);
         _this.closeModal = _this.closeModal.bind(_this);
-        _this.shortenTitle = _this.shortenTitle.bind(_this);
+        _this.shortenString = _this.shortenString.bind(_this);
         _this.removeMiddleName = _this.removeMiddleName.bind(_this);
         _this.getMyBooks = _this.getMyBooks.bind(_this);
         _this.removeBook = _this.removeBook.bind(_this);
@@ -43485,15 +43485,12 @@ var App = function (_React$Component) {
     _createClass(App, [{
         key: 'setSession',
         value: function setSession() {
-            console.log('retrieving user session');
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/user';
             return fetch(apiRoot + route, { credentials: 'include' }).then(function (res) {
-                // console.log(res);
                 return res.json();
             }).then(function (resJson) {
-                // console.log(resJson);
                 return resJson;
             }).catch(function (err) {
                 return console.error(err);
@@ -43502,7 +43499,6 @@ var App = function (_React$Component) {
     }, {
         key: 'setTimer',
         value: function setTimer() {
-            console.log('setting timer');
             this.timerInterval = setInterval(deduct1000.bind(this), 1000);
             function deduct1000() {
                 if (this.state.ui.timer) {
@@ -43523,8 +43519,6 @@ var App = function (_React$Component) {
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/logout';
             this.setState({ user: null });
-            console.log('user set to: null');
-            console.log('server called');
             fetch(apiRoot + route, { credentials: 'include' }).catch(function (err) {
                 return console.error(err);
             });
@@ -43591,7 +43585,6 @@ var App = function (_React$Component) {
         key: 'handleInput',
         value: function handleInput(evt) {
             var searchValue = evt.target.value;
-            // console.log('searchValue @ handleInput:', searchValue);
             this.setState({ searchValue: searchValue });
         }
     }, {
@@ -43603,13 +43596,11 @@ var App = function (_React$Component) {
     }, {
         key: 'toggleImgShadeOn',
         value: function toggleImgShadeOn(evt) {
-            console.log('toggleImgShadeOn');
             var browsingLocation = this.props.history.location.pathname;
             var bookId = evt.target.id;
             var books = browsingLocation === '/search' ? this.state.searchResult.items : this.state.books.map(function (b) {
                 return b.book;
             });
-            console.log(bookId);
 
             if (evt.target === evt.currentTarget) {
                 this.setState(_extends({}, this.state, {
@@ -43627,8 +43618,7 @@ var App = function (_React$Component) {
         }
     }, {
         key: 'toggleImgShadeOff',
-        value: function toggleImgShadeOff(evt) {
-            // console.log('evt.target @ toggleImgShadeOFF:', evt.target);
+        value: function toggleImgShadeOff() {
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     selected: _extends({}, this.state.ui.selected, {
@@ -43665,8 +43655,6 @@ var App = function (_React$Component) {
             var found = void 0;
             for (var i = 0; i < from.length; i++) {
                 var id = from[i].id;
-                // console.log('id @ findBook:', id);
-                // console.log('bookId @ findBookk:', bookId);
                 if (bookId === id) {
                     found = from[i];
                     break;
@@ -43681,11 +43669,8 @@ var App = function (_React$Component) {
     }, {
         key: 'addBook',
         value: function addBook(bookId) {
-            console.log('adding book');
             var books = this.state.searchResult.items;
-            console.log(bookId);
             var foundBook = this.findBookById(bookId, books);
-            console.log('foundBook:', foundBook);
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/book/:id/:username';
@@ -43707,7 +43692,6 @@ var App = function (_React$Component) {
     }, {
         key: 'removeBook',
         value: function removeBook(bookId) {
-            // console.log('removing book');
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var username = this.state.user.username;
@@ -43792,7 +43776,6 @@ var App = function (_React$Component) {
     }, {
         key: 'openModal',
         value: function openModal(evt) {
-            // console.log('openModal()');
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     isModalOpen: true
@@ -43803,7 +43786,6 @@ var App = function (_React$Component) {
     }, {
         key: 'closeModal',
         value: function closeModal() {
-            // console.log('closeModal()');
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     isModalOpen: false
@@ -43811,8 +43793,8 @@ var App = function (_React$Component) {
             }));
         }
     }, {
-        key: 'shortenTitle',
-        value: function shortenTitle(title, length) {
+        key: 'shortenString',
+        value: function shortenString(title, length) {
             var result = void 0;
             if (title.length > length) {
                 result = title.slice(0, length) + '...';
@@ -43829,13 +43811,10 @@ var App = function (_React$Component) {
     }, {
         key: 'getMyBooks',
         value: function getMyBooks(username, from) {
-            // console.log('getting mybooks');
             var myBooks = void 0;
             myBooks = from.filter(function (b) {
-                // console.log('b.ownedby.indexOf(username):',b.ownedby.indexOf(username));
                 return ~b.ownedby.indexOf(username);
             });
-            // console.log('myBooks:', myBooks);
             return myBooks;
         }
     }, {
@@ -43843,8 +43822,6 @@ var App = function (_React$Component) {
         value: function doIOwn(bookId, from) {
             var user = this.state.user;
             var username = user ? user.username : '';
-            // console.log('bookId, from:', bookId, from);
-            // console.log('from.filter(b => b.bookId === bookId):', from.filter(b => b.bookId === bookId));
             if (from) {
                 var matched = from.filter(function (b) {
                     return b.bookId === bookId;
@@ -43873,7 +43850,6 @@ var App = function (_React$Component) {
     }, {
         key: 'changeEmojiToShadow',
         value: function changeEmojiToShadow() {
-            // console.log('changeEmojiToShadow');
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     loginClicked: false
@@ -43883,7 +43859,6 @@ var App = function (_React$Component) {
     }, {
         key: 'changeEmojiToPerson',
         value: function changeEmojiToPerson(evt) {
-            // console.log('changeEmojiToPerson');
             var emoji = ['🧙', '🧛', '🧝', '🧟'][Math.floor(Math.random() * 4)];
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
@@ -43897,9 +43872,6 @@ var App = function (_React$Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this6 = this;
-
-            // console.log('cmpDidMnt');
-            // const socket = socketIOClient();
 
             this.getBooks().then(function (books) {
                 _this6.setSession().then(function (user) {
@@ -43940,7 +43912,7 @@ var App = function (_React$Component) {
             var findBookById = this.findBookById;
             var openModal = this.openModal;
             var closeModal = this.closeModal;
-            var shortenTitle = this.shortenTitle;
+            var shortenString = this.shortenString;
             var removeMiddleName = this.removeMiddleName;
             var removeBook = this.removeBook;
             var cancelLogout = this.cancelLogout;
@@ -43988,18 +43960,18 @@ var App = function (_React$Component) {
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks', render: function render() {
                                     return _react2.default.createElement(_MyBooks2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
-                                        openModal: openModal, removeBook: removeBook, closeModal: closeModal, shortenTitle: shortenTitle,
+                                        openModal: openModal, removeBook: removeBook, closeModal: closeModal, shortenString: shortenString,
                                         removeMiddleName: removeMiddleName, addBook: addBook, cancelRequest: cancelRequest,
                                         approveRequest: approveRequest });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/books', render: function render() {
                                     return _react2.default.createElement(_Books2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
-                                        openModal: openModal, closeModal: closeModal, shortenTitle: shortenTitle, addBook: addBook,
+                                        openModal: openModal, closeModal: closeModal, shortenString: shortenString, addBook: addBook,
                                         removeMiddleName: removeMiddleName, doIOwn: doIOwn, requestBook: requestBook, removeBook: true });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/search', render: function render() {
                                     return _react2.default.createElement(_SearchResults2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
-                                        addBook: addBook, openModal: openModal, closeModal: closeModal, shortenTitle: shortenTitle,
+                                        addBook: addBook, openModal: openModal, closeModal: closeModal, shortenString: shortenString,
                                         removeMiddleName: removeMiddleName, removeBook: removeBook, doIOwn: doIOwn });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/profile', render: function render() {
@@ -44029,7 +44001,7 @@ var App = function (_React$Component) {
                                 );
                             } })
                     ),
-                    _react2.default.createElement(_UserNav2.default, { state: state, logout: logout, shortenTitle: shortenTitle, borderNavItem: borderNavItem })
+                    _react2.default.createElement(_UserNav2.default, { state: state, logout: logout, shortenString: shortenString, borderNavItem: borderNavItem })
                 )
             );
         }
@@ -63996,7 +63968,7 @@ var Nav = function Nav(props) {
 
     return _react2.default.createElement(
         'div',
-        { className: 'nav-container', onClick: borderNavItem },
+        { className: 'nav-container' },
         _react2.default.createElement(
             'div',
             { className: 'nav-item-container' },
@@ -64015,7 +63987,8 @@ var Nav = function Nav(props) {
             { to: '/' },
             _react2.default.createElement(
                 'div',
-                { className: evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container', id: 'home' },
+                { className: evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container',
+                    id: 'home', onClick: borderNavItem },
                 _react2.default.createElement(
                     'div',
                     { className: 'text-wrapper' },
@@ -64088,7 +64061,7 @@ var UserNav = function UserNav(props) {
     var isLoggedIn = state.user;
     var username = isLoggedIn ? isLoggedIn.username : '';
     var logout = props.logout;
-    username = props.shortenTitle(username, 12);
+    username = props.shortenString(username, 12);
     return _react2.default.createElement(
         'div',
         { className: 'user-nav-container' },
@@ -64518,7 +64491,7 @@ var SearchResults = function SearchResults(props) {
     var foundBook = state.foundBook;
     var openModal = props.openModal;
     var closeModal = props.closeModal;
-    var shortenTitle = props.shortenTitle;
+    var shortenString = props.shortenString;
     var removeMiddleName = props.removeMiddleName;
     var removeBook = props.removeBook;
     var doIOwn = props.doIOwn;
@@ -64535,7 +64508,7 @@ var SearchResults = function SearchResults(props) {
                 var bookId = item.id;
                 var authorName = book.authors ? book.authors[0] : 'Unknown';
                 var author = removeMiddleName(authorName);
-                var title = shortenTitle(book.title, 18);
+                var title = shortenString(book.title, 18);
                 var imgUrl = imgRootUrl + item.id + imgSrcParams;
                 var imgStyle = {
                     backgroundImage: 'url(' + imgUrl + ')'
@@ -64609,7 +64582,7 @@ var SearchResults = function SearchResults(props) {
                 var book = b.volumeInfo;
                 var bookId = b.id;
                 var imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
-                var title = shortenTitle(book.title, 25);
+                var title = shortenString(book.title, 25);
                 var authorName = book.authors ? book.authors[0] : 'Unknown';
                 var author = removeMiddleName(authorName);
 
@@ -65716,7 +65689,7 @@ var Books = function Books(props) {
     var foundBook = state.foundBook;
     var openModal = props.openModal;
     var closeModal = props.closeModal;
-    var shortenTitle = props.shortenTitle;
+    var shortenString = props.shortenString;
     var removeMiddleName = props.removeMiddleName;
     var doIOwn = props.doIOwn;
     var requestBook = props.requestBook;
@@ -65735,7 +65708,7 @@ var Books = function Books(props) {
                 var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
                 // console.log('book.authors:', author);
                 var author = removeMiddleName(authorName);
-                var title = shortenTitle(volumeInfo.title, 14);
+                var title = shortenString(volumeInfo.title, 14);
                 var imgUrl = imgRootUrl + bookId + imgSrcParams;
                 var imgStyle = {
                     backgroundImage: 'url(' + imgUrl + ')'
@@ -65816,7 +65789,7 @@ var Books = function Books(props) {
                 var bookId = book.id;
                 var volumeInfo = book.volumeInfo;
                 var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-                var title = shortenTitle(volumeInfo.title, 25);
+                var title = shortenString(volumeInfo.title, 25);
                 var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
                 var author = removeMiddleName(authorName);
 
@@ -65931,7 +65904,7 @@ var MyBooks = function MyBooks(props) {
     var foundBook = state.foundBook;
     var openModal = props.openModal;
     var closeModal = props.closeModal;
-    var shortenTitle = props.shortenTitle;
+    var shortenString = props.shortenString;
     var removeMiddleName = props.removeMiddleName;
     var requestBook = props.requestBook;
     var cancelRequest = props.cancelRequest;
@@ -65981,17 +65954,17 @@ var MyBooks = function MyBooks(props) {
             null,
             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/own', render: function render() {
                     return _react2.default.createElement(_Own2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
-                        addBook: addBook, removeBook: removeBook, shortenTitle: shortenTitle, removeMiddleName: removeMiddleName,
+                        addBook: addBook, removeBook: removeBook, shortenString: shortenString, removeMiddleName: removeMiddleName,
                         requestBook: requestBook });
                 } }),
             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/wishlist', render: function render() {
                     return _react2.default.createElement(_Wishlist2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
-                        addBook: addBook, removeBook: removeBook, shortenTitle: shortenTitle, removeMiddleName: removeMiddleName,
+                        addBook: addBook, removeBook: removeBook, shortenString: shortenString, removeMiddleName: removeMiddleName,
                         requestBook: requestBook, cancelRequest: cancelRequest });
                 } }),
             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/incoming-requests', render: function render() {
                     return _react2.default.createElement(_IncomingRequests2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
-                        addBook: addBook, removeBook: removeBook, shortenTitle: shortenTitle, removeMiddleName: removeMiddleName,
+                        addBook: addBook, removeBook: removeBook, shortenString: shortenString, removeMiddleName: removeMiddleName,
                         requestBook: requestBook, approveRequest: approveRequest });
                 } })
         )
@@ -66030,7 +66003,7 @@ var Own = function Own(props) {
     var addBook = props.addBook;
     // const bookId = props.bookId;
     var doIOwn = props.doIOwn;
-    var shortenTitle = props.shortenTitle;
+    var shortenString = props.shortenString;
     var removeMiddleName = props.removeMiddleName;
     var books = state.books;
     var own = books ? books.filter(function (book) {
@@ -66041,7 +66014,7 @@ var Own = function Own(props) {
         var bookId = book.id;
         var volumeInfo = book.volumeInfo;
         var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-        var title = shortenTitle(volumeInfo.title, 25);
+        var title = shortenString(volumeInfo.title, 25);
         var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
         var author = removeMiddleName(authorName);
 
@@ -66096,7 +66069,7 @@ var Wishlist = function Wishlist(props) {
     var state = props.state;
     var user = state.user;
     var username = user ? state.user.username : '';
-    var shortenTitle = props.shortenTitle;
+    var shortenString = props.shortenString;
     var removeMiddleName = props.removeMiddleName;
     var imgSrc = props.imgSrc;
     var requestBook = props.requestBook;
@@ -66114,7 +66087,7 @@ var Wishlist = function Wishlist(props) {
         var bookId = book.id;
         var volumeInfo = book.volumeInfo;
         var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-        var title = shortenTitle(volumeInfo.title, 25);
+        var title = shortenString(volumeInfo.title, 25);
         var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
         var author = removeMiddleName(authorName);
 
@@ -66175,7 +66148,7 @@ var IncomingRequests = function IncomingRequests(props) {
     var addBook = props.addBook;
     // const bookId = props.bookId;
     var doIOwn = props.doIOwn;
-    var shortenTitle = props.shortenTitle;
+    var shortenString = props.shortenString;
     var removeMiddleName = props.removeMiddleName;
     var approveRequest = props.approveRequest;
     var books = state.books;
@@ -66187,7 +66160,7 @@ var IncomingRequests = function IncomingRequests(props) {
         var bookId = book.id;
         var volumeInfo = book.volumeInfo;
         var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-        var title = shortenTitle(volumeInfo.title, 25);
+        var title = shortenString(volumeInfo.title, 25);
         var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
         var author = removeMiddleName(authorName);
 
