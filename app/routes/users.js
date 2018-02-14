@@ -21,15 +21,12 @@ module.exports = function(app, db) {
 
     // This stores user in session after authentication
     passport.serializeUser(function(user, done) {
-        console.log('serializing user');
-        console.log(user);
         done(null, user._id);
     });
 
     // This retrieves user info from database using user._id set in session
     //and store it in req.user because it is more secure
     passport.deserializeUser(function(id, done) {
-        console.log('deserializing user');
         Users.findOne({_id: new ObjectId(id)}, function(err, user) {
             done(err, user);
         });
@@ -78,7 +75,6 @@ module.exports = function(app, db) {
     });
 
     app.get('/logout', (req, res) => {
-        console.log('user logged out');
         req.logout();
         res.end();
     });
@@ -87,7 +83,6 @@ module.exports = function(app, db) {
         const username = req.body.username || req.user.username;
         const password = req.body.password || req.user.password;
         const location = req.body.location || req.user.location;
-        // console.log('updating porfile; req.user:', req.user);
 
         Users.updateOne(
             { username: username },

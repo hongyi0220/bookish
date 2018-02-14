@@ -43650,8 +43650,6 @@ var App = function (_React$Component) {
     }, {
         key: 'findBookById',
         value: function findBookById(bookId, from) {
-            var _this4 = this;
-
             var found = void 0;
             for (var i = 0; i < from.length; i++) {
                 var id = from[i].id;
@@ -43660,9 +43658,7 @@ var App = function (_React$Component) {
                     break;
                 }
             }
-            this.setState({ foundBook: found }, function () {
-                return console.log('foundbook:', _this4.state.foundBook);
-            });
+            this.setState({ foundBook: found });
 
             return found;
         }
@@ -43832,7 +43828,7 @@ var App = function (_React$Component) {
     }, {
         key: 'borderNavItem',
         value: function borderNavItem(evt) {
-            var _this5 = this;
+            var _this4 = this;
 
             var id = evt.target.id;
             console.log(id);
@@ -43844,12 +43840,15 @@ var App = function (_React$Component) {
                     })
                 })
             }), function () {
-                return console.log('ui after clicking navItem:', _this5.state.ui);
+                return console.log('ui after clicking navItem:', _this4.state.ui);
             });
+            evt.stopPropagation();
         }
     }, {
         key: 'changeEmojiToShadow',
-        value: function changeEmojiToShadow() {
+        value: function changeEmojiToShadow(evt) {
+            console.log('change emoji to shadow');
+            console.log(evt.target);
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     loginClicked: false
@@ -43859,6 +43858,8 @@ var App = function (_React$Component) {
     }, {
         key: 'changeEmojiToPerson',
         value: function changeEmojiToPerson(evt) {
+            console.log('change emoji to person');
+            console.log(evt.target);
             var emoji = ['🧙', '🧛', '🧝', '🧟'][Math.floor(Math.random() * 4)];
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
@@ -43871,19 +43872,19 @@ var App = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this6 = this;
+            var _this5 = this;
 
             this.getBooks().then(function (books) {
-                _this6.setSession().then(function (user) {
+                _this5.setSession().then(function (user) {
                     if (user) {
                         var username = user.username;
-                        _this6.setState({
+                        _this5.setState({
                             user: user,
                             books: books,
-                            myBooks: _this6.getMyBooks(username, books)
+                            myBooks: _this5.getMyBooks(username, books)
                         });
                     } else {
-                        _this6.setState({
+                        _this5.setState({
                             books: books
                         });
                     }
@@ -43897,7 +43898,7 @@ var App = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this7 = this;
+            var _this6 = this;
 
             var state = this.state;
             var logout = this.logout;
@@ -43979,11 +43980,11 @@ var App = function (_React$Component) {
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/login', render: function render() {
                                     return _react2.default.createElement(_LoginForm2.default, { state: state,
-                                        changeEmojiToPerson: _this7.changeEmojiToPerson });
+                                        changeEmojiToPerson: _this6.changeEmojiToPerson });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/signup', render: function render() {
                                     return _react2.default.createElement(_SignupForm2.default, { state: state,
-                                        changeEmojiToPerson: _this7.changeEmojiToPerson });
+                                        changeEmojiToPerson: _this6.changeEmojiToPerson });
                                 } })
                         ),
                         _react2.default.createElement(_reactRouterDom.Route, { path: '/signup/invalid-username', render: function render() {
@@ -63968,7 +63969,7 @@ var Nav = function Nav(props) {
 
     return _react2.default.createElement(
         'div',
-        { className: 'nav-container' },
+        { className: 'nav-container', onClick: borderNavItem },
         _react2.default.createElement(
             'div',
             { className: 'nav-item-container' },
@@ -63987,8 +63988,7 @@ var Nav = function Nav(props) {
             { to: '/' },
             _react2.default.createElement(
                 'div',
-                { className: evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container',
-                    id: 'home', onClick: borderNavItem },
+                { className: evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container', id: 'home' },
                 _react2.default.createElement(
                     'div',
                     { className: 'text-wrapper' },

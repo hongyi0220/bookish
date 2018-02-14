@@ -34,14 +34,10 @@ MongoClient.connect(dbUrl, (err, database) => {
     require('./app/routes')(app, database);
 
     app.get('/user', (req, res) => {
-        console.log('getting session info');
-        console.log('req.session:', req.session);
-        console.log('req.user:', req.user);
         res.send(req.user);
     });
 
     app.get('*', (req, res) => {
-        console.log('sending index.html');
         res.sendFile(__dirname + '/build/index.html')
     });
 

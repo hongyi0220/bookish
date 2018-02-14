@@ -30,7 +30,7 @@ import { Link } from 'react-router-dom';
                     <div className='emoji-wrapper'>📚</div>
                 </div>
             </Link>
-            <div className='nav-item-container'>
+            <div className={evtOrigin === 'about' ? 'nav-item-container' + clicked : 'nav-item-container'} id='about'>
                 <div className='text-wrapper'>About</div>
                 <div className='emoji-wrapper'>📱</div>
             </div>

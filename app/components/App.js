@@ -209,8 +209,6 @@ class App extends React.Component {
     toggleViewFormat(evt) {
         const id = evt.target.id;
         const isGridView = id === 'grid';
-        console.log('evt.target.id:',id);
-        console.log('isGridView:',isGridView);
 
         this.setState({
             ...this.state,
@@ -218,7 +216,8 @@ class App extends React.Component {
                 ...this.state.ui,
                 gridView: isGridView
             }
-        }, () => console.log('viewFormat toggled; gridView:', this.state.ui.gridView));
+        });
+        evt.stopPropagation();
     }
 
     findBookById(bookId, from) {
@@ -230,8 +229,7 @@ class App extends React.Component {
                 break;
             }
         }
-        this.setState({ foundBook: found }, ()=> console.log('foundbook:', this.state.foundBook));
-
+        this.setState({ foundBook: found });
         return found;
     }
 
@@ -397,9 +395,12 @@ class App extends React.Component {
                 }
             }
         }, () => console.log('ui after clicking navItem:', this.state.ui));
+        evt.stopPropagation();
     }
 
-    changeEmojiToShadow() {
+    changeEmojiToShadow(evt) {
+        console.log('change emoji to shadow');
+        console.log(evt.target);
         this.setState({
             ...this.state,
             ui: {
@@ -410,6 +411,8 @@ class App extends React.Component {
     }
 
     changeEmojiToPerson(evt) {
+        console.log('change emoji to person');
+        console.log(evt.target);
         const emoji = ['🧙','🧛','🧝','🧟'][Math.floor(Math.random() * 4)];
         this.setState({
             ...this.state,

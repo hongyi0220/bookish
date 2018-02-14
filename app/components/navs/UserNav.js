@@ -7,6 +7,10 @@ const UserNav = props => {
     let username = isLoggedIn ? isLoggedIn.username : '';
     const logout = props.logout;
     username = props.shortenString(username, 12);
+    const borderNavItem = props.borderNavItem;
+    const clicked = state.ui.navItemClicked.class;
+    const evtOrigin = state.ui.navItemClicked.evtOrigin;
+
     return (
         <div className='user-nav-container'>
             {isLoggedIn ?
@@ -19,13 +23,13 @@ const UserNav = props => {
                     </div>
                     <div className='user-menu-container'>
                         <Link to='/profile'>
-                            <div className='nav-item-container'>
+                            <div className={evtOrigin === 'profile' ? 'nav-item-container' + clicked : 'nav-item-container'} id='profile'>
                                 <div className='text-wrapper'>Profile</div>
                                 <div className='emoji-wrapper'>⚙️</div>
                             </div>
                         </Link>
                         <Link to='/mybooks'>
-                            <div className='nav-item-container'>
+                            <div className={evtOrigin === 'my-books' ? 'nav-item-container' + clicked : 'nav-item-container'} id='my-books'>
                                 <div className='text-wrapper'>My Books</div>
                                 <div className='emoji-wrapper'>📖</div>
                             </div>
