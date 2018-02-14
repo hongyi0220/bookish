@@ -10,7 +10,7 @@
     height: 3em;
     transition: all .1s ease;
     position: relative;
-    min-width: 150px;
+    width: 200px;
     &:hover {
         border-radius: $bd-radius;
         background-color: white;
@@ -42,4 +42,10 @@
         position: absolute;
         right: 0;
     }
+}
+.nav-item-container.clicked {
+    border-radius: $bd-radius;
+    background-color: white;
+    box-shadow: 0 .2px 1px grey;
+    cursor: pointer;
 }

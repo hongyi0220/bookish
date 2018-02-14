@@ -11,7 +11,7 @@ const Books = props => {
     const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
     const toggleImgShadeOn = props.toggleImgShadeOn;
     const imgShadeStyle = state.ui.selected.style;
-    const selectedId = state.ui.selected.origin;
+    const selectedId = state.ui.selected.evtOrigin;
     const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
     const removeBook = props.removeBook;
@@ -27,89 +27,91 @@ const Books = props => {
 
     return (
         <div className='results-container'>
-            {(books && gridView) ? books.map((b, i) => {
-                const ownedby = b.ownedby.length;
-                const book = b.book;
-                const volumeInfo = book.volumeInfo;
-                const bookId = book.id;
-                const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
-                // console.log('book.authors:', author);
-                const author = removeMiddleName(authorName);
-                const title = shortenTitle(volumeInfo.title, 14);
-                const imgUrl = imgRootUrl + bookId + imgSrcParams;
-                let imgStyle = {
-                    backgroundImage: 'url(' + imgUrl + ')'
-                };
+            <div className='books-container'>
+                {(books && gridView) ? books.map((b, i) => {
+                    const ownedby = b.ownedby.length;
+                    const book = b.book;
+                    const volumeInfo = book.volumeInfo;
+                    const bookId = book.id;
+                    const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
+                    // console.log('book.authors:', author);
+                    const author = removeMiddleName(authorName);
+                    const title = shortenTitle(volumeInfo.title, 14);
+                    const imgUrl = imgRootUrl + bookId + imgSrcParams;
+                    let imgStyle = {
+                        backgroundImage: 'url(' + imgUrl + ')'
+                    };
 
-                return (
-                    <div key={i} className='book'>
-                        <div className={bookId === selectedId ? 'img' + imgClass : 'img'} style={imgStyle}></div>
+                    return (
+                        <div key={i} className='book'>
+                            <div className={bookId === selectedId ? 'img' + imgClass : 'img'} style={imgStyle}></div>
 
-                         <div id={bookId} className='img-shade'
-                             style={bookId === selectedId ? imgShadeStyle : {}}
-                              onMouseOver={toggleImgShadeOn}/*onMouseEnter={toggleImgShade} onMouseLeave={toggleImgShade}*/>
+                             <div id={bookId} className='img-shade'
+                                 style={bookId === selectedId ? imgShadeStyle : {}}
+                                  onMouseOver={toggleImgShadeOn}>
 
-                            {bookId === selectedId ?
-                                <div className='view-detail-button' onClick={openModal}>View Detail</div>
-                            : ''}
+                                {bookId === selectedId ?
+                                    <div className='view-detail-button' onClick={openModal}>View Detail</div>
+                                : ''}
 
+                            </div>
+                            <div className='summary-container'>
+                                <div className='title'>{title}</div>
+                                <div className='author'>
+                                    Author:&nbsp;{author}
+                                </div>
+                                <div className='owned-by'>
+                                    Owners:&nbsp;{ownedby}
+                                </div>
+                            </div>
+                            <div className='button-container'>
+                                {(() => {
+                                    if (isLoggedIn) {
+                                        const button = doIOwn(bookId, myBooks) ?
+                                        <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
+                                        <div className='text-wrapper' onClick={() => {requestBook(bookId)}}>Request this 📘</div>;
+                                        return button;
+                                    } else {
+                                        return <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
+                                    }
+                                })()}
+                            </div>
                         </div>
-                        <div className='summary-container'>
+                    );
+                }) : ''}
+                {(books && !gridView) ?
+                books.map((b, i) => {
+                    const book = b.book;
+                    const bookId = book.id;
+                    const volumeInfo = book.volumeInfo;
+                    const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
+                    const title = shortenTitle(volumeInfo.title, 25);
+                    const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
+                    const author = removeMiddleName(authorName);
+
+                    return (
+                        <div key={i} className='book-list-view'>
+                            <div className='img-wrapper'><img src={imgSrc} /></div>
                             <div className='title'>{title}</div>
                             <div className='author'>
                                 Author:&nbsp;{author}
                             </div>
-                            <div className='owned-by'>
-                                Owners:&nbsp;{ownedby}
+                            <div className='button-container'>
+                                {(() => {
+                                    if (isLoggedIn) {
+                                        const button = doIOwn(bookId, myBooks) ?
+                                        <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
+                                        <div className='text-wrapper' onClick={() => {requestBook(bookId)}}>Request this 📘</div>;
+                                        return button;
+                                    } else {
+                                        return <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
+                                    }
+                                })()}
                             </div>
                         </div>
-                        <div className='button-container'>
-                            {(() => {
-                                if (isLoggedIn) {
-                                    const button = doIOwn(bookId, myBooks) ?
-                                    <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
-                                    <div className='text-wrapper' onClick={() => {requestBook(bookId)}}>Request this 📘</div>;
-                                    return button;
-                                } else {
-                                    return <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
-                                }
-                            })()}
-                        </div>
-                    </div>
-                );
-            }) : ''}
-            {(books && !gridView) ?
-            books.map((b, i) => {
-                const book = b.book;
-                const bookId = book.id;
-                const volumeInfo = book.volumeInfo;
-                const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-                const title = shortenTitle(volumeInfo.title, 25);
-                const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
-                const author = removeMiddleName(authorName);
-
-                return (
-                    <div key={i} className='book-list-view'>
-                        <div className='img-wrapper'><img src={imgSrc} /></div>
-                        <div className='title'>{title}</div>
-                        <div className='author'>
-                            Author:&nbsp;{author}
-                        </div>
-                        <div className='button-container'>
-                            {(() => {
-                                if (isLoggedIn) {
-                                    const button = doIOwn(bookId, myBooks) ?
-                                    <div className='text-wrapper' onClick={() => {removeBook(bookId)}}>Disown this 📘</div> :
-                                    <div className='text-wrapper' onClick={() => {requestBook(bookId)}}>Request this 📘</div>;
-                                    return button;
-                                } else {
-                                    return <Link to='/login'><div className='text-wrapper'>Log in & request 📘</div></Link>
-                                }
-                            })()}
-                        </div>
-                    </div>
-                );
-            }) : ''}
+                    );
+                }) : ''}
+            </div>
             {foundBook ? <Dialog state={state} openModal={openModal} closeModal={closeModal}
                 imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams} requestBook={requestBook} removeBook={removeBook}
                 addBook={addBook} bookId={foundBook.id}/>

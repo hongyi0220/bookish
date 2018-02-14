@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom';
 const UserNav = props => {
     const state = props.state;
     const isLoggedIn = state.user;
-    const username = isLoggedIn ? isLoggedIn.username : '';
+    let username = isLoggedIn ? isLoggedIn.username : '';
     const logout = props.logout;
-    const setTimer = props.setTimer;
-
+    username = props.shortenTitle(username, 12);
     return (
         <div className='user-nav-container'>
             {isLoggedIn ?
@@ -31,8 +30,8 @@ const UserNav = props => {
                                 <div className='emoji-wrapper'>📖</div>
                             </div>
                         </Link>
-                        <Link to='/logout'>
-                            <div className='nav-item-container' onClick={() => {logout(); setTimer()}}>
+                        <Link to='/login'>
+                            <div className='nav-item-container' onClick={logout}>
                                 <div className='text-wrapper'>Log Out</div>
                                 <div className='emoji-wrapper'>⏏️</div>
                             </div>

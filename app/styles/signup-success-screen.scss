@@ -1,15 +1,14 @@
 @import 'variables';
 
-.logout-screen-container {
+.signup-success-screen-container {
     position: relative;
     top: 50%;
     transform: translateY(-8px);
-    .emoji-wrapper {
+    .signup-success-emoji {
         font-size: 3em;
-        display: block;
         text-align: center;
     }
-    .logout-msg-container {
+    .signup-success-msg-container {
         text-align: center;
         color: grey;
         .cancel-button {

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 
 const SignupForm = props => {
+    const emoji = props.state.ui.emoji;
     return (
         <div className='form-container'>
             <h2>Sign up for your account</h2>
@@ -10,8 +11,11 @@ const SignupForm = props => {
             </div>
             <form className='form' action='/signup' method='post'>
                 <div className='form-item-container'>
-                    <input id='username' type='text' name='username' placeholder='Choose a username'/>
-                    <div className='emoji-wrapper'>👤</div>
+                    <input id='username' type='text' name='username' placeholder='Choose a username'
+                        onClick={props.changeEmojiToPerson}/>
+                    {props.state.ui.loginClicked ?
+                    <div className='emoji-wrapper'>{emoji}‍‍</div>
+                    : <div className='emoji-wrapper'>👤</div>}
                 </div>
                 <div className='form-item-container'>
                     <input id='password' type='password' name='password' placeholder='Choose a password'/>

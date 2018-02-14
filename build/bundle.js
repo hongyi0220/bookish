@@ -43404,9 +43404,9 @@ var _MyBooks = __webpack_require__(795);
 
 var _MyBooks2 = _interopRequireDefault(_MyBooks);
 
-var _LogoutScreen = __webpack_require__(799);
+var _SignupSuccess = __webpack_require__(799);
 
-var _LogoutScreen2 = _interopRequireDefault(_LogoutScreen);
+var _SignupSuccess2 = _interopRequireDefault(_SignupSuccess);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43435,13 +43435,18 @@ var App = function (_React$Component) {
             pathname: null,
             ui: {
                 selected: {
-                    origin: null,
+                    evtOrigin: null,
                     style: {},
+                    class: ''
+                },
+                navItemClicked: {
+                    evtOrigin: null,
                     class: ''
                 },
                 gridView: true,
                 isModalOpen: false,
-                timer: 5
+                timer: 5,
+                loginClicked: false
             }
         };
         _this.setSession = _this.setSession.bind(_this);
@@ -43465,12 +43470,15 @@ var App = function (_React$Component) {
         _this.removeBook = _this.removeBook.bind(_this);
         _this.logoutTimeout = null;
         _this.cancelLogout = _this.cancelLogout.bind(_this);
-        _this.logoutTimer = null;
+        _this.timerInterval = null;
         _this.setTimer = _this.setTimer.bind(_this);
         _this.doIOwn = _this.doIOwn.bind(_this);
         _this.requestBook = _this.requestBook.bind(_this);
         _this.cancelRequest = _this.cancelRequest.bind(_this);
         _this.approveRequest = _this.approveRequest.bind(_this);
+        _this.changeEmojiToPerson = _this.changeEmojiToPerson.bind(_this);
+        _this.changeEmojiToShadow = _this.changeEmojiToShadow.bind(_this);
+        _this.borderNavItem = _this.borderNavItem.bind(_this);
         return _this;
     }
 
@@ -43494,7 +43502,8 @@ var App = function (_React$Component) {
     }, {
         key: 'setTimer',
         value: function setTimer() {
-            this.logoutTimer = setInterval(deduct1000.bind(this), 1000);
+            console.log('setting timer');
+            this.timerInterval = setInterval(deduct1000.bind(this), 1000);
             function deduct1000() {
                 if (this.state.ui.timer) {
                     this.setState(function (prevState) {
@@ -43504,7 +43513,7 @@ var App = function (_React$Component) {
                             })
                         });
                     });
-                } else clearInterval(this.logoutTimer);
+                } else clearInterval(this.timer);
             }
         }
     }, {
@@ -43513,23 +43522,19 @@ var App = function (_React$Component) {
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/logout';
-            callServer.call(this);
+            this.setState({ user: null });
+            console.log('user set to: null');
+            console.log('server called');
+            fetch(apiRoot + route, { credentials: 'include' }).catch(function (err) {
+                return console.error(err);
+            });
             location.reload();
-            // this.logoutTimeout = setTimeout(() => this.props.history.push('/logout'), 5000);
-            function callServer() {
-                this.setState({ user: null });
-                console.log('user set to: null');
-                console.log('server called');
-                fetch(apiRoot + route).catch(function (err) {
-                    return console.error(err);
-                });
-            }
         }
     }, {
         key: 'cancelLogout',
         value: function cancelLogout() {
             clearTimeout(this.logoutTimeout);
-            clearInterval(this.logoutTimer);
+            clearInterval(this.timer);
             this.props.history.push('/');
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
@@ -43610,7 +43615,7 @@ var App = function (_React$Component) {
                 this.setState(_extends({}, this.state, {
                     ui: _extends({}, this.state.ui, {
                         selected: _extends({}, this.state.ui.selected, {
-                            origin: bookId,
+                            evtOrigin: bookId,
                             style: { backgroundColor: 'rgba(0,0,0,.4)' },
                             class: ' zoom'
                         })
@@ -43627,7 +43632,7 @@ var App = function (_React$Component) {
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     selected: _extends({}, this.state.ui.selected, {
-                        origin: null,
+                        evtOrigin: null,
                         style: {},
                         class: ''
                     })
@@ -43637,19 +43642,25 @@ var App = function (_React$Component) {
     }, {
         key: 'toggleViewFormat',
         value: function toggleViewFormat(evt) {
+            var _this3 = this;
+
             var id = evt.target.id;
             var isGridView = id === 'grid';
-            // console.log('viewFormat toggled; gridView:', this.state.ui.gridView);
+            console.log('evt.target.id:', id);
+            console.log('isGridView:', isGridView);
+
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     gridView: isGridView
                 })
-            }));
+            }), function () {
+                return console.log('viewFormat toggled; gridView:', _this3.state.ui.gridView);
+            });
         }
     }, {
         key: 'findBookById',
         value: function findBookById(bookId, from) {
-            var _this3 = this;
+            var _this4 = this;
 
             var found = void 0;
             for (var i = 0; i < from.length; i++) {
@@ -43662,7 +43673,7 @@ var App = function (_React$Component) {
                 }
             }
             this.setState({ foundBook: found }, function () {
-                return console.log('foundbook:', _this3.state.foundBook);
+                return console.log('foundbook:', _this4.state.foundBook);
             });
 
             return found;
@@ -43704,13 +43715,6 @@ var App = function (_React$Component) {
 
             return fetch(apiRoot + route, {
                 method: 'DELETE'
-                // headers: {
-                //     'Content-Type': 'application/json'
-                // },
-                // body: JSON.stringify({
-                //     bookId: bookId,
-                //     username: username
-                // })
             }).catch(function (err) {
                 return console.error(err);
             });
@@ -43766,13 +43770,6 @@ var App = function (_React$Component) {
 
             return fetch(apiRoot + route, {
                 method: 'PUT'
-                // headers: {
-                //     'Content-Type': 'application/json'
-                // },
-                // body: JSON.stringify({
-                //     bookId: bookId,
-                //     username: username
-                // })
             }).catch(function (err) {
                 return console.error(err);
             });
@@ -43856,24 +43853,65 @@ var App = function (_React$Component) {
             } else return false;
         }
     }, {
+        key: 'borderNavItem',
+        value: function borderNavItem(evt) {
+            var _this5 = this;
+
+            var id = evt.target.id;
+            console.log(id);
+            this.setState(_extends({}, this.state, {
+                ui: _extends({}, this.state.ui, {
+                    navItemClicked: _extends({}, this.state.ui.navItemClicked, {
+                        evtOrigin: id,
+                        class: ' clicked'
+                    })
+                })
+            }), function () {
+                return console.log('ui after clicking navItem:', _this5.state.ui);
+            });
+        }
+    }, {
+        key: 'changeEmojiToShadow',
+        value: function changeEmojiToShadow() {
+            // console.log('changeEmojiToShadow');
+            this.setState(_extends({}, this.state, {
+                ui: _extends({}, this.state.ui, {
+                    loginClicked: false
+                })
+            }));
+        }
+    }, {
+        key: 'changeEmojiToPerson',
+        value: function changeEmojiToPerson(evt) {
+            // console.log('changeEmojiToPerson');
+            var emoji = ['🧙', '🧛', '🧝', '🧟'][Math.floor(Math.random() * 4)];
+            this.setState(_extends({}, this.state, {
+                ui: _extends({}, this.state.ui, {
+                    loginClicked: true,
+                    emoji: emoji
+                })
+            }));
+            evt.stopPropagation();
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this4 = this;
+            var _this6 = this;
 
             // console.log('cmpDidMnt');
             // const socket = socketIOClient();
 
             this.getBooks().then(function (books) {
-                _this4.setSession().then(function (user) {
+                _this6.setSession().then(function (user) {
                     if (user) {
                         var username = user.username;
-                        _this4.setState({
+                        _this6.setState({
                             user: user,
                             books: books,
-                            myBooks: _this4.getMyBooks(username, books)
+                            myBooks: _this6.getMyBooks(username, books)
                         });
                     } else {
-                        _this4.setState({
+                        _this6.setState({
                             books: books
                         });
                     }
@@ -43887,6 +43925,8 @@ var App = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var _this7 = this;
+
             var state = this.state;
             var logout = this.logout;
             var handleInput = this.handleInput;
@@ -43909,10 +43949,11 @@ var App = function (_React$Component) {
             var requestBook = this.requestBook;
             var cancelRequest = this.cancelRequest;
             var approveRequest = this.approveRequest;
+            var borderNavItem = this.borderNavItem;
 
             return _react2.default.createElement(
                 'div',
-                { className: 'app-container', onMouseOver: toggleImgShadeOff },
+                { className: 'app-container', onMouseOver: toggleImgShadeOff, onClick: this.changeEmojiToShadow },
                 _react2.default.createElement(
                     'div',
                     { className: 'title-wrapper' },
@@ -43935,15 +43976,15 @@ var App = function (_React$Component) {
                     'div',
                     { className: 'flexbox-container' },
                     _react2.default.createElement(_Nav2.default, { state: state, handleInput: handleInput, searchForBook: searchForBook,
-                        navigateTo: navigateTo }),
+                        navigateTo: navigateTo, borderNavItem: borderNavItem }),
                     _react2.default.createElement(
                         'div',
                         { className: 'content-container' },
                         _react2.default.createElement(
                             _reactRouterDom.Switch,
                             null,
-                            _react2.default.createElement(_reactRouterDom.Route, { path: '/logout', render: function render() {
-                                    return _react2.default.createElement(_LogoutScreen2.default, { state: state, cancelLogout: cancelLogout });
+                            _react2.default.createElement(_reactRouterDom.Route, { path: '/signup/success', render: function render() {
+                                    return _react2.default.createElement(_SignupSuccess2.default, { state: state, setTimer: setTimer });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks', render: function render() {
                                     return _react2.default.createElement(_MyBooks2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
@@ -43964,15 +44005,31 @@ var App = function (_React$Component) {
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/profile', render: function render() {
                                     return _react2.default.createElement(_Profile2.default, { state: state });
                                 } }),
-                            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/login', render: function render() {
-                                    return _react2.default.createElement(_LoginForm2.default, null);
+                            _react2.default.createElement(_reactRouterDom.Route, { path: '/login', render: function render() {
+                                    return _react2.default.createElement(_LoginForm2.default, { state: state,
+                                        changeEmojiToPerson: _this7.changeEmojiToPerson });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/signup', render: function render() {
-                                    return _react2.default.createElement(_SignupForm2.default, null);
+                                    return _react2.default.createElement(_SignupForm2.default, { state: state,
+                                        changeEmojiToPerson: _this7.changeEmojiToPerson });
                                 } })
-                        )
+                        ),
+                        _react2.default.createElement(_reactRouterDom.Route, { path: '/signup/invalid-username', render: function render() {
+                                return _react2.default.createElement(
+                                    'div',
+                                    { className: 'error-msg' },
+                                    'It seems the username is taken.. boo!'
+                                );
+                            } }),
+                        _react2.default.createElement(_reactRouterDom.Route, { path: '/login/error', render: function render() {
+                                return _react2.default.createElement(
+                                    'div',
+                                    { className: 'error-msg' },
+                                    'Wrong username and or password..?'
+                                );
+                            } })
                     ),
-                    _react2.default.createElement(_UserNav2.default, { state: state, logout: logout, setTimer: setTimer })
+                    _react2.default.createElement(_UserNav2.default, { state: state, logout: logout, shortenTitle: shortenTitle, borderNavItem: borderNavItem })
                 )
             );
         }
@@ -63933,10 +63990,13 @@ var Nav = function Nav(props) {
     var handleInput = props.handleInput;
     var searchForBook = props.searchForBook;
     var navigateTo = props.navigateTo;
+    var borderNavItem = props.borderNavItem;
+    var clicked = state.ui.navItemClicked.class;
+    var evtOrigin = state.ui.navItemClicked.evtOrigin;
 
     return _react2.default.createElement(
         'div',
-        { className: 'nav-container' },
+        { className: 'nav-container', onClick: borderNavItem },
         _react2.default.createElement(
             'div',
             { className: 'nav-item-container' },
@@ -63955,7 +64015,7 @@ var Nav = function Nav(props) {
             { to: '/' },
             _react2.default.createElement(
                 'div',
-                { className: 'nav-item-container' },
+                { className: evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container', id: 'home' },
                 _react2.default.createElement(
                     'div',
                     { className: 'text-wrapper' },
@@ -63973,7 +64033,7 @@ var Nav = function Nav(props) {
             { to: '/books' },
             _react2.default.createElement(
                 'div',
-                { className: 'nav-item-container' },
+                { className: evtOrigin === 'books' ? 'nav-item-container' + clicked : 'nav-item-container', id: 'books' },
                 _react2.default.createElement(
                     'div',
                     { className: 'text-wrapper' },
@@ -63984,20 +64044,6 @@ var Nav = function Nav(props) {
                     { className: 'emoji-wrapper' },
                     '\uD83D\uDCDA'
                 )
-            )
-        ),
-        _react2.default.createElement(
-            'div',
-            { className: 'nav-item-container' },
-            _react2.default.createElement(
-                'div',
-                { className: 'text-wrapper' },
-                'Inbox'
-            ),
-            _react2.default.createElement(
-                'div',
-                { className: 'emoji-wrapper' },
-                '\uD83D\uDCE8'
             )
         ),
         _react2.default.createElement(
@@ -64042,8 +64088,7 @@ var UserNav = function UserNav(props) {
     var isLoggedIn = state.user;
     var username = isLoggedIn ? isLoggedIn.username : '';
     var logout = props.logout;
-    var setTimer = props.setTimer;
-
+    username = props.shortenTitle(username, 12);
     return _react2.default.createElement(
         'div',
         { className: 'user-nav-container' },
@@ -64111,12 +64156,10 @@ var UserNav = function UserNav(props) {
                 ),
                 _react2.default.createElement(
                     _reactRouterDom.Link,
-                    { to: '/logout' },
+                    { to: '/login' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'nav-item-container', onClick: function onClick() {
-                                logout();setTimer();
-                            } },
+                        { className: 'nav-item-container', onClick: logout },
                         _react2.default.createElement(
                             'div',
                             { className: 'text-wrapper' },
@@ -64194,6 +64237,7 @@ var _reactRouterDom = __webpack_require__(21);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var SignupForm = function SignupForm(props) {
+    var emoji = props.state.ui.emoji;
     return _react2.default.createElement(
         'div',
         { className: 'form-container' },
@@ -64218,8 +64262,14 @@ var SignupForm = function SignupForm(props) {
             _react2.default.createElement(
                 'div',
                 { className: 'form-item-container' },
-                _react2.default.createElement('input', { id: 'username', type: 'text', name: 'username', placeholder: 'Choose a username' }),
-                _react2.default.createElement(
+                _react2.default.createElement('input', { id: 'username', type: 'text', name: 'username', placeholder: 'Choose a username',
+                    onClick: props.changeEmojiToPerson }),
+                props.state.ui.loginClicked ? _react2.default.createElement(
+                    'div',
+                    { className: 'emoji-wrapper' },
+                    emoji,
+                    '\u200D\u200D'
+                ) : _react2.default.createElement(
                     'div',
                     { className: 'emoji-wrapper' },
                     '\uD83D\uDC64'
@@ -64269,6 +64319,8 @@ var _reactRouterDom = __webpack_require__(21);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var LoginForm = function LoginForm(props) {
+    var setTimer = props.setTimer;
+    var emoji = props.state.ui.emoji;
     return _react2.default.createElement(
         'div',
         { className: 'form-container' },
@@ -64293,8 +64345,13 @@ var LoginForm = function LoginForm(props) {
             _react2.default.createElement(
                 'div',
                 { className: 'form-item-container' },
-                _react2.default.createElement('input', { id: 'username', type: 'text', name: 'username', placeholder: 'Enter your username' }),
-                _react2.default.createElement(
+                _react2.default.createElement('input', { id: 'username', type: 'text', name: 'username', placeholder: 'Enter your username',
+                    onClick: props.changeEmojiToPerson }),
+                props.state.ui.loginClicked ? _react2.default.createElement(
+                    'div',
+                    { className: 'emoji-wrapper' },
+                    emoji
+                ) : _react2.default.createElement(
                     'div',
                     { className: 'emoji-wrapper' },
                     '\uD83D\uDC64'
@@ -64315,7 +64372,7 @@ var LoginForm = function LoginForm(props) {
                 { className: 'button-wrapper' },
                 _react2.default.createElement(
                     'button',
-                    { type: 'submit' },
+                    { type: 'submit', onClick: setTimer },
                     'LOG IN'
                 )
             )
@@ -64453,10 +64510,9 @@ var SearchResults = function SearchResults(props) {
     var imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
     var toggleImgShadeOn = props.toggleImgShadeOn;
     var imgShadeStyle = state.ui.selected.style;
-    var selectedId = state.ui.selected.origin;
+    var selectedId = state.ui.selected.evtOrigin;
     var imgClass = state.ui.selected.class;
     var isLoggedIn = state.user;
-    // const username = isLoggedIn ? isLoggedIn.username : '';
     var gridView = state.ui.gridView;
     var addBook = props.addBook;
     var foundBook = state.foundBook;
@@ -64471,35 +64527,100 @@ var SearchResults = function SearchResults(props) {
     return _react2.default.createElement(
         'div',
         { className: 'results-container' },
-        searchResult && gridView ? searchResult.items.map(function (item, i) {
-            var book = item.volumeInfo;
-            var bookId = item.id;
-            var authorName = book.authors ? book.authors[0] : 'Unknown';
-            var author = removeMiddleName(authorName);
-            var title = shortenTitle(book.title, 18);
-            var imgUrl = imgRootUrl + item.id + imgSrcParams;
-            var imgStyle = {
-                backgroundImage: 'url(' + imgUrl + ')'
-            };
+        _react2.default.createElement(
+            'div',
+            { className: 'books-container' },
+            searchResult && gridView ? searchResult.items.map(function (item, i) {
+                var book = item.volumeInfo;
+                var bookId = item.id;
+                var authorName = book.authors ? book.authors[0] : 'Unknown';
+                var author = removeMiddleName(authorName);
+                var title = shortenTitle(book.title, 18);
+                var imgUrl = imgRootUrl + item.id + imgSrcParams;
+                var imgStyle = {
+                    backgroundImage: 'url(' + imgUrl + ')'
+                };
 
-            return _react2.default.createElement(
-                'div',
-                { key: i, className: 'book' },
-                _react2.default.createElement('div', { className: bookId === selectedId ? 'img' + imgClass : 'img', style: imgStyle }),
-                _react2.default.createElement(
+                return _react2.default.createElement(
                     'div',
-                    { id: bookId, className: 'img-shade',
-                        style: bookId === selectedId ? imgShadeStyle : {},
-                        onMouseOver: toggleImgShadeOn },
-                    bookId === selectedId ? _react2.default.createElement(
+                    { key: i, className: 'book' },
+                    _react2.default.createElement('div', { className: bookId === selectedId ? 'img' + imgClass : 'img', style: imgStyle }),
+                    _react2.default.createElement(
                         'div',
-                        { className: 'view-detail-button', onClick: openModal },
-                        'View Detail'
-                    ) : ''
-                ),
-                _react2.default.createElement(
+                        { id: bookId, className: 'img-shade',
+                            style: bookId === selectedId ? imgShadeStyle : {},
+                            onMouseOver: toggleImgShadeOn },
+                        bookId === selectedId ? _react2.default.createElement(
+                            'div',
+                            { className: 'view-detail-button', onClick: openModal },
+                            'View Detail'
+                        ) : ''
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'summary-container' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'title' },
+                            title
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'author' },
+                            'Author:\xA0',
+                            author
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'button-container' },
+                        function () {
+                            if (isLoggedIn) {
+                                var button = doIOwn(bookId, myBooks) ? _react2.default.createElement(
+                                    'div',
+                                    { className: 'text-wrapper', onClick: function onClick() {
+                                            removeBook(bookId);
+                                        } },
+                                    'Disown this \uD83D\uDCD8'
+                                ) : _react2.default.createElement(
+                                    'div',
+                                    { className: 'text-wrapper', onClick: function onClick() {
+                                            addBook(bookId);
+                                        } },
+                                    'I own this \uD83D\uDCD8'
+                                );
+                                return button;
+                            } else {
+                                return _react2.default.createElement(
+                                    _reactRouterDom.Link,
+                                    { to: '/login' },
+                                    _react2.default.createElement(
+                                        'div',
+                                        { className: 'text-wrapper' },
+                                        'Log in & add \uD83D\uDCD8'
+                                    )
+                                );
+                            }
+                        }()
+                    )
+                );
+            }) : '',
+            searchResult && !gridView ? searchResult.items.map(function (b, i) {
+                var book = b.volumeInfo;
+                var bookId = b.id;
+                var imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
+                var title = shortenTitle(book.title, 25);
+                var authorName = book.authors ? book.authors[0] : 'Unknown';
+                var author = removeMiddleName(authorName);
+
+                return _react2.default.createElement(
                     'div',
-                    { className: 'summary-container' },
+                    { key: i, className: 'book-list-view' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'img-wrapper' },
+                        _react2.default.createElement('img', { src: imgSrc })
+                    ),
                     _react2.default.createElement(
                         'div',
                         { className: 'title' },
@@ -64510,103 +64631,42 @@ var SearchResults = function SearchResults(props) {
                         { className: 'author' },
                         'Author:\xA0',
                         author
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'button-container' },
+                        function () {
+                            if (isLoggedIn) {
+                                var button = doIOwn(bookId, myBooks) ? _react2.default.createElement(
+                                    'div',
+                                    { className: 'text-wrapper', onClick: function onClick() {
+                                            removeBook(bookId);
+                                        } },
+                                    'Disown this \uD83D\uDCD8'
+                                ) : _react2.default.createElement(
+                                    'div',
+                                    { className: 'text-wrapper', onClick: function onClick() {
+                                            addBook(bookId);
+                                        } },
+                                    'I own this \uD83D\uDCD8'
+                                );
+                                return button;
+                            } else {
+                                return _react2.default.createElement(
+                                    _reactRouterDom.Link,
+                                    { to: '/login' },
+                                    _react2.default.createElement(
+                                        'div',
+                                        { className: 'text-wrapper' },
+                                        'Log in & add \uD83D\uDCD8'
+                                    )
+                                );
+                            }
+                        }()
                     )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'button-container' },
-                    function () {
-                        if (isLoggedIn) {
-                            var button = doIOwn(bookId, myBooks) ? _react2.default.createElement(
-                                'div',
-                                { className: 'text-wrapper', onClick: function onClick() {
-                                        removeBook(bookId);
-                                    } },
-                                'Disown this \uD83D\uDCD8'
-                            ) : _react2.default.createElement(
-                                'div',
-                                { className: 'text-wrapper', onClick: function onClick() {
-                                        addBook(bookId);
-                                    } },
-                                'I own this \uD83D\uDCD8'
-                            );
-                            return button;
-                        } else {
-                            return _react2.default.createElement(
-                                _reactRouterDom.Link,
-                                { to: '/login' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'text-wrapper' },
-                                    'Log in & add \uD83D\uDCD8'
-                                )
-                            );
-                        }
-                    }()
-                )
-            );
-        }) : '',
-        searchResult && !gridView ? searchResult.items.map(function (b, i) {
-            var book = b.volumeInfo;
-            var bookId = b.id;
-            var imgSrc = book.imageLinks ? book.imageLinks.thumbnail : '';
-            var title = shortenTitle(book.title, 25);
-            var authorName = book.authors ? book.authors[0] : 'Unknown';
-            var author = removeMiddleName(authorName);
-
-            return _react2.default.createElement(
-                'div',
-                { key: i, className: 'book-list-view' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'img-wrapper' },
-                    _react2.default.createElement('img', { src: imgSrc })
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'title' },
-                    title
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'author' },
-                    'Author:\xA0',
-                    author
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'button-container' },
-                    function () {
-                        if (isLoggedIn) {
-                            var button = doIOwn(bookId, myBooks) ? _react2.default.createElement(
-                                'div',
-                                { className: 'text-wrapper', onClick: function onClick() {
-                                        removeBook(bookId);
-                                    } },
-                                'Disown this \uD83D\uDCD8'
-                            ) : _react2.default.createElement(
-                                'div',
-                                { className: 'text-wrapper', onClick: function onClick() {
-                                        addBook(bookId);
-                                    } },
-                                'I own this \uD83D\uDCD8'
-                            );
-                            return button;
-                        } else {
-                            return _react2.default.createElement(
-                                _reactRouterDom.Link,
-                                { to: '/login' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'text-wrapper' },
-                                    'Log in & add \uD83D\uDCD8'
-                                )
-                            );
-                        }
-                    }()
-                )
-            );
-        }) : '',
+                );
+            }) : ''
+        ),
         foundBook ? _react2.default.createElement(_Dialog2.default, { state: state, openModal: openModal, closeModal: closeModal,
             imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams, requestBook: requestBook, removeBook: removeBook,
             addBook: addBook, bookId: foundBook.id, doIOwn: doIOwn }) : ''
@@ -65647,7 +65707,7 @@ var Books = function Books(props) {
     var imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
     var toggleImgShadeOn = props.toggleImgShadeOn;
     var imgShadeStyle = state.ui.selected.style;
-    var selectedId = state.ui.selected.origin;
+    var selectedId = state.ui.selected.evtOrigin;
     var imgClass = state.ui.selected.class;
     var isLoggedIn = state.user;
     var removeBook = props.removeBook;
@@ -65664,38 +65724,110 @@ var Books = function Books(props) {
     return _react2.default.createElement(
         'div',
         { className: 'results-container' },
-        books && gridView ? books.map(function (b, i) {
-            var ownedby = b.ownedby.length;
-            var book = b.book;
-            var volumeInfo = book.volumeInfo;
-            var bookId = book.id;
-            var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
-            // console.log('book.authors:', author);
-            var author = removeMiddleName(authorName);
-            var title = shortenTitle(volumeInfo.title, 14);
-            var imgUrl = imgRootUrl + bookId + imgSrcParams;
-            var imgStyle = {
-                backgroundImage: 'url(' + imgUrl + ')'
-            };
+        _react2.default.createElement(
+            'div',
+            { className: 'books-container' },
+            books && gridView ? books.map(function (b, i) {
+                var ownedby = b.ownedby.length;
+                var book = b.book;
+                var volumeInfo = book.volumeInfo;
+                var bookId = book.id;
+                var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
+                // console.log('book.authors:', author);
+                var author = removeMiddleName(authorName);
+                var title = shortenTitle(volumeInfo.title, 14);
+                var imgUrl = imgRootUrl + bookId + imgSrcParams;
+                var imgStyle = {
+                    backgroundImage: 'url(' + imgUrl + ')'
+                };
 
-            return _react2.default.createElement(
-                'div',
-                { key: i, className: 'book' },
-                _react2.default.createElement('div', { className: bookId === selectedId ? 'img' + imgClass : 'img', style: imgStyle }),
-                _react2.default.createElement(
+                return _react2.default.createElement(
                     'div',
-                    { id: bookId, className: 'img-shade',
-                        style: bookId === selectedId ? imgShadeStyle : {},
-                        onMouseOver: toggleImgShadeOn /*onMouseEnter={toggleImgShade} onMouseLeave={toggleImgShade}*/ },
-                    bookId === selectedId ? _react2.default.createElement(
+                    { key: i, className: 'book' },
+                    _react2.default.createElement('div', { className: bookId === selectedId ? 'img' + imgClass : 'img', style: imgStyle }),
+                    _react2.default.createElement(
                         'div',
-                        { className: 'view-detail-button', onClick: openModal },
-                        'View Detail'
-                    ) : ''
-                ),
-                _react2.default.createElement(
+                        { id: bookId, className: 'img-shade',
+                            style: bookId === selectedId ? imgShadeStyle : {},
+                            onMouseOver: toggleImgShadeOn },
+                        bookId === selectedId ? _react2.default.createElement(
+                            'div',
+                            { className: 'view-detail-button', onClick: openModal },
+                            'View Detail'
+                        ) : ''
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'summary-container' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'title' },
+                            title
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'author' },
+                            'Author:\xA0',
+                            author
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'owned-by' },
+                            'Owners:\xA0',
+                            ownedby
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'button-container' },
+                        function () {
+                            if (isLoggedIn) {
+                                var button = doIOwn(bookId, myBooks) ? _react2.default.createElement(
+                                    'div',
+                                    { className: 'text-wrapper', onClick: function onClick() {
+                                            removeBook(bookId);
+                                        } },
+                                    'Disown this \uD83D\uDCD8'
+                                ) : _react2.default.createElement(
+                                    'div',
+                                    { className: 'text-wrapper', onClick: function onClick() {
+                                            requestBook(bookId);
+                                        } },
+                                    'Request this \uD83D\uDCD8'
+                                );
+                                return button;
+                            } else {
+                                return _react2.default.createElement(
+                                    _reactRouterDom.Link,
+                                    { to: '/login' },
+                                    _react2.default.createElement(
+                                        'div',
+                                        { className: 'text-wrapper' },
+                                        'Log in & request \uD83D\uDCD8'
+                                    )
+                                );
+                            }
+                        }()
+                    )
+                );
+            }) : '',
+            books && !gridView ? books.map(function (b, i) {
+                var book = b.book;
+                var bookId = book.id;
+                var volumeInfo = book.volumeInfo;
+                var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
+                var title = shortenTitle(volumeInfo.title, 25);
+                var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
+                var author = removeMiddleName(authorName);
+
+                return _react2.default.createElement(
                     'div',
-                    { className: 'summary-container' },
+                    { key: i, className: 'book-list-view' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'img-wrapper' },
+                        _react2.default.createElement('img', { src: imgSrc })
+                    ),
                     _react2.default.createElement(
                         'div',
                         { className: 'title' },
@@ -65709,107 +65841,39 @@ var Books = function Books(props) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'owned-by' },
-                        'Owners:\xA0',
-                        ownedby
+                        { className: 'button-container' },
+                        function () {
+                            if (isLoggedIn) {
+                                var button = doIOwn(bookId, myBooks) ? _react2.default.createElement(
+                                    'div',
+                                    { className: 'text-wrapper', onClick: function onClick() {
+                                            removeBook(bookId);
+                                        } },
+                                    'Disown this \uD83D\uDCD8'
+                                ) : _react2.default.createElement(
+                                    'div',
+                                    { className: 'text-wrapper', onClick: function onClick() {
+                                            requestBook(bookId);
+                                        } },
+                                    'Request this \uD83D\uDCD8'
+                                );
+                                return button;
+                            } else {
+                                return _react2.default.createElement(
+                                    _reactRouterDom.Link,
+                                    { to: '/login' },
+                                    _react2.default.createElement(
+                                        'div',
+                                        { className: 'text-wrapper' },
+                                        'Log in & request \uD83D\uDCD8'
+                                    )
+                                );
+                            }
+                        }()
                     )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'button-container' },
-                    function () {
-                        if (isLoggedIn) {
-                            var button = doIOwn(bookId, myBooks) ? _react2.default.createElement(
-                                'div',
-                                { className: 'text-wrapper', onClick: function onClick() {
-                                        removeBook(bookId);
-                                    } },
-                                'Disown this \uD83D\uDCD8'
-                            ) : _react2.default.createElement(
-                                'div',
-                                { className: 'text-wrapper', onClick: function onClick() {
-                                        requestBook(bookId);
-                                    } },
-                                'Request this \uD83D\uDCD8'
-                            );
-                            return button;
-                        } else {
-                            return _react2.default.createElement(
-                                _reactRouterDom.Link,
-                                { to: '/login' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'text-wrapper' },
-                                    'Log in & request \uD83D\uDCD8'
-                                )
-                            );
-                        }
-                    }()
-                )
-            );
-        }) : '',
-        books && !gridView ? books.map(function (b, i) {
-            var book = b.book;
-            var bookId = book.id;
-            var volumeInfo = book.volumeInfo;
-            var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-            var title = shortenTitle(volumeInfo.title, 25);
-            var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
-            var author = removeMiddleName(authorName);
-
-            return _react2.default.createElement(
-                'div',
-                { key: i, className: 'book-list-view' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'img-wrapper' },
-                    _react2.default.createElement('img', { src: imgSrc })
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'title' },
-                    title
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'author' },
-                    'Author:\xA0',
-                    author
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'button-container' },
-                    function () {
-                        if (isLoggedIn) {
-                            var button = doIOwn(bookId, myBooks) ? _react2.default.createElement(
-                                'div',
-                                { className: 'text-wrapper', onClick: function onClick() {
-                                        removeBook(bookId);
-                                    } },
-                                'Disown this \uD83D\uDCD8'
-                            ) : _react2.default.createElement(
-                                'div',
-                                { className: 'text-wrapper', onClick: function onClick() {
-                                        requestBook(bookId);
-                                    } },
-                                'Request this \uD83D\uDCD8'
-                            );
-                            return button;
-                        } else {
-                            return _react2.default.createElement(
-                                _reactRouterDom.Link,
-                                { to: '/login' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'text-wrapper' },
-                                    'Log in & request \uD83D\uDCD8'
-                                )
-                            );
-                        }
-                    }()
-                )
-            );
-        }) : '',
+                );
+            }) : ''
+        ),
         foundBook ? _react2.default.createElement(_Dialog2.default, { state: state, openModal: openModal, closeModal: closeModal,
             imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams, requestBook: requestBook, removeBook: removeBook,
             addBook: addBook, bookId: foundBook.id }) : ''
@@ -65859,7 +65923,7 @@ var MyBooks = function MyBooks(props) {
     var imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
     var toggleImgShadeOn = props.toggleImgShadeOn;
     var imgShadeStyle = state.ui.selected.style;
-    var selectedId = state.ui.selected.origin;
+    var selectedId = state.ui.selected.evtOrigin;
     var imgClass = state.ui.selected.class;
     var gridView = state.ui.gridView;
     var addBook = props.addBook;
@@ -66170,29 +66234,29 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var LogoutScreen = function LogoutScreen(props) {
-    var cancelLogout = props.cancelLogout;
+var SignupSuccess = function SignupSuccess(props) {
     var state = props.state;
     var timer = state.ui.timer;
+    props.setTimer();
 
     return _react2.default.createElement(
         'div',
-        { className: 'logout-screen-container' },
+        { className: 'signup-success-screen-container' },
         _react2.default.createElement(
             'div',
-            { className: 'emoji-wrapper' },
-            '\uD83D\uDC4B'
+            { className: 'signup-success-emoji' },
+            '\uD83C\uDF89'
         ),
         _react2.default.createElement(
             'div',
-            { className: 'logout-msg-container' },
-            'Successfully logged out.\xA0 Redirecting to home page in...\xA0',
+            { className: 'signup-success-msg-container' },
+            'Successfully signed up!\xA0 Redirecting to somewhere in...\xA0',
             timer,
             '\xA0'
         )
     );
 };
-exports.default = LogoutScreen;
+exports.default = SignupSuccess;
 
 /***/ }),
 /* 800 */

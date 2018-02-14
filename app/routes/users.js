@@ -1,6 +1,8 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const ObjectId = require('mongodb').ObjectId;
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 module.exports = function(app, db) {
     const Users = db.collection('users');
@@ -40,7 +42,7 @@ module.exports = function(app, db) {
         function(req, res) {
             passport.authenticate('local', function(err, user, info) {
                 if (err) return console.error(err);
-                if (!user) return res.redirect('/login');
+                if (!user) return res.redirect('/login/error');
                 req.login(user, function(err) {
                     if (err) return console.error(err);
                     return res.redirect('/' + user.username);
@@ -62,7 +64,15 @@ module.exports = function(app, db) {
                     password: password
                 };
                 Users.insert(schema);
-                res.redirect('/signup/success');
+                // Sign user in
+                Users.findOne({username: username}, function(err, user) {
+                    if (err) return console.log(err);
+                    req.login(user, function(err) {
+                        user
+                        if (err) return console.error(err);
+                        return res.redirect('/signup/success');
+                    });
+                });
             }
         });
     });
@@ -70,12 +80,7 @@ module.exports = function(app, db) {
     app.get('/logout', (req, res) => {
         console.log('user logged out');
         req.logout();
-        req.session.destroy(function() {
-            res.redirect('/')
-        });
-        // res.sendStatus(200);
-        console.log('req.session:', req.session);
-        console.log('req.user:', req.user);
+        res.end();
     });
 
     app.post('/profile', (req, res) => {

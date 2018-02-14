@@ -10,7 +10,7 @@ import SearchResults from './content/SearchResults';
 import sample from './sampleData';
 import Books from './content/Books';
 import MyBooks from './content/MyBooks';
-import LogoutScreen from './content/LogoutScreen';
+import SignupSuccess from './content/SignupSuccess';
 
 class App extends React.Component {
     constructor() {
@@ -26,13 +26,18 @@ class App extends React.Component {
             pathname: null,
             ui: {
                 selected: {
-                    origin: null,
+                    evtOrigin: null,
                     style: {},
+                    class: ''
+                },
+                navItemClicked: {
+                    evtOrigin: null,
                     class: ''
                 },
                 gridView: true,
                 isModalOpen: false,
-                timer: 5
+                timer: 5,
+                loginClicked: false
             }
         };
         this.setSession = this.setSession.bind(this);
@@ -56,12 +61,15 @@ class App extends React.Component {
         this.removeBook = this.removeBook.bind(this);
         this.logoutTimeout = null;
         this.cancelLogout = this.cancelLogout.bind(this);
-        this.logoutTimer = null;
+        this.timerInterval = null;
         this.setTimer = this.setTimer.bind(this);
         this.doIOwn = this.doIOwn.bind(this);
         this.requestBook = this.requestBook.bind(this);
         this.cancelRequest = this.cancelRequest.bind(this);
         this.approveRequest = this.approveRequest.bind(this);
+        this.changeEmojiToPerson = this.changeEmojiToPerson.bind(this);
+        this.changeEmojiToShadow = this.changeEmojiToShadow.bind(this);
+        this.borderNavItem = this.borderNavItem.bind(this);
     }
 
     setSession() {
@@ -82,7 +90,8 @@ class App extends React.Component {
     }
 
     setTimer() {
-        this.logoutTimer = setInterval(deduct1000.bind(this), 1000);
+        console.log('setting timer');
+        this.timerInterval = setInterval(deduct1000.bind(this), 1000);
         function deduct1000() {
             if (this.state.ui.timer) {
                 this.setState(prevState => ({
@@ -92,30 +101,25 @@ class App extends React.Component {
                         timer: prevState.ui.timer - 1
                     }
                 }));
-            } else clearInterval(this.logoutTimer);
+            } else clearInterval(this.timer);
         }
     }
-
 
     logout() {
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/logout';
-        callServer.call(this);
+        this.setState({ user: null });
+        console.log('user set to: null');
+        console.log('server called');
+        fetch(apiRoot + route, {credentials: 'include'})
+        .catch(err => console.error(err));
         location.reload();
-        // this.logoutTimeout = setTimeout(() => this.props.history.push('/logout'), 5000);
-        function callServer() {
-            this.setState({ user: null });
-            console.log('user set to: null');
-            console.log('server called');
-            fetch(apiRoot + route)
-            .catch(err => console.error(err));
-        }
     }
 
     cancelLogout() {
         clearTimeout(this.logoutTimeout);
-        clearInterval(this.logoutTimer);
+        clearInterval(this.timer);
         this.props.history.push('/');
         this.setState({
             ...this.state,
@@ -185,7 +189,7 @@ class App extends React.Component {
                     ...this.state.ui,
                     selected: {
                         ...this.state.ui.selected,
-                        origin: bookId,
+                        evtOrigin: bookId,
                         style: {backgroundColor: 'rgba(0,0,0,.4)'},
                         class: ' zoom'
                     }
@@ -204,7 +208,7 @@ class App extends React.Component {
                 ...this.state.ui,
                 selected: {
                     ...this.state.ui.selected,
-                    origin: null,
+                    evtOrigin: null,
                     style: {},
                     class: ''
                 }
@@ -215,14 +219,16 @@ class App extends React.Component {
     toggleViewFormat(evt) {
         const id = evt.target.id;
         const isGridView = id === 'grid';
-        // console.log('viewFormat toggled; gridView:', this.state.ui.gridView);
+        console.log('evt.target.id:',id);
+        console.log('isGridView:',isGridView);
+
         this.setState({
             ...this.state,
             ui: {
                 ...this.state.ui,
                 gridView: isGridView
             }
-        });
+        }, () => console.log('viewFormat toggled; gridView:', this.state.ui.gridView));
     }
 
     findBookById(bookId, from) {
@@ -273,14 +279,7 @@ class App extends React.Component {
         const route = '/book/' + bookId + '/' + username;
 
         return fetch(apiRoot + route, {
-            method: 'DELETE',
-            // headers: {
-            //     'Content-Type': 'application/json'
-            // },
-            // body: JSON.stringify({
-            //     bookId: bookId,
-            //     username: username
-            // })
+            method: 'DELETE'
         })
         .catch(err => console.error(err));
     }
@@ -329,14 +328,7 @@ class App extends React.Component {
         const route = '/request/' + bookId + '/' + username;
 
         return fetch(apiRoot + route, {
-            method: 'PUT',
-            // headers: {
-            //     'Content-Type': 'application/json'
-            // },
-            // body: JSON.stringify({
-            //     bookId: bookId,
-            //     username: username
-            // })
+            method: 'PUT'
         })
         .catch(err => console.error(err));
     }
@@ -414,6 +406,47 @@ class App extends React.Component {
         else return false;
     }
 
+    borderNavItem(evt) {
+        const id = evt.target.id;
+        console.log(id);
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                navItemClicked: {
+                    ...this.state.ui.navItemClicked,
+                    evtOrigin: id,
+                    class: ' clicked'
+                }
+            }
+        }, () => console.log('ui after clicking navItem:', this.state.ui));
+    }
+
+    changeEmojiToShadow() {
+        // console.log('changeEmojiToShadow');
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                loginClicked: false
+            }
+        });
+    }
+
+    changeEmojiToPerson(evt) {
+        // console.log('changeEmojiToPerson');
+        const emoji = ['🧙','🧛','🧝','🧟'][Math.floor(Math.random() * 4)];
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                loginClicked: true,
+                emoji: emoji
+            }
+        });
+        evt.stopPropagation();
+    }
+
     componentDidMount() {
         // console.log('cmpDidMnt');
         // const socket = socketIOClient();
@@ -463,9 +496,10 @@ class App extends React.Component {
         const requestBook = this.requestBook;
         const cancelRequest = this.cancelRequest;
         const approveRequest = this.approveRequest;
+        const borderNavItem = this.borderNavItem;
 
         return (
-        <div className='app-container' onMouseOver={toggleImgShadeOff}>
+        <div className='app-container' onMouseOver={toggleImgShadeOff} onClick={this.changeEmojiToShadow}>
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
             <Route path='/(search|books)' render={() => <div className='layout-buttons-container'>
@@ -475,10 +509,11 @@ class App extends React.Component {
 
             <div className='flexbox-container'>
                 <Nav state={state} handleInput={handleInput} searchForBook={searchForBook}
-                    navigateTo={navigateTo}/>
+                    navigateTo={navigateTo} borderNavItem={borderNavItem}/>
+
                 <div className='content-container'>
                     <Switch>
-                        <Route path='/logout' render={() => <LogoutScreen state={state} cancelLogout={cancelLogout}/>}/>
+                        <Route path='/signup/success' render={() => <SignupSuccess state={state} setTimer={setTimer}/>}/>
 
                         <Route path='/mybooks' render={() => <MyBooks state={state} toggleImgShadeOn={toggleImgShadeOn}
                             openModal={openModal} removeBook={removeBook} closeModal={closeModal} shortenTitle={shortenTitle}
@@ -494,11 +529,15 @@ class App extends React.Component {
                             removeMiddleName={removeMiddleName} removeBook={removeBook} doIOwn={doIOwn}/>}/>
 
                         <Route path='/profile' render={() => <Profile state={state}/>} />
-                        <Route exact path='/login' render={() => <LoginForm />} />
-                        <Route path='/signup' render={() => <SignupForm />} />
+                        <Route path='/login' render={() => <LoginForm state={state}
+                            changeEmojiToPerson={this.changeEmojiToPerson}/>} />
+                        <Route path='/signup' render={() => <SignupForm state={state}
+                            changeEmojiToPerson={this.changeEmojiToPerson}/>} />
                     </Switch>
+                    <Route path='/signup/invalid-username' render={() => <div className='error-msg'>It seems the username is taken.. boo!</div>} />
+                    <Route path='/login/error' render={() => <div className='error-msg'>Wrong username and or password..?</div>} />
                 </div>
-                <UserNav state={state} logout={logout} setTimer={setTimer}/>
+                <UserNav state={state} logout={logout} shortenTitle={shortenTitle} borderNavItem={borderNavItem}/>
             </div>
         </div>);
     }

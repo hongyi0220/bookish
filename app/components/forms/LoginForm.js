@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 
 const LoginForm = props => {
+    const setTimer = props.setTimer;
+    const emoji = props.state.ui.emoji;
     return (
         <div className='form-container'>
             <h2>Log into your account</h2>
@@ -10,15 +12,18 @@ const LoginForm = props => {
             </div>
             <form className='form' action='/login' method='post'>
                 <div className='form-item-container'>
-                    <input id='username' type='text' name='username' placeholder='Enter your username'/>
-                    <div className='emoji-wrapper'>👤</div>
+                    <input id='username' type='text' name='username' placeholder='Enter your username'
+                        onClick={props.changeEmojiToPerson}/>
+                    {props.state.ui.loginClicked ?
+                    <div className='emoji-wrapper'>{emoji}</div>
+                    : <div className='emoji-wrapper'>👤</div>}
                 </div>
                 <div className='form-item-container'>
                     <input id='password' type='password' name='password' placeholder='Enter your password'/>
                     <div className='emoji-wrapper'>🔑</div>
                 </div>
                 <div className='button-wrapper'>
-                    <button type='submit'>LOG IN</button>
+                    <button type='submit' onClick={setTimer}>LOG IN</button>
                 </div>
             </form>
         </div>

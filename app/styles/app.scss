@@ -3,14 +3,15 @@
 @import 'user-nav';
 @import 'nav';
 @import 'search-results';
-@import 'logout-screen';
+@import 'signup-success-screen';
 @import 'my-books';
 @import 'modal-button';
+@import 'error-msg';
 * {
     box-sizing: border-box;
 }
 .app-container {
-    height: 100vh;
+    min-height: 100vh;
     background-color: $bg-grey;
     .title-wrapper, .subtitle-wrapper {
         text-align: center;
@@ -52,7 +53,6 @@
         }
         .content-container {
             flex-grow: 8;
-            text-align: center;
         }
     }
 }

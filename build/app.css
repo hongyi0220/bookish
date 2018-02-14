@@ -66,7 +66,7 @@
   height: 3em;
   transition: all .1s ease;
   position: relative;
-  min-width: 150px; }
+  width: 200px; }
   .nav-item-container:hover {
     border-radius: 4px;
     background-color: white;
@@ -94,7 +94,16 @@
     position: absolute;
     right: 0; }
 
+.nav-item-container.clicked {
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 .2px 1px grey;
+  cursor: pointer; }
+
 .results-container h2 {
+  text-align: center; }
+
+.results-container .books-container {
   text-align: center; }
 
 .results-container .book {
@@ -202,20 +211,19 @@
     line-height: 60px;
     display: inline-block; }
 
-.logout-screen-container {
+.signup-success-screen-container {
   position: relative;
   top: 50%;
   transform: translateY(-8px); }
-  .logout-screen-container .emoji-wrapper {
+  .signup-success-screen-container .signup-success-emoji {
     font-size: 3em;
-    display: block;
     text-align: center; }
-  .logout-screen-container .logout-msg-container {
+  .signup-success-screen-container .signup-success-msg-container {
     text-align: center;
     color: grey; }
-    .logout-screen-container .logout-msg-container .cancel-button {
+    .signup-success-screen-container .signup-success-msg-container .cancel-button {
       color: #22A7F0; }
-      .logout-screen-container .logout-msg-container .cancel-button:hover {
+      .signup-success-screen-container .signup-success-msg-container .cancel-button:hover {
         text-decoration: underline;
         cursor: pointer; }
 
@@ -274,11 +282,14 @@
     .ui.modal .button-container .text-wrapper:hover {
       color: white; }
 
+.error-msg {
+  margin-top: -10px; }
+
 * {
   box-sizing: border-box; }
 
 .app-container {
-  height: 100vh;
+  min-height: 100vh;
   background-color: #fafafa; }
   .app-container .title-wrapper, .app-container .subtitle-wrapper {
     text-align: center; }
@@ -308,5 +319,4 @@
     .app-container .flexbox-container .nav-container {
       flex-grow: 1; }
     .app-container .flexbox-container .content-container {
-      flex-grow: 8;
-      text-align: center; }
+      flex-grow: 8; }

@@ -12,7 +12,7 @@ const MyBooks = props => {
     const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
     const toggleImgShadeOn = props.toggleImgShadeOn;
     const imgShadeStyle = state.ui.selected.style;
-    const selectedId = state.ui.selected.origin;
+    const selectedId = state.ui.selected.evtOrigin;
     const imgClass = state.ui.selected.class;
     const gridView = state.ui.gridView;
     const addBook = props.addBook;
