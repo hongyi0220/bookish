@@ -56,18 +56,20 @@ module.exports = function(app, db) {
             if (err) console.error(err);
             if (user) res.redirect('/signup/invalid-username');
             else {
-                const schema = {
+                const user = {
                     username: username,
                     password: password
                 };
-                Users.insert(schema);
-                // Sign user in
-                Users.findOne({username: username}, function(err, user) {
-                    if (err) return console.log(err);
-                    req.login(user, function(err) {
-                        // user
-                        if (err) return console.error(err);
-                        return res.redirect('/signup/success');
+                Users.insertOne(user)
+                .then(() => {
+                    //Sign user in
+                    Users.findOne({username: username}, function(err, user) {
+                        if (err) return console.log(err);
+                        req.login(user, function(err) {
+                            // user
+                            if (err) return console.error(err);
+                            return res.redirect('/signup/success');
+                        });
                     });
                 });
             }

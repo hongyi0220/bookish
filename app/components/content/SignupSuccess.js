@@ -25,8 +25,9 @@ const SignupSuccess = props => {
             <div className='signup-success-emoji'>🎉</div>
             <div className='signup-success-msg-container'>
                 Successfully signed up!&nbsp;
-                You've joined a community of
+
                 <div>
+                    You've joined a community of
                     <div>{countActiveUsers(books)} active users and</div>
                     <div>{books ? books.length : 'many'} books.</div>
 

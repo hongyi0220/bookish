@@ -66231,29 +66231,18 @@ var SignupSuccess = function SignupSuccess(props) {
     var state = props.state;
     // const timer = state.ui.timer;
     var books = state.books;
-    console.log(state);
     function countActiveUsers(books) {
         var users = [];
         if (books) {
-            console.log(books);
-            console.log(users);
             books.forEach(function (b) {
-                var _console, _users, _users2;
+                var _users, _users2;
 
-                (_console = console).log.apply(_console, ['...b.ownedby'].concat(_toConsumableArray(b.ownedby)));
                 (_users = users).push.apply(_users, _toConsumableArray(b.ownedby));
                 (_users2 = users).push.apply(_users2, _toConsumableArray(b.wishlist));
             });
-            // books.ownedby.forEach(o => users.push(o));
-            // console.log(users);
-            // books.wishlist.forEach(w => users.push(w));
-            console.log(users);
             users = users.sort().filter(function (user, i, usersArr) {
-                console.log(usersArr[i]);
-                console.log(usersArr[i - 1] !== usersArr[i]);
                 return usersArr[i - 1] !== usersArr[i];
             });
-            console.log(users);
             return users.length;
         }
     }
