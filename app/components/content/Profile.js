@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 const Profile = props => {
     const state = props.state;
     const user = state.user;
+    const id = user ? user._id : '';
     const username = user ? user.username : '';
     const password = user ? user.password : '';
     const location = user ? (user.location || 'city, state') : '';
@@ -31,6 +32,7 @@ const Profile = props => {
                         <input type='text' name='location' placeholder={location}/>
                         <div className='emoji-wrapper'>📍</div>
                     </div>
+                    <input type='hidden' name='id' value={id}/>
                     <div className='button-wrapper'>
                         <button type='submit'>SAVE</button>
                     </div>

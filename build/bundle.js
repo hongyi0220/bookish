@@ -5063,19 +5063,6 @@ var ButtonsContainer = function ButtonsContainer(props) {
     var doIOwn = props.doIOwn;
     var approveRequest = props.approveRequest;
     var cancelRequest = props.cancelRequest;
-    // const requestButtonHeight = 65;
-    // const requestButtonStyles = {
-    //     borderTop: '1px solid rgb(242,242,242)',
-    //     height: requestButtonHeight + 'px',
-    //     background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)',
-    //     cursor: 'pointer'
-    // };
-    // const textWrapperStyles = {
-    //     color: 'white',
-    //     textAlign: 'center',
-    //     lineHeight: requestButtonHeight + 'px',
-    //     fontSize: '1.4em'
-    // };
 
     return _react2.default.createElement(
         'div',
@@ -5107,7 +5094,6 @@ var ButtonsContainer = function ButtonsContainer(props) {
         )
     );
 };
-// import { Link } from 'react-router-dom';
 exports.default = ButtonsContainer;
 
 /***/ }),
@@ -43453,7 +43439,6 @@ var App = function (_React$Component) {
                 },
                 gridView: true,
                 isModalOpen: false,
-                timer: 5,
                 loginClicked: false
             }
         };
@@ -43476,10 +43461,6 @@ var App = function (_React$Component) {
         _this.removeMiddleName = _this.removeMiddleName.bind(_this);
         _this.getMyBooks = _this.getMyBooks.bind(_this);
         _this.removeBook = _this.removeBook.bind(_this);
-        _this.logoutTimeout = null;
-        _this.cancelLogout = _this.cancelLogout.bind(_this);
-        _this.timerInterval = null;
-        _this.setTimer = _this.setTimer.bind(_this);
         _this.doIOwn = _this.doIOwn.bind(_this);
         _this.requestBook = _this.requestBook.bind(_this);
         _this.cancelRequest = _this.cancelRequest.bind(_this);
@@ -43505,22 +43486,6 @@ var App = function (_React$Component) {
             });
         }
     }, {
-        key: 'setTimer',
-        value: function setTimer() {
-            this.timerInterval = setInterval(deduct1000.bind(this), 1000);
-            function deduct1000() {
-                if (this.state.ui.timer) {
-                    this.setState(function (prevState) {
-                        return _extends({}, prevState, {
-                            ui: _extends({}, prevState.ui, {
-                                timer: prevState.ui.timer - 1
-                            })
-                        });
-                    });
-                } else clearInterval(this.timer);
-            }
-        }
-    }, {
         key: 'logout',
         value: function logout() {
             var dev = this.state.dev;
@@ -43531,18 +43496,6 @@ var App = function (_React$Component) {
                 return console.error(err);
             });
             location.reload();
-        }
-    }, {
-        key: 'cancelLogout',
-        value: function cancelLogout() {
-            clearTimeout(this.logoutTimeout);
-            clearInterval(this.timer);
-            this.props.history.push('/');
-            this.setState(_extends({}, this.state, {
-                ui: _extends({}, this.state.ui, {
-                    timer: 5
-                })
-            }));
         }
     }, {
         key: 'getApiKey',
@@ -43704,8 +43657,6 @@ var App = function (_React$Component) {
     }, {
         key: 'requestBook',
         value: function requestBook(bookId) {
-            console.log('requesting book');
-
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/request/' + bookId + '/' + username;
@@ -43727,8 +43678,6 @@ var App = function (_React$Component) {
     }, {
         key: 'cancelRequest',
         value: function cancelRequest(bookId) {
-            console.log('cancelling request');
-
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var username = this.state.user.username;
@@ -43743,8 +43692,6 @@ var App = function (_React$Component) {
     }, {
         key: 'approveRequest',
         value: function approveRequest(bookId) {
-            console.log('approving request');
-
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var username = this.state.user.username;
@@ -43831,8 +43778,6 @@ var App = function (_React$Component) {
         key: 'borderNavItem',
         value: function borderNavItem(evt) {
             var id = evt.target.id;
-            // console.log(evt.target);
-            // console.log(id);
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     navItemClicked: _extends({}, this.state.ui.navItemClicked, {
@@ -43889,14 +43834,10 @@ var App = function (_React$Component) {
             }).catch(function (err) {
                 return console.error(err);
             });
-            console.log('cmpDidMnt');
-            console.log(this.state);
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
-
             var state = this.state;
             var logout = this.logout;
             var handleInput = this.handleInput;
@@ -43914,16 +43855,17 @@ var App = function (_React$Component) {
             var removeMiddleName = this.removeMiddleName;
             var removeBook = this.removeBook;
             var cancelLogout = this.cancelLogout;
-            var setTimer = this.setTimer;
             var doIOwn = this.doIOwn;
             var requestBook = this.requestBook;
             var cancelRequest = this.cancelRequest;
             var approveRequest = this.approveRequest;
             var borderNavItem = this.borderNavItem;
+            var changeEmojiToShadow = this.changeEmojiToShadow;
+            var changeEmojiToPerson = this.changeEmojiToPerson;
 
             return _react2.default.createElement(
                 'div',
-                { className: 'app-container', onMouseOver: toggleImgShadeOff, onClick: this.changeEmojiToShadow },
+                { className: 'app-container', onMouseOver: toggleImgShadeOff, onClick: changeEmojiToShadow },
                 _react2.default.createElement(_Footer2.default, null),
                 _react2.default.createElement(
                     'div',
@@ -43956,7 +43898,7 @@ var App = function (_React$Component) {
                             null,
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/about', component: _About2.default }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/signup/success', render: function render() {
-                                    return _react2.default.createElement(_SignupSuccess2.default, { state: state, setTimer: setTimer });
+                                    return _react2.default.createElement(_SignupSuccess2.default, { state: state });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks', render: function render() {
                                     return _react2.default.createElement(_MyBooks2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
@@ -43974,11 +43916,11 @@ var App = function (_React$Component) {
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/login', render: function render() {
                                     return _react2.default.createElement(_LoginForm2.default, { state: state,
-                                        changeEmojiToPerson: _this4.changeEmojiToPerson });
+                                        changeEmojiToPerson: changeEmojiToPerson });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/signup', render: function render() {
                                     return _react2.default.createElement(_SignupForm2.default, { state: state,
-                                        changeEmojiToPerson: _this4.changeEmojiToPerson });
+                                        changeEmojiToPerson: changeEmojiToPerson });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/', render: function render() {
                                     return _react2.default.createElement(_Books2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
@@ -63984,25 +63926,6 @@ var Nav = function Nav(props) {
         ),
         _react2.default.createElement(
             _reactRouterDom.Link,
-            { to: '/home' },
-            _react2.default.createElement(
-                'div',
-                { className: evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container',
-                    id: 'home' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'text-wrapper', id: 'home' },
-                    'Home'
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'emoji-wrapper', id: 'home' },
-                    '\uD83C\uDFE0'
-                )
-            )
-        ),
-        _react2.default.createElement(
-            _reactRouterDom.Link,
             { to: '/' },
             _react2.default.createElement(
                 'div',
@@ -64306,7 +64229,6 @@ var _reactRouterDom = __webpack_require__(21);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var LoginForm = function LoginForm(props) {
-    var setTimer = props.setTimer;
     var emoji = props.state.ui.emoji;
     return _react2.default.createElement(
         'div',
@@ -64359,7 +64281,7 @@ var LoginForm = function LoginForm(props) {
                 { className: 'button-wrapper' },
                 _react2.default.createElement(
                     'button',
-                    { type: 'submit', onClick: setTimer },
+                    { type: 'submit' },
                     'LOG IN'
                 )
             )
@@ -64390,6 +64312,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Profile = function Profile(props) {
     var state = props.state;
     var user = state.user;
+    var id = user ? user._id : '';
     var username = user ? user.username : '';
     var password = user ? user.password : '';
     var location = user ? user.location || 'city, state' : '';
@@ -64444,6 +64367,7 @@ var Profile = function Profile(props) {
                         '\uD83D\uDCCD'
                     )
                 ),
+                _react2.default.createElement('input', { type: 'hidden', name: 'id', value: id }),
                 _react2.default.createElement(
                     'div',
                     { className: 'button-wrapper' },
@@ -65720,9 +65644,8 @@ var Books = function Books(props) {
                 var volumeInfo = book.volumeInfo;
                 var bookId = book.id;
                 var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
-                // console.log('book.authors:', author);
                 var author = removeMiddleName(authorName);
-                var title = shortenString(volumeInfo.title, 14);
+                var title = shortenString(volumeInfo.title, 10);
                 var imgUrl = imgRootUrl + bookId + imgSrcParams;
                 var imgStyle = {
                     backgroundImage: 'url(' + imgUrl + ')'
@@ -66015,7 +65938,6 @@ var Own = function Own(props) {
     var requestBook = props.requestBook;
     var removeBook = props.removeBook;
     var addBook = props.addBook;
-    // const bookId = props.bookId;
     var doIOwn = props.doIOwn;
     var shortenString = props.shortenString;
     var removeMiddleName = props.removeMiddleName;
@@ -66089,7 +66011,6 @@ var Wishlist = function Wishlist(props) {
     var requestBook = props.requestBook;
     var removeBook = props.removeBook;
     var addBook = props.addBook;
-    // const bookId = props.bookId;
     var doIOwn = props.doIOwn;
     var cancelRequest = props.cancelRequest;
     var books = state.books;
@@ -66160,7 +66081,6 @@ var IncomingRequests = function IncomingRequests(props) {
     var requestBook = props.requestBook;
     var removeBook = props.removeBook;
     var addBook = props.addBook;
-    // const bookId = props.bookId;
     var doIOwn = props.doIOwn;
     var shortenString = props.shortenString;
     var removeMiddleName = props.removeMiddleName;
@@ -66229,7 +66149,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 var SignupSuccess = function SignupSuccess(props) {
     var state = props.state;
-    // const timer = state.ui.timer;
     var books = state.books;
     function countActiveUsers(books) {
         var users = [];
@@ -66246,7 +66165,6 @@ var SignupSuccess = function SignupSuccess(props) {
             return users.length;
         }
     }
-    // props.setTimer();
 
     return _react2.default.createElement(
         'div',
@@ -66259,19 +66177,16 @@ var SignupSuccess = function SignupSuccess(props) {
         _react2.default.createElement(
             'div',
             { className: 'signup-success-msg-container' },
-            'Successfully signed up!\xA0 You\'ve joined a community of',
+            'Welcome!',
             _react2.default.createElement(
                 'div',
                 null,
+                'You\'ve joined a community of',
                 _react2.default.createElement(
                     'div',
                     null,
                     countActiveUsers(books),
-                    ' active users and'
-                ),
-                _react2.default.createElement(
-                    'div',
-                    null,
+                    ' active users and ',
                     books ? books.length : 'many',
                     ' books.'
                 )
@@ -66284,7 +66199,6 @@ exports.default = SignupSuccess;
 
 SignupSuccess.propTypes = {
     state: _propTypes2.default.object.isRequired
-    // timer: PropTypes.func.isRequired
 };
 
 /***/ }),

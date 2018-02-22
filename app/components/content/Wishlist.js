@@ -11,7 +11,6 @@ const Wishlist = props => {
     const requestBook = props.requestBook;
     const removeBook = props.removeBook;
     const addBook = props.addBook;
-    // const bookId = props.bookId;
     const doIOwn = props.doIOwn;
     const cancelRequest = props.cancelRequest;
     const books = state.books;

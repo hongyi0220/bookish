@@ -34,9 +34,8 @@ const Books = props => {
                     const volumeInfo = book.volumeInfo;
                     const bookId = book.id;
                     const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
-                    // console.log('book.authors:', author);
                     const author = removeMiddleName(authorName);
-                    const title = shortenString(volumeInfo.title, 14);
+                    const title = shortenString(volumeInfo.title, 10);
                     const imgUrl = imgRootUrl + bookId + imgSrcParams;
                     let imgStyle = {
                         backgroundImage: 'url(' + imgUrl + ')'

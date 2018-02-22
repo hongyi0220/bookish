@@ -9,7 +9,6 @@ const Own = props => {
     const requestBook = props.requestBook;
     const removeBook = props.removeBook;
     const addBook = props.addBook;
-    // const bookId = props.bookId;
     const doIOwn = props.doIOwn;
     const shortenString = props.shortenString;
     const removeMiddleName = props.removeMiddleName;

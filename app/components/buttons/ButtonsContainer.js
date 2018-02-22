@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
 import AddButton from './AddButton';
 import RequestButton from './RequestButton';
 import RemoveButton from './RemoveButton';
@@ -17,19 +16,6 @@ const ButtonsContainer = props => {
     const doIOwn = props.doIOwn;
     const approveRequest = props.approveRequest;
     const cancelRequest = props.cancelRequest;
-    // const requestButtonHeight = 65;
-    // const requestButtonStyles = {
-    //     borderTop: '1px solid rgb(242,242,242)',
-    //     height: requestButtonHeight + 'px',
-    //     background: 'radial-gradient(circle at center, #22A7F0 0, #19B5FE, #89C4F4 100%)',
-    //     cursor: 'pointer'
-    // };
-    // const textWrapperStyles = {
-    //     color: 'white',
-    //     textAlign: 'center',
-    //     lineHeight: requestButtonHeight + 'px',
-    //     fontSize: '1.4em'
-    // };
 
     return (
         <div className='buttons-container'>

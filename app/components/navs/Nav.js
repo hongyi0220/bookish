@@ -18,13 +18,6 @@ import { Link } from 'react-router-dom';
                     onKeyUp={(evt) => {searchForBook(evt); navigateTo('/search')}} />
                 <div className='emoji-wrapper'>🔍</div>
             </div>
-            <Link to='/home'>
-                <div className={evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container'}
-                    id='home'>
-                    <div className='text-wrapper' id='home'>Home</div>
-                    <div className='emoji-wrapper' id='home'>🏠</div>
-                </div>
-            </Link>
             <Link to='/'>
                 <div className={evtOrigin === 'books' ? 'nav-item-container' + clicked : 'nav-item-container'}
                     id='books'>

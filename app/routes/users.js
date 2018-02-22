@@ -85,9 +85,10 @@ module.exports = function(app, db) {
         const username = req.body.username || req.user.username;
         const password = req.body.password || req.user.password;
         const location = req.body.location || req.user.location;
+        const id = req.body.id;
 
         Users.updateOne(
-            { username: username },
+            { _id: ObjectId(id) },
             { $set: {
                 username: username,
                 password: password,

@@ -38,7 +38,6 @@ class App extends React.Component {
                 },
                 gridView: true,
                 isModalOpen: false,
-                timer: 5,
                 loginClicked: false
             }
         };
@@ -61,10 +60,6 @@ class App extends React.Component {
         this.removeMiddleName = this.removeMiddleName.bind(this);
         this.getMyBooks = this.getMyBooks.bind(this);
         this.removeBook = this.removeBook.bind(this);
-        this.logoutTimeout = null;
-        this.cancelLogout = this.cancelLogout.bind(this);
-        this.timerInterval = null;
-        this.setTimer = this.setTimer.bind(this);
         this.doIOwn = this.doIOwn.bind(this);
         this.requestBook = this.requestBook.bind(this);
         this.cancelRequest = this.cancelRequest.bind(this);
@@ -88,21 +83,6 @@ class App extends React.Component {
         .catch(err => console.error(err));
     }
 
-    setTimer() {
-        this.timerInterval = setInterval(deduct1000.bind(this), 1000);
-        function deduct1000() {
-            if (this.state.ui.timer) {
-                this.setState(prevState => ({
-                    ...prevState,
-                    ui: {
-                        ...prevState.ui,
-                        timer: prevState.ui.timer - 1
-                    }
-                }));
-            } else clearInterval(this.timer);
-        }
-    }
-
     logout() {
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
@@ -111,19 +91,6 @@ class App extends React.Component {
         fetch(apiRoot + route, {credentials: 'include'})
         .catch(err => console.error(err));
         location.reload();
-    }
-
-    cancelLogout() {
-        clearTimeout(this.logoutTimeout);
-        clearInterval(this.timer);
-        this.props.history.push('/');
-        this.setState({
-            ...this.state,
-            ui: {
-                ...this.state.ui,
-                timer: 5
-            }
-        })
     }
 
     getApiKey() {
@@ -269,8 +236,6 @@ class App extends React.Component {
     }
 
     requestBook(bookId) {
-        console.log('requesting book');
-
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/request/' + bookId + '/' + username;
@@ -290,8 +255,6 @@ class App extends React.Component {
     }
 
     cancelRequest(bookId) {
-        console.log('cancelling request');
-
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const username = this.state.user.username;
@@ -304,8 +267,6 @@ class App extends React.Component {
     }
 
     approveRequest(bookId) {
-        console.log('approving request');
-
         const dev = this.state.dev;
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const username = this.state.user.username;
@@ -385,8 +346,6 @@ class App extends React.Component {
 
     borderNavItem(evt) {
         const id = evt.target.id;
-        // console.log(evt.target);
-        // console.log(id);
         this.setState({
             ...this.state,
             ui: {
@@ -445,8 +404,6 @@ class App extends React.Component {
             .catch(err => console.error(err));
         })
         .catch(err => console.error(err));
-        console.log('cmpDidMnt');
-        console.log(this.state);
     }
 
     render() {
@@ -467,15 +424,16 @@ class App extends React.Component {
         const removeMiddleName = this.removeMiddleName;
         const removeBook = this.removeBook;
         const cancelLogout = this.cancelLogout;
-        const setTimer = this.setTimer;
         const doIOwn = this.doIOwn;
         const requestBook = this.requestBook;
         const cancelRequest = this.cancelRequest;
         const approveRequest = this.approveRequest;
         const borderNavItem = this.borderNavItem;
+        const changeEmojiToShadow = this.changeEmojiToShadow;
+        const changeEmojiToPerson = this.changeEmojiToPerson;
 
         return (
-        <div className='app-container' onMouseOver={toggleImgShadeOff} onClick={this.changeEmojiToShadow}>
+        <div className='app-container' onMouseOver={toggleImgShadeOff} onClick={changeEmojiToShadow}>
             <Footer />
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
@@ -491,7 +449,7 @@ class App extends React.Component {
                 <div className='content-container'>
                     <Switch>
                         <Route path='/about' component={About} />
-                        <Route path='/signup/success' render={() => <SignupSuccess state={state} setTimer={setTimer}/>}/>
+                        <Route path='/signup/success' render={() => <SignupSuccess state={state}/>}/>
 
                         <Route path='/mybooks' render={() => <MyBooks state={state} toggleImgShadeOn={toggleImgShadeOn}
                             openModal={openModal} removeBook={removeBook} closeModal={closeModal} shortenString={shortenString}
@@ -504,9 +462,11 @@ class App extends React.Component {
 
                         <Route path='/profile' render={() => <Profile state={state}/>} />
                         <Route path='/login' render={() => <LoginForm state={state}
-                            changeEmojiToPerson={this.changeEmojiToPerson}/>} />
+                            changeEmojiToPerson={changeEmojiToPerson}/>} />
+
                         <Route path='/signup' render={() => <SignupForm state={state}
-                            changeEmojiToPerson={this.changeEmojiToPerson}/>} />
+                            changeEmojiToPerson={changeEmojiToPerson}/>} />
+
                         <Route path='/' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
                             openModal={openModal} closeModal={closeModal} shortenString={shortenString} addBook={addBook}
                             removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook} removeBook/>}/>

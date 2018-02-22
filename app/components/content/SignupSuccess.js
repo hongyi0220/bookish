@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 const SignupSuccess = props => {
     const state = props.state;
-    // const timer = state.ui.timer;
     const books = state.books;
     function countActiveUsers(books) {
         let users = [];
@@ -18,18 +17,17 @@ const SignupSuccess = props => {
             return users.length;
         }
     }
-    // props.setTimer();
 
     return (
         <div className='signup-success-screen-container'>
             <div className='signup-success-emoji'>🎉</div>
             <div className='signup-success-msg-container'>
-                Successfully signed up!&nbsp;
-
+                Welcome!
                 <div>
                     You've joined a community of
-                    <div>{countActiveUsers(books)} active users and</div>
-                    <div>{books ? books.length : 'many'} books.</div>
+                    <div>
+                        {countActiveUsers(books)} active users and {books ? books.length : 'many'} books.
+                    </div>
 
                 </div>
             </div>
@@ -39,6 +37,5 @@ const SignupSuccess = props => {
 export default SignupSuccess;
 
 SignupSuccess.propTypes = {
-    state: PropTypes.object.isRequired,
-    // timer: PropTypes.func.isRequired
+    state: PropTypes.object.isRequired
 }
