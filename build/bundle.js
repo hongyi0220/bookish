@@ -43437,6 +43437,10 @@ var App = function (_React$Component) {
                     evtOrigin: null,
                     class: ''
                 },
+                myBooksNavItemClicked: {
+                    evtOrigin: null,
+                    class: ''
+                },
                 gridView: true,
                 isModalOpen: false,
                 loginClicked: false
@@ -43468,6 +43472,7 @@ var App = function (_React$Component) {
         _this.changeEmojiToPerson = _this.changeEmojiToPerson.bind(_this);
         _this.changeEmojiToShadow = _this.changeEmojiToShadow.bind(_this);
         _this.borderNavItem = _this.borderNavItem.bind(_this);
+        _this.highlightMyBooksNavItem = _this.highlightMyBooksNavItem.bind(_this);
         return _this;
     }
 
@@ -43534,7 +43539,9 @@ var App = function (_React$Component) {
 
             if (keyword.length) this.getApiKey().then(function (apiKey) {
                 _this2.callGoogleApi(keyword, apiKey).then(function (books) {
-                    return _this2.setState({ searchResult: books });
+                    return _this2.setState({ searchResult: books }, function () {
+                        return console.log(_this2.state.searchResult);
+                    });
                 }).catch(function (err) {
                     return console.error(err);
                 });
@@ -43620,12 +43627,19 @@ var App = function (_React$Component) {
     }, {
         key: 'addBook',
         value: function addBook(bookId) {
+            var _this3 = this;
+
             var books = this.state.searchResult.items;
             var foundBook = this.findBookById(bookId, books);
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/book/:id/:username';
             var username = this.state.user.username;
+            var searchResult = this.state.searchResult;
+            searchResult.items = searchResult.items.filter(function (book) {
+                return book.id !== bookId;
+            });
+            var newSearchResult = searchResult;
 
             return fetch(apiRoot + route, {
                 method: 'POST',
@@ -43636,6 +43650,13 @@ var App = function (_React$Component) {
                     book: foundBook,
                     username: username
                 })
+            }).then(function () {
+                return _this3.getBooks();
+            }).then(function (books) {
+                return _this3.setState({
+                    searchResult: newSearchResult,
+                    books: books
+                });
             }).catch(function (err) {
                 return console.error(err);
             });
@@ -43643,6 +43664,8 @@ var App = function (_React$Component) {
     }, {
         key: 'removeBook',
         value: function removeBook(bookId) {
+            var _this4 = this;
+
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var username = this.state.user.username;
@@ -43650,6 +43673,12 @@ var App = function (_React$Component) {
 
             return fetch(apiRoot + route, {
                 method: 'DELETE'
+            }).then(function () {
+                return _this4.getBooks();
+            }).then(function (books) {
+                return _this4.setState({
+                    books: books
+                });
             }).catch(function (err) {
                 return console.error(err);
             });
@@ -43657,6 +43686,8 @@ var App = function (_React$Component) {
     }, {
         key: 'requestBook',
         value: function requestBook(bookId) {
+            var _this5 = this;
+
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var route = '/request/' + bookId + '/' + username;
@@ -43671,6 +43702,12 @@ var App = function (_React$Component) {
                     bookId: bookId,
                     username: username
                 })
+            }).then(function () {
+                return _this5.getBooks();
+            }).then(function (books) {
+                return _this5.setState({
+                    books: books
+                });
             }).catch(function (err) {
                 return console.error(err);
             });
@@ -43678,6 +43715,8 @@ var App = function (_React$Component) {
     }, {
         key: 'cancelRequest',
         value: function cancelRequest(bookId) {
+            var _this6 = this;
+
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var username = this.state.user.username;
@@ -43685,6 +43724,12 @@ var App = function (_React$Component) {
 
             fetch(apiRoot + route, {
                 method: 'DELETE'
+            }).then(function () {
+                return _this6.getBooks();
+            }).then(function (books) {
+                return _this6.setState({
+                    books: books
+                });
             }).catch(function (err) {
                 return console.error(err);
             });
@@ -43692,6 +43737,8 @@ var App = function (_React$Component) {
     }, {
         key: 'approveRequest',
         value: function approveRequest(bookId) {
+            var _this7 = this;
+
             var dev = this.state.dev;
             var apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
             var username = this.state.user.username;
@@ -43699,6 +43746,12 @@ var App = function (_React$Component) {
 
             return fetch(apiRoot + route, {
                 method: 'PUT'
+            }).then(function () {
+                return _this7.getBooks();
+            }).then(function (books) {
+                return _this7.setState({
+                    books: books
+                });
             }).catch(function (err) {
                 return console.error(err);
             });
@@ -43789,6 +43842,20 @@ var App = function (_React$Component) {
             evt.stopPropagation();
         }
     }, {
+        key: 'highlightMyBooksNavItem',
+        value: function highlightMyBooksNavItem(evt) {
+            var id = evt.target.id;
+            this.setState(_extends({}, this.state, {
+                ui: _extends({}, this.state.ui, {
+                    myBooksNavItemClicked: _extends({}, this.state.ui.myBooksnavItemClicked, {
+                        evtOrigin: id,
+                        class: ' clicked'
+                    })
+                })
+            }));
+            evt.stopPropagation();
+        }
+    }, {
         key: 'changeEmojiToShadow',
         value: function changeEmojiToShadow(evt) {
             this.setState(_extends({}, this.state, {
@@ -43812,24 +43879,22 @@ var App = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this3 = this;
+            var _this8 = this;
 
             this.getBooks().then(function (books) {
-                _this3.setSession().then(function (user) {
+                _this8.setSession().then(function (user) {
                     if (user) {
                         var username = user.username;
-                        _this3.setState({
+                        _this8.setState({
                             user: user,
                             books: books,
-                            myBooks: _this3.getMyBooks(username, books)
+                            myBooks: _this8.getMyBooks(username, books)
                         });
                     } else {
-                        _this3.setState({
+                        _this8.setState({
                             books: books
                         });
                     }
-                }).catch(function (err) {
-                    return console.error(err);
                 });
             }).catch(function (err) {
                 return console.error(err);
@@ -43862,6 +43927,7 @@ var App = function (_React$Component) {
             var borderNavItem = this.borderNavItem;
             var changeEmojiToShadow = this.changeEmojiToShadow;
             var changeEmojiToPerson = this.changeEmojiToPerson;
+            var highlightMyBooksNavItem = this.highlightMyBooksNavItem;
 
             return _react2.default.createElement(
                 'div',
@@ -43877,7 +43943,7 @@ var App = function (_React$Component) {
                     { className: 'subtitle-wrapper' },
                     'Book trading made easy'
                 ),
-                _react2.default.createElement(_reactRouterDom.Route, { path: '/(search|books)', render: function render() {
+                _react2.default.createElement(_reactRouterDom.Route, { path: '/(search|books|)', render: function render() {
                         return _react2.default.createElement(
                             'div',
                             { className: 'layout-buttons-container' },
@@ -43904,7 +43970,7 @@ var App = function (_React$Component) {
                                     return _react2.default.createElement(_MyBooks2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
                                         openModal: openModal, removeBook: removeBook, closeModal: closeModal, shortenString: shortenString,
                                         removeMiddleName: removeMiddleName, addBook: addBook, cancelRequest: cancelRequest,
-                                        approveRequest: approveRequest });
+                                        approveRequest: approveRequest, highlightMyBooksNavItem: highlightMyBooksNavItem });
                                 } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/search', render: function render() {
                                     return _react2.default.createElement(_SearchResults2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
@@ -43922,7 +43988,7 @@ var App = function (_React$Component) {
                                     return _react2.default.createElement(_SignupForm2.default, { state: state,
                                         changeEmojiToPerson: changeEmojiToPerson });
                                 } }),
-                            _react2.default.createElement(_reactRouterDom.Route, { path: '/', render: function render() {
+                            _react2.default.createElement(_reactRouterDom.Route, { path: '/(books|)', render: function render() {
                                     return _react2.default.createElement(_Books2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
                                         openModal: openModal, closeModal: closeModal, shortenString: shortenString, addBook: addBook,
                                         removeMiddleName: removeMiddleName, doIOwn: doIOwn, requestBook: requestBook, removeBook: true });
@@ -64045,7 +64111,7 @@ var UserNav = function UserNav(props) {
                 ),
                 _react2.default.createElement(
                     _reactRouterDom.Link,
-                    { to: '/mybooks' },
+                    { to: '/mybooks/own' },
                     _react2.default.createElement(
                         'div',
                         { className: evtOrigin === 'my-books' ? 'nav-item-container' + clicked : 'nav-item-container',
@@ -64405,6 +64471,10 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactRouterDom = __webpack_require__(21);
 
 var _Dialog = __webpack_require__(213);
@@ -64417,16 +64487,16 @@ var SearchResults = function SearchResults(props) {
     var state = props.state;
     var myBooks = state.myBooks;
     var searchResult = state.searchResult;
-    var imgRootUrl = 'http://books.google.com/books/content?id=';
-    var imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
-    var toggleImgShadeOn = props.toggleImgShadeOn;
     var imgShadeStyle = state.ui.selected.style;
     var selectedId = state.ui.selected.evtOrigin;
     var imgClass = state.ui.selected.class;
     var isLoggedIn = state.user;
     var gridView = state.ui.gridView;
-    var addBook = props.addBook;
     var foundBook = state.foundBook;
+    var imgRootUrl = 'http://books.google.com/books/content?id=';
+    var imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
+    var toggleImgShadeOn = props.toggleImgShadeOn;
+    var addBook = props.addBook;
     var openModal = props.openModal;
     var closeModal = props.closeModal;
     var shortenString = props.shortenString;
@@ -64584,6 +64654,20 @@ var SearchResults = function SearchResults(props) {
     );
 };
 exports.default = SearchResults;
+
+
+SearchResults.propTypes = {
+    state: _propTypes2.default.object.isRequired,
+    toggleImgShadeOn: _propTypes2.default.func,
+    addBook: _propTypes2.default.func,
+    openModal: _propTypes2.default.func,
+    closeModal: _propTypes2.default.func,
+    shortenString: _propTypes2.default.func,
+    removeMiddleName: _propTypes2.default.func,
+    removeBook: _propTypes2.default.func,
+    doIOwn: _propTypes2.default.func,
+    requestBook: _propTypes2.default.func
+};
 
 /***/ }),
 /* 788 */
@@ -64746,7 +64830,7 @@ var CancelRequestButton = function CancelRequestButton(props) {
             { className: 'text-wrapper', onClick: function onClick() {
                     cancelRequest(bookId);
                 } },
-            'Cancel Request'
+            'Cancel Request \u274C'
         )
     );
 };
@@ -64783,7 +64867,7 @@ var ApproveButton = function ApproveButton(props) {
             { className: 'text-wrapper', onClick: function onClick() {
                     approveRequest(bookId);
                 } },
-            'Accept this request'
+            'Approve this request \uD83D\uDC4D'
         )
     );
 };
@@ -65726,7 +65810,7 @@ var Books = function Books(props) {
                 var bookId = book.id;
                 var volumeInfo = book.volumeInfo;
                 var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-                var title = shortenString(volumeInfo.title, 25);
+                var title = shortenString(volumeInfo.title, 20);
                 var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
                 var author = removeMiddleName(authorName);
 
@@ -65846,6 +65930,9 @@ var MyBooks = function MyBooks(props) {
     var requestBook = props.requestBook;
     var cancelRequest = props.cancelRequest;
     var approveRequest = props.approveRequest;
+    var highlightMyBooksNavItem = props.highlightMyBooksNavItem;
+    var clicked = state.ui.myBooksNavItemClicked.class;
+    var evtOrigin = state.ui.myBooksNavItemClicked.evtOrigin;
 
     return _react2.default.createElement(
         'div',
@@ -65857,13 +65944,14 @@ var MyBooks = function MyBooks(props) {
         ),
         _react2.default.createElement(
             'div',
-            { className: 'my-books-nav' },
+            { className: 'my-books-nav', onClick: highlightMyBooksNavItem },
             _react2.default.createElement(
                 _reactRouterDom.Link,
                 { to: '/mybooks/own' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'my-book-nav-item' },
+                    { className: evtOrigin === 'own' ? 'my-book-nav-item' + clicked : 'my-book-nav-item',
+                        id: 'own' },
                     'Own'
                 )
             ),
@@ -65872,7 +65960,8 @@ var MyBooks = function MyBooks(props) {
                 { to: '/mybooks/wishlist' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'my-book-nav-item' },
+                    { className: evtOrigin === 'wish' ? 'my-book-nav-item' + clicked : 'my-book-nav-item',
+                        id: 'wish' },
                     'Wish List'
                 )
             ),
@@ -65881,7 +65970,8 @@ var MyBooks = function MyBooks(props) {
                 { to: '/mybooks/incoming-requests' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'my-book-nav-item' },
+                    { className: evtOrigin === 'request' ? 'my-book-nav-item' + clicked : 'my-book-nav-item',
+                        id: 'request' },
                     'Incoming Requests'
                 )
             )
@@ -65889,11 +65979,6 @@ var MyBooks = function MyBooks(props) {
         _react2.default.createElement(
             _reactRouterDom.Switch,
             null,
-            _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks', render: function render() {
-                    return _react2.default.createElement(_Own2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
-                        addBook: addBook, removeBook: removeBook, shortenString: shortenString, removeMiddleName: removeMiddleName,
-                        requestBook: requestBook });
-                } }),
             _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/wishlist', render: function render() {
                     return _react2.default.createElement(_Wishlist2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
                         addBook: addBook, removeBook: removeBook, shortenString: shortenString, removeMiddleName: removeMiddleName,
@@ -65903,6 +65988,11 @@ var MyBooks = function MyBooks(props) {
                     return _react2.default.createElement(_IncomingRequests2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
                         addBook: addBook, removeBook: removeBook, shortenString: shortenString, removeMiddleName: removeMiddleName,
                         requestBook: requestBook, approveRequest: approveRequest });
+                } }),
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/mybooks/own', render: function render() {
+                    return _react2.default.createElement(_Own2.default, { state: state, imgRootUrl: imgRootUrl, imgSrcParams: imgSrcParams,
+                        addBook: addBook, removeBook: removeBook, shortenString: shortenString, removeMiddleName: removeMiddleName,
+                        requestBook: requestBook });
                 } })
         )
     );
@@ -65950,7 +66040,7 @@ var Own = function Own(props) {
         var bookId = book.id;
         var volumeInfo = book.volumeInfo;
         var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-        var title = shortenString(volumeInfo.title, 25);
+        var title = shortenString(volumeInfo.title, 20);
         var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
         var author = removeMiddleName(authorName);
 
@@ -66017,12 +66107,13 @@ var Wishlist = function Wishlist(props) {
     var wishlist = books ? books.filter(function (book) {
         return book.wishlist.includes(username);
     }) : [];
+
     return wishlist.map(function (b, i) {
         var book = b.book;
         var bookId = book.id;
         var volumeInfo = book.volumeInfo;
         var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-        var title = shortenString(volumeInfo.title, 25);
+        var title = shortenString(volumeInfo.title, 20);
         var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
         var author = removeMiddleName(authorName);
 
@@ -66094,7 +66185,7 @@ var IncomingRequests = function IncomingRequests(props) {
         var bookId = book.id;
         var volumeInfo = book.volumeInfo;
         var imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-        var title = shortenString(volumeInfo.title, 25);
+        var title = shortenString(volumeInfo.title, 20);
         var authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
         var author = removeMiddleName(authorName);
 

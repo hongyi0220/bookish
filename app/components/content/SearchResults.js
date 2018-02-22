@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Dialog from './Dialog';
 
@@ -6,16 +7,16 @@ const SearchResults = props => {
     const state = props.state;
     const myBooks = state.myBooks;
     const searchResult = state.searchResult;
-    const imgRootUrl = 'http://books.google.com/books/content?id=';
-    const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
-    const toggleImgShadeOn = props.toggleImgShadeOn;
     const imgShadeStyle = state.ui.selected.style;
     const selectedId = state.ui.selected.evtOrigin;
     const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
     const gridView = state.ui.gridView;
-    const addBook = props.addBook;
     const foundBook = state.foundBook;
+    const imgRootUrl = 'http://books.google.com/books/content?id=';
+    const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
+    const toggleImgShadeOn = props.toggleImgShadeOn;
+    const addBook = props.addBook;
     const openModal = props.openModal;
     const closeModal = props.closeModal;
     const shortenString = props.shortenString;
@@ -116,3 +117,16 @@ const SearchResults = props => {
     );
 }
 export default SearchResults;
+
+SearchResults.propTypes = {
+    state: PropTypes.object.isRequired,
+    toggleImgShadeOn: PropTypes.func,
+    addBook: PropTypes.func,
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
+    shortenString: PropTypes.func,
+    removeMiddleName: PropTypes.func,
+    removeBook: PropTypes.func,
+    doIOwn: PropTypes.func,
+    requestBook: PropTypes.func
+}

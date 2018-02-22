@@ -20,7 +20,7 @@ const Own = props => {
             const bookId = book.id;
             const volumeInfo = book.volumeInfo;
             const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-            const title = shortenString(volumeInfo.title, 25);
+            const title = shortenString(volumeInfo.title, 20);
             const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
             const author = removeMiddleName(authorName);
 

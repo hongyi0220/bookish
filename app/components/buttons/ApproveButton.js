@@ -8,7 +8,7 @@ const ApproveButton = props => {
 
     return (
         <div className='button-container'>
-            <div className='text-wrapper' onClick={() => {approveRequest(bookId)}}>Accept this request</div>
+            <div className='text-wrapper' onClick={() => {approveRequest(bookId)}}>Approve this request 👍</div>
         </div>
     );
 }

@@ -36,6 +36,10 @@ class App extends React.Component {
                     evtOrigin: null,
                     class: ''
                 },
+                myBooksNavItemClicked: {
+                    evtOrigin: null,
+                    class: ''
+                },
                 gridView: true,
                 isModalOpen: false,
                 loginClicked: false
@@ -67,6 +71,7 @@ class App extends React.Component {
         this.changeEmojiToPerson = this.changeEmojiToPerson.bind(this);
         this.changeEmojiToShadow = this.changeEmojiToShadow.bind(this);
         this.borderNavItem = this.borderNavItem.bind(this);
+        this.highlightMyBooksNavItem = this.highlightMyBooksNavItem.bind(this);
     }
 
     setSession() {
@@ -121,7 +126,7 @@ class App extends React.Component {
         if (keyword.length) this.getApiKey()
         .then(apiKey => {
             this.callGoogleApi(keyword, apiKey)
-            .then(books => this.setState({ searchResult: books }))
+            .then(books => this.setState({ searchResult: books }, () => console.log(this.state.searchResult)))
             .catch(err => console.error(err));
         })
         .catch(err => console.error(err));
@@ -209,6 +214,9 @@ class App extends React.Component {
         const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
         const route = '/book/:id/:username';
         const username = this.state.user.username;
+        let searchResult = this.state.searchResult;
+        searchResult.items = searchResult.items.filter(book => book.id !== bookId);
+        const newSearchResult = searchResult;
 
         return fetch(apiRoot + route, {
             method: 'POST',
@@ -220,6 +228,11 @@ class App extends React.Component {
                 username: username
             })
         })
+        .then(() => this.getBooks())
+        .then(books => this.setState({
+            searchResult: newSearchResult,
+            books: books
+        }))
         .catch(err => console.error(err));
     }
 
@@ -232,6 +245,10 @@ class App extends React.Component {
         return fetch(apiRoot + route, {
             method: 'DELETE'
         })
+        .then(() => this.getBooks())
+        .then(books => this.setState({
+            books: books
+        }))
         .catch(err => console.error(err));
     }
 
@@ -251,6 +268,10 @@ class App extends React.Component {
                 username: username
             })
         })
+        .then(() => this.getBooks())
+        .then(books => this.setState({
+            books: books
+        }))
         .catch(err => console.error(err));
     }
 
@@ -263,6 +284,10 @@ class App extends React.Component {
         fetch(apiRoot + route, {
             method: 'DELETE'
         })
+        .then(() => this.getBooks())
+        .then(books => this.setState({
+            books: books
+        }))
         .catch(err => console.error(err));
     }
 
@@ -275,6 +300,10 @@ class App extends React.Component {
         return fetch(apiRoot + route, {
             method: 'PUT'
         })
+        .then(() => this.getBooks())
+        .then(books => this.setState({
+            books: books
+        }))
         .catch(err => console.error(err));
     }
 
@@ -360,6 +389,22 @@ class App extends React.Component {
         evt.stopPropagation();
     }
 
+    highlightMyBooksNavItem(evt) {
+        const id = evt.target.id;
+        this.setState({
+            ...this.state,
+            ui: {
+                ...this.state.ui,
+                myBooksNavItemClicked: {
+                    ...this.state.ui.myBooksnavItemClicked,
+                    evtOrigin: id,
+                    class: ' clicked'
+                }
+            }
+        });
+        evt.stopPropagation();
+    }
+
     changeEmojiToShadow(evt) {
         this.setState({
             ...this.state,
@@ -400,8 +445,7 @@ class App extends React.Component {
                         books: books
                     });
                 }
-            })
-            .catch(err => console.error(err));
+            });
         })
         .catch(err => console.error(err));
     }
@@ -431,13 +475,14 @@ class App extends React.Component {
         const borderNavItem = this.borderNavItem;
         const changeEmojiToShadow = this.changeEmojiToShadow;
         const changeEmojiToPerson = this.changeEmojiToPerson;
+        const highlightMyBooksNavItem = this.highlightMyBooksNavItem;
 
         return (
         <div className='app-container' onMouseOver={toggleImgShadeOff} onClick={changeEmojiToShadow}>
             <Footer />
             <div className='title-wrapper'>Bookish</div>
             <div className='subtitle-wrapper'>Book trading made easy</div>
-            <Route path='/(search|books)' render={() => <div className='layout-buttons-container'>
+            <Route path='/(search|books|)' render={() => <div className='layout-buttons-container'>
                 <Icon id='list' className='icon' name='list layout' onClick={toggleViewFormat}></Icon>
                 <Icon id='grid' className='icon' name='grid layout' onClick={toggleViewFormat}></Icon>
             </div>}/>
@@ -454,7 +499,7 @@ class App extends React.Component {
                         <Route path='/mybooks' render={() => <MyBooks state={state} toggleImgShadeOn={toggleImgShadeOn}
                             openModal={openModal} removeBook={removeBook} closeModal={closeModal} shortenString={shortenString}
                             removeMiddleName={removeMiddleName} addBook={addBook} cancelRequest={cancelRequest}
-                            approveRequest={approveRequest}/>}/>
+                            approveRequest={approveRequest} highlightMyBooksNavItem={highlightMyBooksNavItem}/> }/>
 
                         <Route path='/search' render={() => <SearchResults state={state} toggleImgShadeOn={toggleImgShadeOn}
                             addBook={addBook} openModal={openModal} closeModal={closeModal} shortenString={shortenString}
@@ -467,7 +512,7 @@ class App extends React.Component {
                         <Route path='/signup' render={() => <SignupForm state={state}
                             changeEmojiToPerson={changeEmojiToPerson}/>} />
 
-                        <Route path='/' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
+                        <Route path='/(books|)' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
                             openModal={openModal} closeModal={closeModal} shortenString={shortenString} addBook={addBook}
                             removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook} removeBook/>}/>
                     </Switch>

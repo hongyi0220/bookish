@@ -178,7 +178,8 @@
   white-space: nowrap;
   min-width: 600px;
   margin: .5em;
-  height: 60px; }
+  height: 60px;
+  text-align: left; }
   .results-container .book-list-view:hover {
     border-radius: 4px;
     background-color: white;
@@ -247,6 +248,9 @@
       cursor: pointer;
       border-bottom: 3px solid #22A7F0;
       color: #22A7F0; }
+  .results-container .my-books-nav .my-book-nav-item.clicked {
+    border-bottom: 3px solid #22A7F0;
+    color: #22A7F0; }
 
 .results-container .book-list-view .buttons-container {
   position: relative;
@@ -383,6 +387,7 @@
     .app-container .flexbox-container .nav-container {
       flex-grow: 1; }
     .app-container .flexbox-container .content-container {
-      flex-grow: 8; }
+      flex-grow: 8;
+      margin: 0 .5em 0 .5em; }
   .app-container .error-msg {
     text-align: center; }

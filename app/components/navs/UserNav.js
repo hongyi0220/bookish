@@ -29,7 +29,7 @@ const UserNav = props => {
                                 <div className='emoji-wrapper' id='profile'>⚙️</div>
                             </div>
                         </Link>
-                        <Link to='/mybooks'>
+                        <Link to='/mybooks/own'>
                             <div className={evtOrigin === 'my-books' ? 'nav-item-container' + clicked : 'nav-item-container'}
                                 id='my-books'>
                                 <div className='text-wrapper' id='my-books'>My Books</div>

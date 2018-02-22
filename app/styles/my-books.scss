@@ -18,11 +18,15 @@
                 color: $picton-blue;
             }
         }
+        .my-book-nav-item.clicked {
+            border-bottom: 3px solid $picton-blue;
+            color: $picton-blue;
+        }
     }
     .book-list-view {
-        // border: 1px solid blue;
+
         .buttons-container {
-            // border: 1px solid green;
+
             position: relative;
             top: -84px;
             .button-container {

@@ -8,7 +8,7 @@ const CancelRequestButton = props => {
 
     return (
         <div className='button-container'>
-            <div className='text-wrapper' onClick={() => {cancelRequest(bookId)}}>Cancel Request</div>
+            <div className='text-wrapper' onClick={() => {cancelRequest(bookId)}}>Cancel Request ❌</div>
         </div>
     );
 }

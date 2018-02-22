@@ -15,13 +15,14 @@ const Wishlist = props => {
     const cancelRequest = props.cancelRequest;
     const books = state.books;
     const wishlist = books ? books.filter(book => book.wishlist.includes(username)) : [];
+
     return (
         wishlist.map((b, i) => {
             const book = b.book;
             const bookId = book.id;
             const volumeInfo = book.volumeInfo;
             const imgSrc = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '';
-            const title = shortenString(volumeInfo.title, 25);
+            const title = shortenString(volumeInfo.title, 20);
             const authorName = volumeInfo.authors ? volumeInfo.authors[0] : 'Unknown';
             const author = removeMiddleName(authorName);
 

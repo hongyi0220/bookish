@@ -25,25 +25,31 @@ const MyBooks = props => {
     const requestBook = props.requestBook;
     const cancelRequest = props.cancelRequest;
     const approveRequest = props.approveRequest;
+    const highlightMyBooksNavItem = props.highlightMyBooksNavItem;
+    const clicked = state.ui.myBooksNavItemClicked.class;
+    const evtOrigin = state.ui.myBooksNavItemClicked.evtOrigin;
 
     return (
         <div className='results-container'>
             <h2>My Books</h2>
-            <div className='my-books-nav'>
-                <Link to='/mybooks/own'><div className='my-book-nav-item'>Own</div></Link>
-                <Link to='/mybooks/wishlist'><div className='my-book-nav-item'>Wish List</div></Link>
-                <Link to='/mybooks/incoming-requests'><div className='my-book-nav-item'>Incoming Requests</div></Link>
+            <div className='my-books-nav' onClick={highlightMyBooksNavItem}>
+                <Link to='/mybooks/own'><div className={evtOrigin === 'own' ? 'my-book-nav-item' + clicked : 'my-book-nav-item'}
+                    id='own'>Own</div></Link>
+                <Link to='/mybooks/wishlist'><div className={evtOrigin === 'wish' ? 'my-book-nav-item' + clicked : 'my-book-nav-item'}
+                    id='wish'>Wish List</div></Link>
+                <Link to='/mybooks/incoming-requests'><div className={evtOrigin === 'request' ? 'my-book-nav-item' + clicked : 'my-book-nav-item'}
+                    id='request'>Incoming Requests</div></Link>
             </div>
             <Switch>
-                <Route path='/mybooks' render={() => <Own state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}
-                    addBook={addBook} removeBook={removeBook} shortenString={shortenString} removeMiddleName={removeMiddleName}
-                    requestBook={requestBook}/>}/>
                 <Route path='/mybooks/wishlist' render={() => <Wishlist state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}
                     addBook={addBook} removeBook={removeBook} shortenString={shortenString} removeMiddleName={removeMiddleName}
                     requestBook={requestBook} cancelRequest={cancelRequest}/>}/>
                 <Route path='/mybooks/incoming-requests' render={() => <IncomingRequests state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}
                     addBook={addBook} removeBook={removeBook} shortenString={shortenString} removeMiddleName={removeMiddleName}
                     requestBook={requestBook} approveRequest={approveRequest}/>}/>
+                <Route path='/mybooks/own' render={() => <Own state={state} imgRootUrl={imgRootUrl} imgSrcParams={imgSrcParams}
+                    addBook={addBook} removeBook={removeBook} shortenString={shortenString} removeMiddleName={removeMiddleName}
+                    requestBook={requestBook}/>}/>
             </Switch>
         </div>
     );
