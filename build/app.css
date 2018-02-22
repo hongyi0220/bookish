@@ -381,3 +381,5 @@
       flex-grow: 1; }
     .app-container .flexbox-container .content-container {
       flex-grow: 8; }
+  .app-container .error-msg {
+    text-align: center; }

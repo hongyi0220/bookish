@@ -2,8 +2,8 @@
   "name": "bookish",
   "version": "1.0.0",
   "engines": {
-   "node": "8.9.1"
- },
+    "node": "8.9.1"
+  },
   "description": "A facilitator of online second-hand book trade transactions",
   "main": "server.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "mongodb": "^2.2.33",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-router-dom": "^4.2.2",

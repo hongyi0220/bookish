@@ -43831,8 +43831,8 @@ var App = function (_React$Component) {
         key: 'borderNavItem',
         value: function borderNavItem(evt) {
             var id = evt.target.id;
-            console.log(evt.target);
-            console.log(id);
+            // console.log(evt.target);
+            // console.log(id);
             this.setState(_extends({}, this.state, {
                 ui: _extends({}, this.state.ui, {
                     navItemClicked: _extends({}, this.state.ui.navItemClicked, {
@@ -43889,6 +43889,8 @@ var App = function (_React$Component) {
             }).catch(function (err) {
                 return console.error(err);
             });
+            console.log('cmpDidMnt');
+            console.log(this.state);
         }
     }, {
         key: 'render',
@@ -43962,11 +43964,6 @@ var App = function (_React$Component) {
                                         removeMiddleName: removeMiddleName, addBook: addBook, cancelRequest: cancelRequest,
                                         approveRequest: approveRequest });
                                 } }),
-                            _react2.default.createElement(_reactRouterDom.Route, { path: '/books', render: function render() {
-                                    return _react2.default.createElement(_Books2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
-                                        openModal: openModal, closeModal: closeModal, shortenString: shortenString, addBook: addBook,
-                                        removeMiddleName: removeMiddleName, doIOwn: doIOwn, requestBook: requestBook, removeBook: true });
-                                } }),
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/search', render: function render() {
                                     return _react2.default.createElement(_SearchResults2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
                                         addBook: addBook, openModal: openModal, closeModal: closeModal, shortenString: shortenString,
@@ -43982,6 +43979,11 @@ var App = function (_React$Component) {
                             _react2.default.createElement(_reactRouterDom.Route, { path: '/signup', render: function render() {
                                     return _react2.default.createElement(_SignupForm2.default, { state: state,
                                         changeEmojiToPerson: _this4.changeEmojiToPerson });
+                                } }),
+                            _react2.default.createElement(_reactRouterDom.Route, { path: '/', render: function render() {
+                                    return _react2.default.createElement(_Books2.default, { state: state, toggleImgShadeOn: toggleImgShadeOn,
+                                        openModal: openModal, closeModal: closeModal, shortenString: shortenString, addBook: addBook,
+                                        removeMiddleName: removeMiddleName, doIOwn: doIOwn, requestBook: requestBook, removeBook: true });
                                 } })
                         ),
                         _react2.default.createElement(_reactRouterDom.Route, { path: '/signup/invalid-username', render: function render() {
@@ -63982,7 +63984,7 @@ var Nav = function Nav(props) {
         ),
         _react2.default.createElement(
             _reactRouterDom.Link,
-            { to: '/' },
+            { to: '/home' },
             _react2.default.createElement(
                 'div',
                 { className: evtOrigin === 'home' ? 'nav-item-container' + clicked : 'nav-item-container',
@@ -64001,7 +64003,7 @@ var Nav = function Nav(props) {
         ),
         _react2.default.createElement(
             _reactRouterDom.Link,
-            { to: '/books' },
+            { to: '/' },
             _react2.default.createElement(
                 'div',
                 { className: evtOrigin === 'books' ? 'nav-item-container' + clicked : 'nav-item-container',
@@ -66217,12 +66219,45 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var SignupSuccess = function SignupSuccess(props) {
     var state = props.state;
-    var timer = state.ui.timer;
-    props.setTimer();
+    // const timer = state.ui.timer;
+    var books = state.books;
+    console.log(state);
+    function countActiveUsers(books) {
+        var users = [];
+        if (books) {
+            console.log(books);
+            console.log(users);
+            books.forEach(function (b) {
+                var _console, _users, _users2;
+
+                (_console = console).log.apply(_console, ['...b.ownedby'].concat(_toConsumableArray(b.ownedby)));
+                (_users = users).push.apply(_users, _toConsumableArray(b.ownedby));
+                (_users2 = users).push.apply(_users2, _toConsumableArray(b.wishlist));
+            });
+            // books.ownedby.forEach(o => users.push(o));
+            // console.log(users);
+            // books.wishlist.forEach(w => users.push(w));
+            console.log(users);
+            users = users.sort().filter(function (user, i, usersArr) {
+                console.log(usersArr[i]);
+                console.log(usersArr[i - 1] !== usersArr[i]);
+                return usersArr[i - 1] !== usersArr[i];
+            });
+            console.log(users);
+            return users.length;
+        }
+    }
+    // props.setTimer();
 
     return _react2.default.createElement(
         'div',
@@ -66235,13 +66270,33 @@ var SignupSuccess = function SignupSuccess(props) {
         _react2.default.createElement(
             'div',
             { className: 'signup-success-msg-container' },
-            'Successfully signed up!\xA0 Redirecting to somewhere in...\xA0',
-            timer,
-            '\xA0'
+            'Successfully signed up!\xA0 You\'ve joined a community of',
+            _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    countActiveUsers(books),
+                    ' active users and'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    books ? books.length : 'many',
+                    ' books.'
+                )
+            )
         )
     );
 };
 exports.default = SignupSuccess;
+
+
+SignupSuccess.propTypes = {
+    state: _propTypes2.default.object.isRequired
+    // timer: PropTypes.func.isRequired
+};
 
 /***/ }),
 /* 800 */

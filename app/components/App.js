@@ -385,8 +385,8 @@ class App extends React.Component {
 
     borderNavItem(evt) {
         const id = evt.target.id;
-        console.log(evt.target);
-        console.log(id);
+        // console.log(evt.target);
+        // console.log(id);
         this.setState({
             ...this.state,
             ui: {
@@ -445,6 +445,8 @@ class App extends React.Component {
             .catch(err => console.error(err));
         })
         .catch(err => console.error(err));
+        console.log('cmpDidMnt');
+        console.log(this.state);
     }
 
     render() {
@@ -496,10 +498,6 @@ class App extends React.Component {
                             removeMiddleName={removeMiddleName} addBook={addBook} cancelRequest={cancelRequest}
                             approveRequest={approveRequest}/>}/>
 
-                        <Route path='/books' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
-                            openModal={openModal} closeModal={closeModal} shortenString={shortenString} addBook={addBook}
-                            removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook} removeBook/>}/>
-
                         <Route path='/search' render={() => <SearchResults state={state} toggleImgShadeOn={toggleImgShadeOn}
                             addBook={addBook} openModal={openModal} closeModal={closeModal} shortenString={shortenString}
                             removeMiddleName={removeMiddleName} removeBook={removeBook} doIOwn={doIOwn}/>}/>
@@ -509,6 +507,9 @@ class App extends React.Component {
                             changeEmojiToPerson={this.changeEmojiToPerson}/>} />
                         <Route path='/signup' render={() => <SignupForm state={state}
                             changeEmojiToPerson={this.changeEmojiToPerson}/>} />
+                        <Route path='/' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
+                            openModal={openModal} closeModal={closeModal} shortenString={shortenString} addBook={addBook}
+                            removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook} removeBook/>}/>
                     </Switch>
                     <Route path='/signup/invalid-username' render={() => <div className='error-msg'>It seems the username is taken.. boo!</div>} />
                     <Route path='/login/error' render={() => <div className='error-msg'>Wrong username and or password..?</div>} />

@@ -65,7 +65,7 @@ module.exports = function(app, db) {
                 Users.findOne({username: username}, function(err, user) {
                     if (err) return console.log(err);
                     req.login(user, function(err) {
-                        user
+                        // user
                         if (err) return console.error(err);
                         return res.redirect('/signup/success');
                     });
