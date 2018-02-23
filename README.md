@@ -9,3 +9,5 @@ Bookish is a web app that allows users to trade second hand books.
 
 ## API:
 * [Google Books API](https://developers.google.com/books).
+
+Checkout the app [here](https://bookish-0220.herokuapp.com/).
