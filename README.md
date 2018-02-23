@@ -1,5 +1,4 @@
 # Bookish -- A book trading place
-===========
 Bookish is a web app that allows users to trade second hand books.
 
 ## Tools used:
