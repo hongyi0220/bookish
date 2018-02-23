@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const LoginForm = props => {
     const emoji = props.state.ui.emoji;

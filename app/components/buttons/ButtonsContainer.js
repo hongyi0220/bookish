@@ -5,6 +5,7 @@ import RequestButton from './RequestButton';
 import RemoveButton from './RemoveButton';
 import CancelRequestButton from './CancelRequestButton';
 import ApproveButton from './ApproveButton';
+import PropTypes from 'prop-types';
 
 const ButtonsContainer = props => {
     const state = props.state;

@@ -1,5 +1,6 @@
 import React from 'react';
 import ButtonsContainer from '../buttons/ButtonsContainer';
+import PropTypes from 'prop-types';
 
 const IncomingRequests = props => {
     const state = props.state;

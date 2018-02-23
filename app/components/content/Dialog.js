@@ -1,6 +1,7 @@
 import React from 'react';
 import { Header, Image, Modal, Icon } from 'semantic-ui-react';
 import ButtonsContainer from '../buttons/ButtonsContainer';
+import PropTypes from 'prop-types';
 
 const Dialog = props => {
     const state = props.state;

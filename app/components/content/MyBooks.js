@@ -4,6 +4,7 @@ import Dialog from './Dialog';
 import Own from './Own';
 import Wishlist from './Wishlist';
 import IncomingRequests from './IncomingRequests';
+import PropTypes from 'prop-types';
 
 const MyBooks = props => {
     const state = props.state;
@@ -69,5 +70,4 @@ MyBooks.propTypes = {
     cancelRequest: PropTypes.func,
     approveRequest: PropTypes.func,
     highlightMyBooksNavItem: PropTypes.func
-
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Dialog from './Dialog';
+import PropTypes from 'prop-types';
 
 const Books = props => {
     const state = props.state;
