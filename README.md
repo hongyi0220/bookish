@@ -1,3 +1,11 @@
-Bookish -- A book trading place
+# Bookish -- A book trading place
 ===========
-Bookish is a full-stack app built on the MERN stack.
+Bookish is a web app that allows users to trade second hand books.
+
+## Tools used:
+* Built on the MERN stack: MongoDB, Express, React and Node.
+* Key modules used: React Router and passport.
+* Some parts of the front end are built with [Semantic UI React](https://react.semantic-ui.com).
+
+## API:
+* [Google Books API](https://developers.google.com/books).

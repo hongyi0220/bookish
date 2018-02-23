@@ -12,3 +12,8 @@ const RemoveButton = props => {
     );
 }
 export default RemoveButton;
+RemoveButton.propTypes = {
+    state: PropTypes.object.isRequired,
+    removeBook: PropTypes.func,
+    bookId: PropTypes.string
+}

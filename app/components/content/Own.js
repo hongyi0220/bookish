@@ -5,6 +5,7 @@ const Own = props => {
     const state = props.state;
     const user = state.user;
     const username = user ? state.user.username : '';
+    const books = state.books;
     const imgSrc = props.imgSrc;
     const requestBook = props.requestBook;
     const removeBook = props.removeBook;
@@ -12,8 +13,8 @@ const Own = props => {
     const doIOwn = props.doIOwn;
     const shortenString = props.shortenString;
     const removeMiddleName = props.removeMiddleName;
-    const books = state.books;
     const own = books ? books.filter(book => book.ownedby.includes(username)) : [];
+
     return (
         own.map((b, i) => {
             const book = b.book;
@@ -39,3 +40,13 @@ const Own = props => {
     );
 }
 export default Own;
+Own.propTypes = {
+    state: PropTypes.object.isRequired,
+    imgSrc: PropTypes.string,
+    requestBook: PropTypes.func,
+    removeBook: PropTypes.func,
+    addBook: PropTypes.func,
+    doIOwn: PropTypes.func,
+    shortenString: PropTypes.func,
+    removeMiddleName: PropTypes.func
+}

@@ -7,7 +7,6 @@ import SignupForm from './forms/SignupForm';
 import LoginForm from './forms/LoginForm';
 import Profile from './content/Profile';
 import SearchResults from './content/SearchResults';
-import sample from './sampleData';
 import Books from './content/Books';
 import MyBooks from './content/MyBooks';
 import SignupSuccess from './content/SignupSuccess';
@@ -126,7 +125,7 @@ class App extends React.Component {
         if (keyword.length) this.getApiKey()
         .then(apiKey => {
             this.callGoogleApi(keyword, apiKey)
-            .then(books => this.setState({ searchResult: books }, () => console.log(this.state.searchResult)))
+            .then(books => this.setState({ searchResult: books }))
             .catch(err => console.error(err));
         })
         .catch(err => console.error(err));

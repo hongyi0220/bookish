@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 const UserNav = props => {
     const state = props.state;
     const isLoggedIn = state.user;
+    const clicked = state.ui.navItemClicked.class;
+    const evtOrigin = state.ui.navItemClicked.evtOrigin;
     let username = isLoggedIn ? isLoggedIn.username : '';
     const logout = props.logout;
     username = props.shortenString(username, 12);
     const borderNavItem = props.borderNavItem;
-    const clicked = state.ui.navItemClicked.class;
-    const evtOrigin = state.ui.navItemClicked.evtOrigin;
 
     return (
         <div className='user-nav-container' onClick={borderNavItem}>
@@ -65,3 +65,9 @@ const UserNav = props => {
     );
 }
 export default UserNav;
+UserNav.propTypes = {
+    state: PropTypes.object.isRequired,
+    logout: PropTypes.func,
+    shortenString: PropTypes.func,
+    borderNavItem: PropTypes.func
+}

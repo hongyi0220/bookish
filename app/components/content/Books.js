@@ -7,17 +7,17 @@ const Books = props => {
     const username = state.user ? state.user.username : '';
     const books = state.books ? state.books.filter(b => !b.ownedby.includes(username) && !b.wishlist.includes(username)) : [];
     const myBooks = state.myBooks;
-    const imgRootUrl = 'http://books.google.com/books/content?id=';
-    const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
-    const toggleImgShadeOn = props.toggleImgShadeOn;
     const imgShadeStyle = state.ui.selected.style;
     const selectedId = state.ui.selected.evtOrigin;
     const imgClass = state.ui.selected.class;
     const isLoggedIn = state.user;
-    const removeBook = props.removeBook;
-    const addBook = props.addBook;
     const gridView = state.ui.gridView;
     const foundBook = state.foundBook;
+    const imgRootUrl = 'http://books.google.com/books/content?id=';
+    const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
+    const toggleImgShadeOn = props.toggleImgShadeOn;
+    const removeBook = props.removeBook;
+    const addBook = props.addBook;
     const openModal = props.openModal;
     const closeModal = props.closeModal;
     const shortenString = props.shortenString;
@@ -119,3 +119,15 @@ const Books = props => {
     );
 }
 export default Books;
+Books.propTypes = {
+    state: PropTypes.object.isRequired,
+    toggleImgShadeOn : PropTypes.func,
+    removeBook : PropTypes.func,
+    addBook : PropTypes.func,
+    openModal : PropTypes.func,
+    closeModal : PropTypes.func,
+    shortenString : PropTypes.func,
+    removeMiddleName : PropTypes.func,
+    doIOwn : PropTypes.func,
+    requestBook : PropTypes.func
+}

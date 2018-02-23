@@ -18,3 +18,8 @@ const AddButton = props => {
     );
 }
 export default AddButton;
+AddButton.propTypes = {
+    state: PropTypes.object.isRequired,
+    addBook: PropTypes.func,
+    bookId: PropTypes.string
+}

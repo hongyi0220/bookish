@@ -1,7 +1,6 @@
 import React from 'react';
 
-const About = props => {
-    return (
+const About = () =>
         <div className='about-container'>
             <div className='about-text-wrapper'>About This App</div>
             <div className='tech-text-wrapper'>Front-end tech stack</div>
@@ -45,8 +44,6 @@ const About = props => {
                 </div>
             </div>
             <span>*Website design adapted from <a target='_blank' href='http://www.pages.xyz/type/pricing'>pages.xyz</a></span>
-        </div>
-    );
-}
+        </div>;
 
 export default About;

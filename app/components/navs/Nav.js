@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
  const Nav = props => {
     const state = props.state;
     const searchValue = state.searchValue;
+    const clicked = state.ui.navItemClicked.class;
+    const evtOrigin = state.ui.navItemClicked.evtOrigin;
     const handleInput = props.handleInput;
     const searchForBook = props.searchForBook;
     const navigateTo = props.navigateTo;
     const borderNavItem = props.borderNavItem;
-    const clicked = state.ui.navItemClicked.class;
-    const evtOrigin = state.ui.navItemClicked.evtOrigin;
 
     return (
         <div className='nav-container' onClick={borderNavItem}>
@@ -36,3 +36,10 @@ import { Link } from 'react-router-dom';
     );
 }
 export default Nav;
+Nav.propTypes = {
+    state: PropTypes.object.isRequired,
+    handleInput: PropTypes.func,
+    searchForBook: PropTypes.func,
+    navigateTo: PropTypes.func,
+    borderNavItem: PropTypes.func
+}

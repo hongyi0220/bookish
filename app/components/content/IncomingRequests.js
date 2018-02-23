@@ -5,6 +5,7 @@ const IncomingRequests = props => {
     const state = props.state;
     const user = state.user;
     const username = user ? state.user.username : '';
+    const books = state.books;
     const imgSrc = props.imgSrc;
     const requestBook = props.requestBook;
     const removeBook = props.removeBook;
@@ -13,7 +14,6 @@ const IncomingRequests = props => {
     const shortenString = props.shortenString;
     const removeMiddleName = props.removeMiddleName;
     const approveRequest = props.approveRequest;
-    const books = state.books;
     const incomingRequests = books.filter(book => book.wishlist.length && book.ownedby.includes(username));
     return (
         incomingRequests.map((b, i) => {
@@ -40,3 +40,14 @@ const IncomingRequests = props => {
     );
 }
 export default IncomingRequests;
+IncomingRequests.propTypes = {
+    state: PropTypes.object.isRequired,
+    imgSrc : PropTypes.string,
+    requestBook : PropTypes.func,
+    removeBook : PropTypes.func,
+    addBook : PropTypes.func,
+    doIOwn : PropTypes.func,
+    shortenString : PropTypes.func,
+    removeMiddleName : PropTypes.func,
+    approveRequest : PropTypes.func
+}

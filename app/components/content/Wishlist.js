@@ -5,6 +5,7 @@ const Wishlist = props => {
     const state = props.state;
     const user = state.user;
     const username = user ? state.user.username : '';
+    const books = state.books;
     const shortenString = props.shortenString;
     const removeMiddleName = props.removeMiddleName;
     const imgSrc = props.imgSrc;
@@ -13,7 +14,6 @@ const Wishlist = props => {
     const addBook = props.addBook;
     const doIOwn = props.doIOwn;
     const cancelRequest = props.cancelRequest;
-    const books = state.books;
     const wishlist = books ? books.filter(book => book.wishlist.includes(username)) : [];
 
     return (
@@ -41,3 +41,14 @@ const Wishlist = props => {
     );
 }
 export default Wishlist;
+Wishlist.propTypes = {
+    state: PropTypes.object.isRequired,
+    shortenString: PropTypes.func,
+    removeMiddleName: PropTypes.func,
+    imgSrc: PropTypes.string,
+    requestBook: PropTypes.func,
+    removeBook: PropTypes.func,
+    addBook: PropTypes.func,
+    doIOwn: PropTypes.func,
+    cancelRequest: PropTypes.func,
+}

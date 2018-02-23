@@ -29,3 +29,6 @@ const LoginForm = props => {
     );
 }
 export default LoginForm;
+LoginForm.propTypes = {
+    state: PropTypes.object.isRequired
+}

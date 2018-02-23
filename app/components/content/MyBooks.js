@@ -8,16 +8,18 @@ import IncomingRequests from './IncomingRequests';
 const MyBooks = props => {
     const state = props.state;
     const myBooks = state.myBooks;
-    const imgRootUrl = 'http://books.google.com/books/content?id=';
-    const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
-    const toggleImgShadeOn = props.toggleImgShadeOn;
     const imgShadeStyle = state.ui.selected.style;
     const selectedId = state.ui.selected.evtOrigin;
     const imgClass = state.ui.selected.class;
     const gridView = state.ui.gridView;
+    const foundBook = state.foundBook;
+    const clicked = state.ui.myBooksNavItemClicked.class;
+    const evtOrigin = state.ui.myBooksNavItemClicked.evtOrigin;
+    const imgRootUrl = 'http://books.google.com/books/content?id=';
+    const imgSrcParams = '&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api';
+    const toggleImgShadeOn = props.toggleImgShadeOn;
     const addBook = props.addBook;
     const removeBook = props.removeBook;
-    const foundBook = state.foundBook;
     const openModal = props.openModal;
     const closeModal = props.closeModal;
     const shortenString = props.shortenString;
@@ -26,8 +28,7 @@ const MyBooks = props => {
     const cancelRequest = props.cancelRequest;
     const approveRequest = props.approveRequest;
     const highlightMyBooksNavItem = props.highlightMyBooksNavItem;
-    const clicked = state.ui.myBooksNavItemClicked.class;
-    const evtOrigin = state.ui.myBooksNavItemClicked.evtOrigin;
+
 
     return (
         <div className='results-container'>
@@ -55,3 +56,18 @@ const MyBooks = props => {
     );
 }
 export default MyBooks;
+MyBooks.propTypes = {
+    state: PropTypes.object.isRequired,
+    toggleImgShadeOn: PropTypes.func,
+    addBook: PropTypes.func,
+    removeBook: PropTypes.func,
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
+    shortenString: PropTypes.func,
+    removeMiddleName: PropTypes.func,
+    requestBook: PropTypes.func,
+    cancelRequest: PropTypes.func,
+    approveRequest: PropTypes.func,
+    highlightMyBooksNavItem: PropTypes.func
+
+}

@@ -13,3 +13,9 @@ const ApproveButton = props => {
     );
 }
 export default ApproveButton;
+ApproveButton.propTypes = {
+    state: PropTypes.object.isRequired,
+    addBook: PropTypes.func,
+    approveRequest: PropTypes.func,
+    bookId: PropTypes.string
+}

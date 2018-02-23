@@ -13,3 +13,9 @@ const CancelRequestButton = props => {
     );
 }
 export default CancelRequestButton;
+CancelRequestButton.propTypes = {
+    state: PropTypes.object.isRequired,
+    requestBook: PropTypes.func,
+    bookId: PropTypes.string,
+    cancelRequest: PropTypes.func
+}

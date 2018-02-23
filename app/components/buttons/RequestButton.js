@@ -18,3 +18,8 @@ const RequestButton = props => {
     );
 }
 export default RequestButton;
+RequestButton.propTypes = {
+    state: PropTypes.object.isRequired,
+    requestBook: PropTypes.func,
+    bookId: PropTypes.string
+}

@@ -4,11 +4,11 @@ import ButtonsContainer from '../buttons/ButtonsContainer';
 
 const Dialog = props => {
     const state = props.state;
-    const openModal = props.openModal;
-    const closeModal = props.closeModal;
     const isModalOepn = state.ui.isModalOpen;
     const isLoggedIn = state.user;
     const foundBook = state.foundBook;
+    const openModal = props.openModal;
+    const closeModal = props.closeModal;
     const imgRootUrl = props.imgRootUrl;
     const imgSrcParams = props.imgSrcParams;
     const requestBook = props.requestBook;
@@ -37,3 +37,15 @@ const Dialog = props => {
     );
 }
 export default Dialog;
+Dialog.propTypes = {
+    state: PropTypes.object.isRequired,
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
+    imgRootUrl: PropTypes.string,
+    imgSrcParams: PropTypes.string,
+    requestBook: PropTypes.func,
+    removeBook: PropTypes.func,
+    addBook: PropTypes.func,
+    bookId: PropTypes.func,
+    doIOwn: PropTypes.func
+}

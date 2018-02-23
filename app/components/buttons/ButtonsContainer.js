@@ -42,3 +42,13 @@ const ButtonsContainer = props => {
     );
 }
 export default ButtonsContainer;
+ButtonsContainer.propTypes = {
+    state: PropTypes.object.isRequired,
+    addBook: PropTypes.func,
+    bookId: PropTypes.string,
+    removeBook: PropTypes.func,
+    requestBook: PropTypes.func,
+    doIOwn: PropTypes.func,
+    approveRequest: PropTypes.func,
+    cancelRequest: PropTypes.func
+}
