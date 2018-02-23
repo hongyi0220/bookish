@@ -23,7 +23,7 @@ class App extends React.Component {
             books: null,
             myBooks: null,
             foundBook: null,
-            dev: true,
+            dev: false,
             pathname: null,
             ui: {
                 selected: {
@@ -75,7 +75,7 @@ class App extends React.Component {
 
     setSession() {
         const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const apiRoot = dev ? 'http://localhost:8080' : 'https://bookish-0220.herokuapp.com';
         const route = '/user';
         return fetch(apiRoot + route, {credentials: 'include'})
         .then(res => {
@@ -89,7 +89,7 @@ class App extends React.Component {
 
     logout() {
         const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const apiRoot = dev ? 'http://localhost:8080' : 'https://bookish-0220.herokuapp.com';
         const route = '/logout';
         this.setState({ user: null });
         fetch(apiRoot + route, {credentials: 'include'})
@@ -99,7 +99,7 @@ class App extends React.Component {
 
     getApiKey() {
         const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const apiRoot = dev ? 'http://localhost:8080' : 'https://bookish-0220.herokuapp.com';
         const route = '/apikey';
         return fetch(apiRoot + route)
         .then(res => res.json())
@@ -210,7 +210,7 @@ class App extends React.Component {
         const books = this.state.searchResult.items;
         const foundBook = this.findBookById(bookId, books);
         const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const apiRoot = dev ? 'http://localhost:8080' : 'https://bookish-0220.herokuapp.com';
         const route = '/book/:id/:username';
         const username = this.state.user.username;
         let searchResult = this.state.searchResult;
@@ -237,7 +237,7 @@ class App extends React.Component {
 
     removeBook(bookId) {
         const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const apiRoot = dev ? 'http://localhost:8080' : 'https://bookish-0220.herokuapp.com';
         const username = this.state.user.username;
         const route = '/book/' + bookId + '/' + username;
 
@@ -253,7 +253,7 @@ class App extends React.Component {
 
     requestBook(bookId) {
         const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const apiRoot = dev ? 'http://localhost:8080' : 'https://bookish-0220.herokuapp.com';
         const route = '/request/' + bookId + '/' + username;
         const username = this.state.user.username;
 
@@ -276,7 +276,7 @@ class App extends React.Component {
 
     cancelRequest(bookId) {
         const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const apiRoot = dev ? 'http://localhost:8080' : 'https://bookish-0220.herokuapp.com';
         const username = this.state.user.username;
         const route = '/request/' + bookId + '/' + username;
 
@@ -292,7 +292,7 @@ class App extends React.Component {
 
     approveRequest(bookId) {
         const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const apiRoot = dev ? 'http://localhost:8080' : 'https://bookish-0220.herokuapp.com';
         const username = this.state.user.username;
         const route = '/request/' + bookId + '/' + username;
 
@@ -308,7 +308,7 @@ class App extends React.Component {
 
     getBooks() {
         const dev = this.state.dev;
-        const apiRoot = dev ? 'http://localhost:8080' : 'http://myappurl';
+        const apiRoot = dev ? 'http://localhost:8080' : 'https://bookish-0220.herokuapp.com';
         const route = '/all-books';
 
         return fetch(apiRoot + route)
