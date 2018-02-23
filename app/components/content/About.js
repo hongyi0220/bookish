@@ -44,6 +44,7 @@ const About = props => {
                     <div className='logo-text-wrapper'>Passport.js</div>
                 </div>
             </div>
+            <span>*Website design adapted from <a target='_blank' href='http://www.pages.xyz/type/pricing'>pages.xyz</a></span>
         </div>
     );
 }
