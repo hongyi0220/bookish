@@ -511,9 +511,7 @@ class App extends React.Component {
                         <Route path='/signup' render={() => <SignupForm state={state}
                             changeEmojiToPerson={changeEmojiToPerson}/>} />
 
-                        <Route path='/(books|)' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn}
-                            openModal={openModal} closeModal={closeModal} shortenString={shortenString} addBook={addBook}
-                            removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook} removeBook/>}/>
+                        <Route path='/(books|)' render={() => <Books state={state} toggleImgShadeOn={toggleImgShadeOn} openModal={openModal} closeModal={closeModal} shortenString={shortenString} addBook={addBook} removeMiddleName={removeMiddleName} doIOwn={doIOwn} requestBook={requestBook} removeBook/>}/>
                     </Switch>
                     <Route path='/signup/invalid-username' render={() => <div className='error-msg'>It seems the username is taken.. boo!</div>} />
                     <Route path='/login/error' render={() => <div className='error-msg'>Wrong username and or password..?</div>} />

@@ -1,8 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const ObjectId = require('mongodb').ObjectId;
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
 
 module.exports = function(app, db) {
     const Users = db.collection('users');
@@ -21,12 +19,14 @@ module.exports = function(app, db) {
 
     // This stores user in session after authentication
     passport.serializeUser(function(user, done) {
+        console.log('serializing user');
         done(null, user._id);
     });
 
     // This retrieves user info from database using user._id set in session
     //and store it in req.user because it is more secure
     passport.deserializeUser(function(id, done) {
+        console.log('deserializing user');
         Users.findOne({_id: new ObjectId(id)}, function(err, user) {
             done(err, user);
         });
